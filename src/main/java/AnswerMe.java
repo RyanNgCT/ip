@@ -1,10 +1,12 @@
 // imports
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class AnswerMe {
     public static final String BOTNAME = "AnswerMe";
     public static final String HLINE = "____________________________________________________________";
     private static final Scanner SCANNER = new Scanner(System.in);
+    private static ArrayList<String> taskList = new ArrayList<>();
 
     public static void main(String[] args) {
         String banner = """
@@ -25,27 +27,38 @@ public class AnswerMe {
         boolean exitProgram = false;
         do {
             String userResponse = readUserInput();
-            exitProgram = echo(userResponse);
+            exitProgram = process(userResponse);
         }
         while (!exitProgram);
 
-        System.out.println("\nBye. Hope to see you again soon!");
-        System.out.println(AnswerMe.HLINE);
+        printIndentedString("Bye. Hope to see you again soon!");
     }
 
     public static String readUserInput() {
-        return SCANNER.nextLine();
+        return AnswerMe.SCANNER.nextLine();
     }
 
-    public static boolean echo(String userResponse) {
+    public static boolean process(String userResponse) {
         if (userResponse.equalsIgnoreCase("bye")) {
             return true;
         }
-        else {
-            System.out.println("\t" + AnswerMe.HLINE);
-            System.out.println("\t" + userResponse);
-            System.out.println("\t" + AnswerMe.HLINE);
-            return false;
+        else if (userResponse.equalsIgnoreCase("list")) {
+            System.out.println(AnswerMe.HLINE);
+            for (int i = 0; i < taskList.size(); i++) {
+                System.out.println((i + 1) + ". " + taskList.get(i));
+            }
+            System.out.println(AnswerMe.HLINE + "\n");
         }
+        else {
+            taskList.add(userResponse);
+            printIndentedString("added: " + userResponse);
+        }
+        return false;
+    }
+
+    public static void printIndentedString(String toPrint) {
+        System.out.println(AnswerMe.HLINE);
+        System.out.println(toPrint);
+        System.out.println(AnswerMe.HLINE + "\n");
     }
 }
