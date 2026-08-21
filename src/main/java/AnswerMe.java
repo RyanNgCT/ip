@@ -2,6 +2,7 @@
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class AnswerMe {
     public static final String BOTNAME = "AnswerMe";
@@ -59,11 +60,11 @@ public class AnswerMe {
                     // set or unset based on first arg
                     if (responseParts[0].equals("mark")) {
                         t.setComplete();
-                        formatOutputString("Nice! I have marked this task as done:\n\t" + t.toString());
+                        formatOutputString("Nice! I have marked this task as done:\n" + t);
                     }
                     else {
                         t.setIncomplete();
-                        formatOutputString("OK, I've marked this task as not done yet\n\t" + t.toString());
+                        formatOutputString("OK, I've marked this task as not done yet\n" + t);
                     }
                 }
                 catch (IllegalArgumentException e) {
@@ -88,7 +89,7 @@ public class AnswerMe {
             for (int i = 0; i < AnswerMe.taskList.size(); i++) {
                 System.out.println("\t" + (i + 1) + ". " + AnswerMe.taskList.get(i));
             }
-            System.out.println("\tNow you have " + AnswerMe.taskList.size() + " tasks in the list.");
+            // System.out.println("\t" + getListStatus());
             System.out.println("\t" + AnswerMe.HLINE + "\n");
         }
         else {
@@ -116,32 +117,69 @@ public class AnswerMe {
 
     public static void formatOutputString(String toPrint) {
         System.out.println("\t" + AnswerMe.HLINE);
-        System.out.println("\t" + toPrint);
+        for (String line: toPrint.split("\n")) {
+            System.out.println("\t" + line);
+        }
         System.out.println("\t" + AnswerMe.HLINE + "\n");
     }
 
     public static void addTask(String userResponse) {
         String[] responseParts = userResponse.split(" ");
-        switch (responseParts[0].toLowerCase()) {
+        String command = responseParts[0].toLowerCase();
+        Task t;
+        switch (command) {
             case "todo":
-                String args = extractArgs(responseParts);
-                AnswerMe.taskList.add(new ToDo(args));
-                formatOutputString("added: " + args);
+                String todoArgs = extractArgs(responseParts);
+                t = new ToDo(todoArgs);
+                AnswerMe.taskList.add(t);
+                printAddNewItem(t);
                 break;
+
             case "deadline":
             case "event":
+                String args = extractArgs(responseParts);
+                String[] segments = args.split("(?=/by|/from|/to)");
+                String desc = segments[0].trim(); // task title
+                HashMap<String, String> flags = new HashMap<>();
+
+                // skip over task title
+                for (int i = 1; i < segments.length; i++) {
+                    String segment = segments[i].trim();
+                    String[] argList = segment.split(" ", 2);
+                    if (argList[1].isBlank()) {
+                        throw new IllegalArgumentException(
+                                "Every flag must be followed by a value.");
+                    }
+                    flags.put(argList[0], argList[1]);
+                }
+                if (command.equals("deadline")) {
+                    t = new Deadline(desc, flags.get("/by"));
+                }
+                else {
+                    t = new Event(desc, flags.get("/from"), flags.get("/to"));
+                }
+                AnswerMe.taskList.add(t);
+                printAddNewItem(t);
                 break;
+
             default:
                 // to change this echo behaviour later
                 formatOutputString(userResponse);
+                break;
         }
-
-//        AnswerMe.taskList.add(new Task(userResponse));
-//        formatOutputString("added: " + userResponse);
     }
 
     public static String extractArgs(String[] responseParts) {
         String[] resized = Arrays.copyOfRange(responseParts,1,responseParts.length);
         return String.join(" ", resized);
+    }
+
+    public static String getListStatus() {
+        return "Now you have " + AnswerMe.taskList.size() + " tasks in the list.";
+    }
+
+    public static void printAddNewItem(Task t) {
+        String message = String.format("Got it. I've added this task:\n%s\n%s", t.toString(), getListStatus());
+        formatOutputString(message);
     }
 }
