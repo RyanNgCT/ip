@@ -40,7 +40,7 @@ public class AnswerMe {
         return AnswerMe.SCANNER.nextLine();
     }
 
-    public static boolean process(String userResponse) {
+    public static boolean process(String userResponse) throws AnswerMeException, IndexOutOfBoundsException {
         String[] responseParts = userResponse.split(" ");
 
         switch (responseParts[0].toLowerCase()){
@@ -67,7 +67,7 @@ public class AnswerMe {
                         formatOutputString("OK, I've marked this task as not done yet\n" + t);
                     }
                 }
-                catch (IllegalArgumentException e) {
+                catch (AnswerMeException e) {
                     formatOutputString(e.getMessage());
                 }
                 catch (IndexOutOfBoundsException e) {
@@ -79,7 +79,7 @@ public class AnswerMe {
                 try {
                     addTask(userResponse);
                 }
-                catch (IllegalArgumentException e) {
+                catch (AnswerMeException e) {
                     formatOutputString(e.getMessage());
                 }
                 break;
@@ -103,19 +103,19 @@ public class AnswerMe {
         }
     }
 
-    public static Integer extractListIndex(String[] responseParts) throws IllegalArgumentException, NumberFormatException {
+    public static Integer extractListIndex(String[] responseParts) throws AnswerMeException {
         if (responseParts == null || responseParts.length < 2) {
-            throw new IllegalArgumentException("An index must be supplied for this command.");
+            throw new AnswerMeException("An index must be supplied for this command.");
         }
         int index;
         try {
             index = Integer.parseInt(responseParts[1]);
         } catch (NumberFormatException ex) {
-            throw new IllegalArgumentException("The list index must be a valid integer.", ex);
+            throw new AnswerMeException("The list index must be a valid integer.");
         }
 
         if (index < 1) {
-            throw new IllegalArgumentException("The list index must be at least 1.");
+            throw new AnswerMeException("The list index must be at least 1.");
         }
         return index - 1;
     }
@@ -128,13 +128,16 @@ public class AnswerMe {
         System.out.println("\t" + AnswerMe.HLINE + "\n");
     }
 
-    public static void addTask(String userResponse) {
+    public static void addTask(String userResponse) throws AnswerMeException{
         String[] responseParts = userResponse.split(" ");
         String command = responseParts[0].toLowerCase();
         Task t;
         switch (command) {
             case "todo":
                 String todoArgs = extractArgs(responseParts);
+                if (todoArgs.isEmpty()) {
+                    throw new AnswerMeException("Format: todo <description>");
+                }
                 t = new ToDo(todoArgs);
                 AnswerMe.taskList.add(t);
                 printAddNewItem(t);
@@ -152,19 +155,19 @@ public class AnswerMe {
                     String segment = segments[i].trim();
                     String[] argList = segment.split(" ", 2);
                     if (argList[1].isBlank()) {
-                        throw new IllegalArgumentException("Every flag must be followed by an argument.");
+                        throw new AnswerMeException("Every flag must be followed by an argument.");
                     }
                     flags.put(argList[0], argList[1]);
                 }
                 if (command.equals("deadline")) {
                     if (!flags.containsKey("/by")) {
-                        throw new IllegalArgumentException("Format: <deadline> <description> /by <when>.");
+                        throw new AnswerMeException("Format: <deadline> <description> /by <when>.");
                     }
                     t = new Deadline(desc, flags.get("/by"));
                 }
                 else {
                     if (!flags.containsKey("/from") || !flags.containsKey("/to")) {
-                        throw new IllegalArgumentException("Format: <event> <description> /from <when> /to <when>.");
+                        throw new AnswerMeException("Format: <event> <description> /from <when> /to <when>.");
                     }
                     t = new Event(desc, flags.get("/from"), flags.get("/to"));
                 }
