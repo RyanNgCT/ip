@@ -6,7 +6,7 @@ public class AnswerMe {
     public static final String BOTNAME = "AnswerMe";
     public static final String HLINE = "____________________________________________________________";
     private static final Scanner SCANNER = new Scanner(System.in);
-    private static ArrayList<String> taskList = new ArrayList<>();
+    private static ArrayList<Task> taskList = new ArrayList<>();
 
     public static void main(String[] args) {
         String banner = """
@@ -31,7 +31,7 @@ public class AnswerMe {
         }
         while (!exitProgram);
 
-        printIndentedString("Bye. Hope to see you again soon!");
+        formatOutputString("Bye. Hope to see you again soon!");
     }
 
     public static String readUserInput() {
@@ -39,26 +39,83 @@ public class AnswerMe {
     }
 
     public static boolean process(String userResponse) {
-        if (userResponse.equalsIgnoreCase("bye")) {
-            return true;
-        }
-        else if (userResponse.equalsIgnoreCase("list")) {
-            System.out.println(AnswerMe.HLINE);
-            for (int i = 0; i < taskList.size(); i++) {
-                System.out.println((i + 1) + ". " + taskList.get(i));
-            }
-            System.out.println(AnswerMe.HLINE + "\n");
-        }
-        else {
-            taskList.add(userResponse);
-            printIndentedString("added: " + userResponse);
+        String[] responseParts = userResponse.split(" ");
+
+        switch (responseParts[0].toLowerCase()){
+            case "bye":
+                return true;
+
+            case "list":
+                listTasks();
+                break;
+
+            case "mark":
+            case "unmark":
+                try {
+                    Integer index = extractListIndex(responseParts);
+                    Task t = AnswerMe.taskList.get(index);
+
+                    // set or unset based on first arg
+                    if (responseParts[0].equals("mark")) {
+                        t.setComplete();
+                        formatOutputString("Nice! I have marked this task as done:\n\t" + t.toString());
+                    }
+                    else {
+                        t.setIncomplete();
+                        formatOutputString("OK, I've marked this task as not done yet\n\t" + t.toString());
+                    }
+                }
+                catch (IllegalArgumentException e) {
+                    formatOutputString(e.getMessage());
+                }
+                catch (IndexOutOfBoundsException e) {
+                    formatOutputString("Please supply a valid index!");
+                }
+                break;
+
+            default:
+                AnswerMe.taskList.add(new Task(userResponse));
+                formatOutputString("added: " + userResponse);
+                break;
         }
         return false;
     }
 
-    public static void printIndentedString(String toPrint) {
-        System.out.println(AnswerMe.HLINE);
-        System.out.println(toPrint);
-        System.out.println(AnswerMe.HLINE + "\n");
+    public static void listTasks() {
+        if (!AnswerMe.taskList.isEmpty()) {
+            System.out.println("\t" + AnswerMe.HLINE);
+            System.out.println("\tHere are the tasks in your list:");
+            for (int i = 0; i < AnswerMe.taskList.size(); i++) {
+                System.out.println("\t" + (i + 1) + ". " + AnswerMe.taskList.get(i));
+            }
+            System.out.println("\t" + AnswerMe.HLINE + "\n");
+        }
+        else {
+            // empty list -> print message
+            formatOutputString("Task List is Empty!");
+        }
+    }
+
+    public static Integer extractListIndex(String[] responseParts) throws IllegalArgumentException, NumberFormatException {
+        if (responseParts == null || responseParts.length < 2) {
+            throw new IllegalArgumentException("An index must be supplied for this command.");
+        }
+        int index;
+        try {
+            index = Integer.parseInt(responseParts[1]);
+        } catch (NumberFormatException ex) {
+            throw new IllegalArgumentException("The list index must be a valid integer.", ex);
+        }
+
+        if (index < 1) {
+            throw new IllegalArgumentException("The list index must be at least 1.");
+        }
+        return index - 1;
+    }
+
+    public static void formatOutputString(String toPrint) {
+        System.out.println("\t" + AnswerMe.HLINE);
+        System.out.println("\t" + toPrint);
+        System.out.println("\t" + AnswerMe.HLINE + "\n");
     }
 }

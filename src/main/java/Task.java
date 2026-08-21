@@ -29,10 +29,15 @@ public class Task {
         this.isComplete = true;
     }
 
+    public void setIncomplete() {
+        this.isComplete = false;
+    }
+
     public boolean getCompletedStatus() {
         return this.isComplete;
     }
 
+    @Override
     public String toString() {
         return "[" + getStatusIcon() + "] " + this.description;
     }
