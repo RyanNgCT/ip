@@ -29,7 +29,12 @@ public class AnswerMe {
         boolean exitProgram = false;
         do {
             String userResponse = readUserInput();
-            exitProgram = process(userResponse);
+            try {
+                exitProgram = process(userResponse);
+            }
+            catch(AnswerMeException e) {
+                formatOutputString(e.getMessage());
+            }
         }
         while (!exitProgram);
 
@@ -40,7 +45,7 @@ public class AnswerMe {
         return AnswerMe.SCANNER.nextLine();
     }
 
-    public static boolean process(String userResponse) throws AnswerMeException, IndexOutOfBoundsException {
+    public static boolean process(String userResponse) throws AnswerMeException {
         String[] responseParts = userResponse.split(" ");
 
         switch (responseParts[0].toLowerCase()){
@@ -53,18 +58,23 @@ public class AnswerMe {
 
             case "mark":
             case "unmark":
+            case "delete":
                 try {
                     Integer index = extractListIndex(responseParts);
                     Task t = AnswerMe.taskList.get(index);
 
-                    // set or unset based on first arg
+                    // set, unset or delete based on first arg
                     if (responseParts[0].equals("mark")) {
                         t.setComplete();
                         formatOutputString("Nice! I have marked this task as done:\n" + t);
                     }
-                    else {
+                    else if (responseParts[0].equals("unmark")) {
                         t.setIncomplete();
                         formatOutputString("OK, I've marked this task as not done yet\n" + t);
+                    }
+                    else {
+                        AnswerMe.taskList.remove(t);
+                        printDeleteItem(t);
                     }
                 }
                 catch (AnswerMeException e) {
@@ -188,11 +198,15 @@ public class AnswerMe {
     }
 
     public static String getListStatus() {
-        return "Now you have " + AnswerMe.taskList.size() + " tasks in the list.";
+        return "You now have " + AnswerMe.taskList.size() + " tasks in the list.";
     }
 
     public static void printAddNewItem(Task t) {
-        String message = String.format("Got it. I've added this task:\n%s\n%s", t.toString(), getListStatus());
+        String message = String.format("Got it. I have added this task:\n%s\n%s", t.toString(), getListStatus());
+        formatOutputString(message);
+    }
+    public static void printDeleteItem(Task t) {
+        String message = String.format("Noted. I will remove this task:\n%s\n%s", t.toString(), getListStatus());
         formatOutputString(message);
     }
 }
