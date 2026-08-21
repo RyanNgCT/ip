@@ -6,8 +6,9 @@
 # Java build files
 *.class
 
-# Misc AI files
+# Misc files
 .codex/*
+compile.sh
 
 # Gradle build files
 /.gradle/

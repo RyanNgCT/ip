@@ -174,8 +174,8 @@ public class AnswerMe {
 
             default:
                 // to change this echo behaviour later
-                formatOutputString(userResponse);
-                break;
+                // formatOutputString(userResponse);
+                throw new AnswerMeException("I'm not sure what you mean :(");
         }
     }
 
