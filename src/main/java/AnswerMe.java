@@ -1,4 +1,5 @@
 // imports
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -74,8 +75,7 @@ public class AnswerMe {
                 break;
 
             default:
-                AnswerMe.taskList.add(new Task(userResponse));
-                formatOutputString("added: " + userResponse);
+                addTask(userResponse);
                 break;
         }
         return false;
@@ -88,6 +88,7 @@ public class AnswerMe {
             for (int i = 0; i < AnswerMe.taskList.size(); i++) {
                 System.out.println("\t" + (i + 1) + ". " + AnswerMe.taskList.get(i));
             }
+            System.out.println("\tNow you have " + AnswerMe.taskList.size() + " tasks in the list.");
             System.out.println("\t" + AnswerMe.HLINE + "\n");
         }
         else {
@@ -117,5 +118,30 @@ public class AnswerMe {
         System.out.println("\t" + AnswerMe.HLINE);
         System.out.println("\t" + toPrint);
         System.out.println("\t" + AnswerMe.HLINE + "\n");
+    }
+
+    public static void addTask(String userResponse) {
+        String[] responseParts = userResponse.split(" ");
+        switch (responseParts[0].toLowerCase()) {
+            case "todo":
+                String args = extractArgs(responseParts);
+                AnswerMe.taskList.add(new ToDo(args));
+                formatOutputString("added: " + args);
+                break;
+            case "deadline":
+            case "event":
+                break;
+            default:
+                // to change this echo behaviour later
+                formatOutputString(userResponse);
+        }
+
+//        AnswerMe.taskList.add(new Task(userResponse));
+//        formatOutputString("added: " + userResponse);
+    }
+
+    public static String extractArgs(String[] responseParts) {
+        String[] resized = Arrays.copyOfRange(responseParts,1,responseParts.length);
+        return String.join(" ", resized);
     }
 }
