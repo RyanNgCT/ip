@@ -76,7 +76,12 @@ public class AnswerMe {
                 break;
 
             default:
-                addTask(userResponse);
+                try {
+                    addTask(userResponse);
+                }
+                catch (IllegalArgumentException e) {
+                    formatOutputString(e.getMessage());
+                }
                 break;
         }
         return false;
@@ -147,15 +152,20 @@ public class AnswerMe {
                     String segment = segments[i].trim();
                     String[] argList = segment.split(" ", 2);
                     if (argList[1].isBlank()) {
-                        throw new IllegalArgumentException(
-                                "Every flag must be followed by a value.");
+                        throw new IllegalArgumentException("Every flag must be followed by an argument.");
                     }
                     flags.put(argList[0], argList[1]);
                 }
                 if (command.equals("deadline")) {
+                    if (!flags.containsKey("/by")) {
+                        throw new IllegalArgumentException("Format: <deadline> <description> /by <when>.");
+                    }
                     t = new Deadline(desc, flags.get("/by"));
                 }
                 else {
+                    if (!flags.containsKey("/from") || !flags.containsKey("/to")) {
+                        throw new IllegalArgumentException("Format: <event> <description> /from <when> /to <when>.");
+                    }
                     t = new Event(desc, flags.get("/from"), flags.get("/to"));
                 }
                 AnswerMe.taskList.add(t);
