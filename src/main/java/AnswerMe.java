@@ -59,6 +59,10 @@ public class AnswerMe {
             case "mark":
             case "unmark":
             case "delete":
+                if (AnswerMe.taskList.isEmpty()) {
+                    formatOutputString("The list is empty so we have nothing to " + responseParts[0] + ".");
+                    break;
+                }
                 try {
                     Integer index = extractListIndex(responseParts);
                     Task t = AnswerMe.taskList.get(index);
@@ -124,8 +128,8 @@ public class AnswerMe {
             throw new AnswerMeException("The list index must be a valid integer.");
         }
 
-        if (index < 1) {
-            throw new AnswerMeException("The list index must be at least 1.");
+        if (index < 1 || index > AnswerMe.taskList.size()) {
+            throw new AnswerMeException("The task does not exist in the list.");
         }
         return index - 1;
     }
