@@ -6,6 +6,9 @@
 # Java build files
 *.class
 
+# logs directory
+src/main/java/data/*
+
 # Misc files
 .codex/*
 compile.sh
