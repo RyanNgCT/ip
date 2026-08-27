@@ -39,6 +39,15 @@ public class Task {
 
     @Override
     public String toString() {
-        return "[" + getStatusIcon() + "] " + this.description;
+        return "[" + getStatusIcon() + "] " + description;
+    }
+
+    protected String getLogFormat(String type) {
+        String status = isComplete ? "Complete" : "Incomplete";
+        return type + " | " + status + " | " + description;
+    }
+
+    public String toStorageFormat() {
+        return "Task";
     }
 }
