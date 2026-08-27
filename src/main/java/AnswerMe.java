@@ -81,6 +81,7 @@ public class AnswerMe {
                         AnswerMe.taskList.remove(t);
                         printDeleteItem(t);
                     }
+                    Storage.saveTasks(AnswerMe.taskList);
                 }
                 catch (AnswerMeException e) {
                     formatOutputString(e.getMessage());
@@ -88,7 +89,6 @@ public class AnswerMe {
                 catch (IndexOutOfBoundsException e) {
                     formatOutputString("Please supply a valid index!");
                 }
-                Storage.saveTasks(AnswerMe.taskList);
                 break;
 
             default:
