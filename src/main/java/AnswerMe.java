@@ -26,6 +26,7 @@ public class AnswerMe {
         System.out.println("What can I do for you today?");
         System.out.println(AnswerMe.HLINE);
 
+        AnswerMe.taskList = Storage.loadTasks();
         boolean exitProgram = false;
         do {
             String userResponse = readUserInput();
@@ -87,6 +88,7 @@ public class AnswerMe {
                 catch (IndexOutOfBoundsException e) {
                     formatOutputString("Please supply a valid index!");
                 }
+                Storage.saveTasks(AnswerMe.taskList);
                 break;
 
             default:
@@ -155,6 +157,7 @@ public class AnswerMe {
                 t = new ToDo(todoArgs);
                 AnswerMe.taskList.add(t);
                 printAddNewItem(t);
+                Storage.saveTasks(AnswerMe.taskList);
                 break;
 
             case "deadline":
@@ -187,6 +190,7 @@ public class AnswerMe {
                 }
                 AnswerMe.taskList.add(t);
                 printAddNewItem(t);
+                Storage.saveTasks(AnswerMe.taskList);
                 break;
 
             default:
