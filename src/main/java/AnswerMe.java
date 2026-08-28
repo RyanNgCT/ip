@@ -1,4 +1,7 @@
 // imports
+import java.time.LocalDateTime;
+
+import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -166,6 +169,7 @@ public class AnswerMe {
                 String[] segments = args.split("(?=/by|/from|/to)");
                 String desc = segments[0].trim(); // task title
                 HashMap<String, String> flags = new HashMap<>();
+                DateTimeParser dtParser = new DateTimeParser();
 
                 // skip over task title
                 for (int i = 1; i < segments.length; i++) {
@@ -180,13 +184,23 @@ public class AnswerMe {
                     if (!flags.containsKey("/by")) {
                         throw new AnswerMeException("Format: <deadline> <description> /by <when>.");
                     }
-                    t = new Deadline(desc, flags.get("/by"));
+                    try {
+                        LocalDateTime by = dtParser.parseDateTime(flags.get("/by"));
+                        t = new Deadline(desc, by);
+                    } catch (DateTimeParseException e) {
+                        throw new AnswerMeException("Ensure date/time is formatted correctly.");
+                    }
                 }
                 else {
                     if (!flags.containsKey("/from") || !flags.containsKey("/to")) {
                         throw new AnswerMeException("Format: <event> <description> /from <when> /to <when>.");
                     }
-                    t = new Event(desc, flags.get("/from"), flags.get("/to"));
+                    LocalDateTime from = dtParser.parseDateTime(flags.get("/from"));
+                    LocalDateTime to = dtParser.parseDateTime(flags.get("/to"));
+                    if (!from.isBefore(to)) {
+                        throw new AnswerMeException("'From' datetime must occur before 'To'");
+                    }
+                    t = new Event(desc, from, to);
                 }
                 AnswerMe.taskList.add(t);
                 printAddNewItem(t);
@@ -194,7 +208,7 @@ public class AnswerMe {
                 break;
 
             default:
-                // to change this echo behaviour later
+                // to change this echo behavior later
                 // formatOutputString(userResponse);
                 throw new AnswerMeException("I'm not sure what you mean :(");
         }

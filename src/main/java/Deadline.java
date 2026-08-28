@@ -1,26 +1,28 @@
-public class Deadline extends Task{
-    protected String by;
+import java.time.LocalDateTime;
 
-    public Deadline(String description, String by) {
+public class Deadline extends Task{
+    protected LocalDateTime by;
+
+    public Deadline(String description, LocalDateTime by) {
         super(description);
         this.by = by;
     }
 
-    public void setDeadLine(String newDeadline) {
-        this.by = newDeadline;
+    public void setDeadLine(LocalDateTime newDeadline) {
+        by = newDeadline;
     }
 
-    public String getDueBy() {
-        return this.by;
+    public LocalDateTime getDueBy() {
+        return by;
     }
 
     @Override
     public String toString() {
-        return "[D]" + super.toString() + " (by: " + by + ")";
+        return "[D]" + super.toString() + " (by: " + DateTimeParser.dtToString(by) + ")";
     }
 
     @Override
     public String toStorageFormat() {
-        return getLogFormat("Deadline") + " | " + by;
+        return getLogFormat("Deadline") + " | " + DateTimeParser.dtToString(by);
     }
 }

@@ -91,6 +91,7 @@ public class Storage {
         }
 
         Task t = new Task(desc);
+        DateTimeParser dtParser = new DateTimeParser();
         switch (type) {
             case "todo":
                 if (fields.length != 3) {
@@ -103,14 +104,14 @@ public class Storage {
                 if (fields.length != 4) {
                     throw new AnswerMeException("Invalid Deadline on line " + lineNumber);
                 }
-                t = new Deadline(desc, fields[3]);
+                t = new Deadline(desc, dtParser.parse(fields[3]));
                 break;
 
             case "event":
                 if (fields.length != 5) {
                     throw new AnswerMeException("Invalid Event on line " + lineNumber);
                 }
-                t = new Event(desc, fields[3], fields[4]);
+                t = new Event(desc, dtParser.parse(fields[3]), dtParser.parse(fields[4]));
                 break;
 
             default:
