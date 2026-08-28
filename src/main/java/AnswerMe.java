@@ -185,7 +185,7 @@ public class AnswerMe {
                         throw new AnswerMeException("Format: <deadline> <description> /by <when>.");
                     }
                     try {
-                        LocalDateTime by = dtParser.parse(flags.get("/by"));
+                        LocalDateTime by = dtParser.parseDateTime(flags.get("/by"));
                         t = new Deadline(desc, by);
                     } catch (DateTimeParseException e) {
                         throw new AnswerMeException("Ensure date/time is formatted correctly.");
@@ -195,18 +195,12 @@ public class AnswerMe {
                     if (!flags.containsKey("/from") || !flags.containsKey("/to")) {
                         throw new AnswerMeException("Format: <event> <description> /from <when> /to <when>.");
                     }
-                    try {
-                        LocalDateTime from = dtParser.parse(flags.get("/from"));
-                        LocalDateTime to = dtParser.parse(flags.get("/to"));
-                        if (from.isBefore(to)) {
-                            t = new Event(desc, from, to);
-                        }
-                        else {
-                            throw new AnswerMeException("'From' datetime must occur before 'To'");
-                        }
-                    } catch (DateTimeParseException e) {
-                        throw new AnswerMeException("Ensure date/time is formatted correctly.");
+                    LocalDateTime from = dtParser.parseDateTime(flags.get("/from"));
+                    LocalDateTime to = dtParser.parseDateTime(flags.get("/to"));
+                    if (!from.isBefore(to)) {
+                        throw new AnswerMeException("'From' datetime must occur before 'To'");
                     }
+                    t = new Event(desc, from, to);
                 }
                 AnswerMe.taskList.add(t);
                 printAddNewItem(t);

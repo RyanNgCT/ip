@@ -45,6 +45,15 @@ public class DateTimeParser {
         throw new DateTimeParseException("Invalid datetime format!", "", 0);
     }
 
+    public LocalDateTime parseDateTime(String input)
+            throws AnswerMeException {
+        try {
+            return this.parse(input);
+        } catch (DateTimeParseException e) {
+            throw new AnswerMeException("Ensure date/time is formatted correctly.");
+        }
+    }
+
     public static String dtToString(LocalDateTime toUpdate) {
         if (toUpdate == null) {
             throw new DateTimeParseException("Datetime cannot be null.", "", 0);
