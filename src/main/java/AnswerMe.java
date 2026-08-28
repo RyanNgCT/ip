@@ -3,51 +3,29 @@ import java.time.LocalDateTime;
 
 import java.time.format.DateTimeParseException;
 import java.util.Arrays;
-import java.util.Scanner;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class AnswerMe {
-    public static final String BOTNAME = "AnswerMe";
-    public static final String HLINE = "____________________________________________________________";
-    private static final Scanner SCANNER = new Scanner(System.in);
     private static TaskList taskList = new TaskList();
 
     public static void main(String[] args) {
-        String banner = """
-                      >>                                                        >=>       >=>          \s
-                     >>=>                                                       >> >=>   >>=>          \s
-                    >> >=>     >==>>==>   >===>  >=>      >=>   >==>    >> >==> >=> >=> > >=>   >==>   \s
-                   >=>  >=>     >=>  >=> >=>      >=>  >  >=> >>   >=>   >=>    >=>  >=>  >=> >>   >=> \s
-                  >=====>>=>    >=>  >=>   >==>   >=> >>  >=> >>===>>=>  >=>    >=>   >>  >=> >>===>>=>\s
-                 >=>      >=>   >=>  >=>     >=>  >=>>  >=>=> >>         >=>    >=>       >=> >>       \s
-                >=>        >=> >==>  >=> >=> >=> >==>    >==>  >====>   >==>    >=>       >=>  >====>  \s
-                """;
-        System.out.println(banner);
-        System.out.println("Hello! I'm " + BOTNAME + ", your personal assistant bot.\nWhat can I do for you today?\n");
-        System.out.println(AnswerMe.HLINE);
-        System.out.println("What can I do for you today?");
-        System.out.println(AnswerMe.HLINE);
-
         AnswerMe.taskList = Storage.loadTasks();
+        UI ui = new UI();
+        ui.showWelcome();
         boolean exitProgram = false;
         do {
-            String userResponse = readUserInput();
+            String userResponse = UI.readUserInput();
             try {
                 exitProgram = process(userResponse);
             }
             catch(AnswerMeException e) {
-                formatOutputString(e.getMessage());
+                UI.formatOutputString(e.getMessage());
             }
         }
         while (!exitProgram);
-
-        formatOutputString("Bye. Hope to see you again soon!");
+        UI.formatOutputString("Bye. Hope to see you again soon!");
     }
 
-    public static String readUserInput() {
-        return AnswerMe.SCANNER.nextLine();
-    }
 
     public static boolean process(String userResponse) throws AnswerMeException {
         String[] responseParts = userResponse.split(" ");
@@ -57,14 +35,14 @@ public class AnswerMe {
                 return true;
 
             case "list":
-                listTasks();
+                UI.listTasks(AnswerMe.taskList);
                 break;
 
             case "mark":
             case "unmark":
             case "delete":
                 if (AnswerMe.taskList.isEmpty()) {
-                    formatOutputString("The list is empty so we have nothing to " + responseParts[0] + ".");
+                    UI.formatOutputString("The list is empty so we have nothing to " + responseParts[0] + ".");
                     break;
                 }
                 try {
@@ -74,23 +52,23 @@ public class AnswerMe {
                     // set, unset or delete based on first arg
                     if (responseParts[0].equals("mark")) {
                         t.setComplete();
-                        formatOutputString("Nice! I have marked this task as done:\n" + t);
+                        UI.formatOutputString("Nice! I have marked this task as done:\n" + t);
                     }
                     else if (responseParts[0].equals("unmark")) {
                         t.setIncomplete();
-                        formatOutputString("OK, I've marked this task as not done yet\n" + t);
+                        UI.formatOutputString("OK, I've marked this task as not done yet\n" + t);
                     }
                     else {
                         AnswerMe.taskList.remove(t);
-                        printDeleteItem(t);
+                        UI.printDeleteItem(t, AnswerMe.taskList.size());
                     }
                     Storage.saveTasks(AnswerMe.taskList);
                 }
                 catch (AnswerMeException e) {
-                    formatOutputString(e.getMessage());
+                    UI.formatOutputString(e.getMessage());
                 }
                 catch (IndexOutOfBoundsException e) {
-                    formatOutputString("Please supply a valid index!");
+                    UI.formatOutputString("Please supply a valid index!");
                 }
                 break;
 
@@ -99,24 +77,11 @@ public class AnswerMe {
                     addTask(userResponse);
                 }
                 catch (AnswerMeException e) {
-                    formatOutputString(e.getMessage());
+                    UI.formatOutputString(e.getMessage());
                 }
                 break;
         }
         return false;
-    }
-
-    public static void listTasks() {
-        if (!AnswerMe.taskList.isEmpty()) {
-            System.out.println("\t" + AnswerMe.HLINE);
-            System.out.println("\tHere are the tasks in your list:");
-            System.out.print(AnswerMe.taskList.toString());
-            System.out.println("\t" + AnswerMe.HLINE + "\n");
-        }
-        else {
-            // empty list -> print message
-            formatOutputString("Task List is Empty!");
-        }
     }
 
     public static Integer extractListIndex(String[] responseParts) throws AnswerMeException {
@@ -136,14 +101,6 @@ public class AnswerMe {
         return index - 1;
     }
 
-    public static void formatOutputString(String toPrint) {
-        System.out.println("\t" + AnswerMe.HLINE);
-        for (String line: toPrint.split("\n")) {
-            System.out.println("\t" + line);
-        }
-        System.out.println("\t" + AnswerMe.HLINE + "\n");
-    }
-
     public static void addTask(String userResponse) throws AnswerMeException{
         String[] responseParts = userResponse.split(" ");
         String command = responseParts[0].toLowerCase();
@@ -156,7 +113,7 @@ public class AnswerMe {
                 }
                 t = new ToDo(todoArgs);
                 AnswerMe.taskList.add(t);
-                printAddNewItem(t);
+                UI.printAddNewItem(t, AnswerMe.taskList.size());
                 Storage.saveTasks(AnswerMe.taskList);
                 break;
 
@@ -200,13 +157,11 @@ public class AnswerMe {
                     t = new Event(desc, from, to);
                 }
                 AnswerMe.taskList.add(t);
-                printAddNewItem(t);
+                UI.printAddNewItem(t, AnswerMe.taskList.size());
                 Storage.saveTasks(AnswerMe.taskList);
                 break;
 
             default:
-                // to change this echo behavior later
-                // formatOutputString(userResponse);
                 throw new AnswerMeException("I'm not sure what you mean :(");
         }
     }
@@ -214,18 +169,5 @@ public class AnswerMe {
     public static String extractArgs(String[] responseParts) {
         String[] resized = Arrays.copyOfRange(responseParts,1,responseParts.length);
         return String.join(" ", resized);
-    }
-
-    public static String getListStatus() {
-        return "You now have " + AnswerMe.taskList.size() + " tasks in the list.";
-    }
-
-    public static void printAddNewItem(Task t) {
-        String message = String.format("Got it. I have added this task:\n%s\n%s", t.toString(), getListStatus());
-        formatOutputString(message);
-    }
-    public static void printDeleteItem(Task t) {
-        String message = String.format("Noted. I will remove this task:\n%s\n%s", t.toString(), getListStatus());
-        formatOutputString(message);
     }
 }
