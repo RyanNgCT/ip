@@ -3,7 +3,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Storage {
@@ -13,7 +12,7 @@ public class Storage {
 
     }
 
-    public static void saveTasks(ArrayList<Task> taskList) {
+    public static void saveTasks(TaskList taskList) {
         if (!Storage.doesFileExists()) {
             try {
                 createDataFile();
@@ -34,8 +33,8 @@ public class Storage {
         }
     }
 
-    public static ArrayList<Task> loadTasks() {
-        ArrayList<Task> taskList = new ArrayList<>();
+    public static TaskList loadTasks() {
+        TaskList taskList = new TaskList();
         try (Scanner scanner = new Scanner(new File(DATA_FILE_PATH))) {
             int lineNumber = 1;
 

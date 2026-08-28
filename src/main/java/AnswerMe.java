@@ -11,7 +11,7 @@ public class AnswerMe {
     public static final String BOTNAME = "AnswerMe";
     public static final String HLINE = "____________________________________________________________";
     private static final Scanner SCANNER = new Scanner(System.in);
-    private static ArrayList<Task> taskList = new ArrayList<>();
+    private static TaskList taskList = new TaskList();
 
     public static void main(String[] args) {
         String banner = """
@@ -110,10 +110,7 @@ public class AnswerMe {
         if (!AnswerMe.taskList.isEmpty()) {
             System.out.println("\t" + AnswerMe.HLINE);
             System.out.println("\tHere are the tasks in your list:");
-            for (int i = 0; i < AnswerMe.taskList.size(); i++) {
-                System.out.println("\t" + (i + 1) + ". " + AnswerMe.taskList.get(i));
-            }
-            // System.out.println("\t" + getListStatus());
+            System.out.print(AnswerMe.taskList.toString());
             System.out.println("\t" + AnswerMe.HLINE + "\n");
         }
         else {
