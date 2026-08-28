@@ -7,24 +7,24 @@ import java.util.List;
 
 public class DateTimeParser {
     private static final DateTimeFormatter DATETIME_OUTPUT_FORMAT =
-            DateTimeFormatter.ofPattern("MMM dd yyyy HH:mm");
+            DateTimeFormatter.ofPattern("MMM d yyyy HH:mm");
     private static final DateTimeFormatter DATE_OUTPUT_FORMAT =
-            DateTimeFormatter.ofPattern("MMM dd yyyy");
-    private List<DateTimeFormatter> dateTimeFormats;
+            DateTimeFormatter.ofPattern("MMM d yyyy");
+    private final List<DateTimeFormatter> dateTimeFormats;
 
     public DateTimeParser() {
         // allowed list of formats
-        this.dateTimeFormats = List.of(DateTimeFormatter.ofPattern("yyyy-M-dd"),
-                DateTimeFormatter.ofPattern("yyyy/M/dd"),
-                DateTimeFormatter.ofPattern("dd-M-yyyy"),
-                DateTimeFormatter.ofPattern("dd/M/yyyy"),
-                DateTimeFormatter.ofPattern("MMM dd yyyy"),
-                DateTimeFormatter.ofPattern("MMM dd yyyy HH:mm"),
+        this.dateTimeFormats = List.of(DateTimeFormatter.ofPattern("yyyy-M-d"),
+                DateTimeFormatter.ofPattern("yyyy/M/d"),
+                DateTimeFormatter.ofPattern("d-M-yyyy"),
+                DateTimeFormatter.ofPattern("d/M/yyyy"),
+                DateTimeFormatter.ofPattern("MMM d yyyy"),
+                DateTimeFormatter.ofPattern("MMM d yyyy HH:mm"),
                 DateTimeFormatter.ofPattern("d/M/yyyy HHmm"),
-                DateTimeFormatter.ofPattern("yyyy-M-dd HH:mm"),
-                DateTimeFormatter.ofPattern("yyyy/M/dd HH:mm"),
-                DateTimeFormatter.ofPattern("dd-M-yyyy HH:mm"),
-                DateTimeFormatter.ofPattern("dd/M/yyyy HH:mm"));
+                DateTimeFormatter.ofPattern("yyyy-M-d HH:mm"),
+                DateTimeFormatter.ofPattern("yyyy/M/d HH:mm"),
+                DateTimeFormatter.ofPattern("d-M-yyyy HH:mm"),
+                DateTimeFormatter.ofPattern("d/M/yyyy HH:mm"));
     }
 
     public LocalDateTime parse(String toParse) throws DateTimeParseException {
