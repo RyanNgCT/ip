@@ -35,4 +35,4 @@ When proposing or creating a commit message, include enough detail to explain th
 Do not commit or push unless explicitly asked.
 
 # Other rules
-Unless the user says otherwise, always ask for permission before performing any modification to files or code.
+Unless the user says otherwise, always ask for permission before performing any modification or writing to files or code.
