@@ -39,11 +39,11 @@ public class UI {
         }
         else {
             // empty list -> print message
-            formatOutputString("Task List is Empty!");
+            showMessage("Task List is Empty!");
         }
     }
 
-    public static void formatOutputString(String toPrint) {
+    public static void showMessage(String toPrint) {
         System.out.println("\t" + HLINE);
         for (String line: toPrint.split("\n")) {
             System.out.println("\t" + line);
@@ -52,11 +52,11 @@ public class UI {
     }
 
     public static void printAddNewItem(Task t, int taskCount) {
-        formatOutputString("Got it. I have added this task:\n"
+        showMessage("Got it. I have added this task:\n"
                 + t + "\nYou now have " + taskCount + " tasks in the list.");
     }
     public static void printDeleteItem(Task t, int taskCount) {
-        formatOutputString("Noted. I will remove this task:\n"
+        showMessage("Noted. I will remove this task:\n"
                 + t + "\nYou now have " + taskCount + " tasks in the list.");
     }
 }

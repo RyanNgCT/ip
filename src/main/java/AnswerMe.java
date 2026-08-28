@@ -19,11 +19,11 @@ public class AnswerMe {
                 exitProgram = process(userResponse);
             }
             catch(AnswerMeException e) {
-                UI.formatOutputString(e.getMessage());
+                UI.showMessage(e.getMessage());
             }
         }
         while (!exitProgram);
-        UI.formatOutputString("Bye. Hope to see you again soon!");
+        UI.showMessage("Bye. Hope to see you again soon!");
     }
 
 
@@ -42,7 +42,7 @@ public class AnswerMe {
             case "unmark":
             case "delete":
                 if (AnswerMe.taskList.isEmpty()) {
-                    UI.formatOutputString("The list is empty so we have nothing to " + responseParts[0] + ".");
+                    UI.showMessage("The list is empty so we have nothing to " + responseParts[0] + ".");
                     break;
                 }
                 try {
@@ -52,11 +52,11 @@ public class AnswerMe {
                     // set, unset or delete based on first arg
                     if (responseParts[0].equals("mark")) {
                         t.setComplete();
-                        UI.formatOutputString("Nice! I have marked this task as done:\n" + t);
+                        UI.showMessage("Nice! I have marked this task as done:\n" + t);
                     }
                     else if (responseParts[0].equals("unmark")) {
                         t.setIncomplete();
-                        UI.formatOutputString("OK, I've marked this task as not done yet\n" + t);
+                        UI.showMessage("OK, I've marked this task as not done yet\n" + t);
                     }
                     else {
                         AnswerMe.taskList.remove(t);
@@ -65,10 +65,10 @@ public class AnswerMe {
                     Storage.saveTasks(AnswerMe.taskList);
                 }
                 catch (AnswerMeException e) {
-                    UI.formatOutputString(e.getMessage());
+                    UI.showMessage(e.getMessage());
                 }
                 catch (IndexOutOfBoundsException e) {
-                    UI.formatOutputString("Please supply a valid index!");
+                    UI.showMessage("Please supply a valid index!");
                 }
                 break;
 
@@ -77,7 +77,7 @@ public class AnswerMe {
                     addTask(userResponse);
                 }
                 catch (AnswerMeException e) {
-                    UI.formatOutputString(e.getMessage());
+                    UI.showMessage(e.getMessage());
                 }
                 break;
         }
