@@ -33,7 +33,7 @@ public class Storage {
         }
     }
 
-    public TaskList loadTasks() {
+    public TaskList loadTasks() throws AnswerMeException {
         TaskList taskList = new TaskList();
         try (Scanner scanner = new Scanner(new File(DATA_FILE_PATH))) {
             int lineNumber = 1;
@@ -42,11 +42,7 @@ public class Storage {
                 String line = scanner.nextLine();
 
                 if (!line.isBlank()) {
-                    try {
-                        taskList.add(parseTask(line, lineNumber));
-                    } catch (AnswerMeException e) {
-                        System.out.println(e.getMessage());
-                    }
+                    taskList.add(parseTask(line, lineNumber));
                 }
                 lineNumber++;
             }
@@ -103,14 +99,14 @@ public class Storage {
                 if (fields.length != 4) {
                     throw new AnswerMeException("Invalid Deadline on line " + lineNumber);
                 }
-                t = new Deadline(desc, dtParser.parse(fields[3]));
+                t = new Deadline(desc, dtParser.parseDateTime(fields[3]));
                 break;
 
             case "event":
                 if (fields.length != 5) {
                     throw new AnswerMeException("Invalid Event on line " + lineNumber);
                 }
-                t = new Event(desc, dtParser.parse(fields[3]), dtParser.parse(fields[4]));
+                t = new Event(desc, dtParser.parseDateTime(fields[3]), dtParser.parseDateTime(fields[4]));
                 break;
 
             default:

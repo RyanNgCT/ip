@@ -51,6 +51,12 @@ public class Ui {
         System.out.println("\t" + HLINE + "\n");
     }
 
+    public void showLoadingError() {
+        System.out.println(HLINE);
+        System.out.println("!ERROR! Unable to load saved file.\nInitializing task list as empty...");
+        System.out.println(HLINE);
+    }
+
     public void printAddNewItem(Task t, int taskCount) {
         this.showMessage("Got it. I have added this task:\n"
                 + t + "\nYou now have " + taskCount + " tasks in the list.");
