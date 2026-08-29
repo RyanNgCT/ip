@@ -1,3 +1,9 @@
+package answerme.command;
+
+import answerme.task.TaskList;
+import answerme.storage.Storage;
+import answerme.ui.Ui;
+
 public class ExitCommand extends Command {
 
     public ExitCommand() {

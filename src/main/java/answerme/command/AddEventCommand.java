@@ -1,3 +1,6 @@
+package answerme.command;
+
+import answerme.task.Event;
 import java.time.LocalDateTime;
 
 public class AddEventCommand extends AddCommand {
