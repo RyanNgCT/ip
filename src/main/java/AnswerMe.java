@@ -27,7 +27,8 @@ public class AnswerMe {
     }
 
 
-    public static boolean process(String userResponse, Ui ui, Storage storage) throws AnswerMeException {
+    public static boolean process(String userResponse, Ui ui, Storage storage)
+            throws AnswerMeException {
         String[] responseParts = userResponse.split(" ");
 
         switch (responseParts[0].toLowerCase()){
@@ -41,8 +42,11 @@ public class AnswerMe {
             case "mark":
             case "unmark":
             case "delete":
-                Integer index = extractListIndex(responseParts);
                 String command = responseParts[0];
+                if (taskList.isEmpty()) {
+                    throw new AnswerMeException("The list is empty so we have nothing to " + command + ".");
+                }
+                int index = extractListIndex(responseParts);
 
                 // set, unset or delete based on first arg
                 if (command.equals("mark")) {
@@ -68,7 +72,7 @@ public class AnswerMe {
         return false;
     }
 
-    public static Integer extractListIndex(String[] responseParts) throws AnswerMeException {
+    public static int extractListIndex(String[] responseParts) throws AnswerMeException {
         if (responseParts == null || responseParts.length < 2) {
             throw new AnswerMeException("An index must be supplied for this command.");
         }

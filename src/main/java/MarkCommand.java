@@ -8,10 +8,6 @@ public class MarkCommand extends Command {
     @Override
     public void execute(TaskList taskList, Ui ui, Storage storage)
             throws AnswerMeException {
-        if (taskList.isEmpty()) {
-            throw new AnswerMeException("The list is empty so we have nothing to mark.");
-        }
-
         Task t = taskList.get(taskIndex);
         t.setComplete();
         ui.showMessage("Nice! I have marked this task as done:\n" + t);
