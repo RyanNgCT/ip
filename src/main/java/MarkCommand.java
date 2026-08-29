@@ -8,7 +8,7 @@ public class MarkCommand extends Command {
     @Override
     public void execute(TaskList taskList, Ui ui, Storage storage)
             throws AnswerMeException {
-        Task t = taskList.get(taskIndex);
+        Task t = taskList.getTask(taskIndex);
         t.setComplete();
         ui.showMessage("Nice! I have marked this task as done:\n" + t);
         storage.saveTasks(taskList);

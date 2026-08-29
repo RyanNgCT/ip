@@ -8,7 +8,7 @@ public class DeleteCommand extends Command {
     @Override
     public void execute(TaskList taskList, Ui ui, Storage storage)
             throws AnswerMeException {
-        Task t = taskList.get(taskIndex);
+        Task t = taskList.getTask(taskIndex);
         taskList.remove(t);
         ui.printDeleteItem(t, taskList.size());
         storage.saveTasks(taskList);
