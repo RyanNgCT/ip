@@ -27,7 +27,8 @@ public class DateTimeParser {
                 DateTimeFormatter.ofPattern("d/M/yyyy HH:mm"));
     }
 
-    public LocalDateTime parse(String toParse) throws DateTimeParseException {
+    public LocalDateTime parse(String toParse)
+            throws DateTimeParseException {
         String toParseTrimmed = toParse.trim();
         for (DateTimeFormatter format : dateTimeFormats) {
             try {

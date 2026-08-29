@@ -1,4 +1,4 @@
-# Console UI test plan
+# Console Ui test plan
 
 This plan is the input to the project-specific `test-ui` skill. Add test cases to the JSON block below in the order they should run. Each case records its aim, the console input lines, and the complete expected output.
 

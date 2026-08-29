@@ -3,7 +3,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Storage {
@@ -13,8 +12,8 @@ public class Storage {
 
     }
 
-    public static void saveTasks(ArrayList<Task> taskList) {
-        if (!Storage.doesFileExists()) {
+    public void saveTasks(TaskList taskList) {
+        if (!this.doesFileExists()) {
             try {
                 createDataFile();
             }
@@ -34,8 +33,8 @@ public class Storage {
         }
     }
 
-    public static ArrayList<Task> loadTasks() {
-        ArrayList<Task> taskList = new ArrayList<>();
+    public TaskList loadTasks() throws AnswerMeException {
+        TaskList taskList = new TaskList();
         try (Scanner scanner = new Scanner(new File(DATA_FILE_PATH))) {
             int lineNumber = 1;
 
@@ -43,11 +42,7 @@ public class Storage {
                 String line = scanner.nextLine();
 
                 if (!line.isBlank()) {
-                    try {
-                        taskList.add(parseTask(line, lineNumber));
-                    } catch (AnswerMeException e) {
-                        System.out.println(e.getMessage());
-                    }
+                    taskList.add(parseTask(line, lineNumber));
                 }
                 lineNumber++;
             }
@@ -59,11 +54,11 @@ public class Storage {
         return taskList;
     }
 
-    public static boolean doesFileExists() {
+    public boolean doesFileExists() {
         return new File(DATA_FILE_PATH).exists();
     }
 
-    public static void createDataFile() throws AnswerMeException {
+    public void createDataFile() throws AnswerMeException {
         File f = new File(DATA_FILE_PATH);
         File dir = f.getParentFile();
         if (dir != null && !dir.exists()) {
@@ -77,7 +72,7 @@ public class Storage {
         }
     }
 
-    public static Task parseTask(String line, int lineNumber) throws AnswerMeException {
+    public Task parseTask(String line, int lineNumber) throws AnswerMeException {
         String[] fields = line.split("\\s*\\|\\s*", -1);
         if (fields.length < 3) {
             throw new AnswerMeException("Invalid task found on line " + lineNumber);
@@ -104,14 +99,14 @@ public class Storage {
                 if (fields.length != 4) {
                     throw new AnswerMeException("Invalid Deadline on line " + lineNumber);
                 }
-                t = new Deadline(desc, dtParser.parse(fields[3]));
+                t = new Deadline(desc, dtParser.parseDateTime(fields[3]));
                 break;
 
             case "event":
                 if (fields.length != 5) {
                     throw new AnswerMeException("Invalid Event on line " + lineNumber);
                 }
-                t = new Event(desc, dtParser.parse(fields[3]), dtParser.parse(fields[4]));
+                t = new Event(desc, dtParser.parseDateTime(fields[3]), dtParser.parseDateTime(fields[4]));
                 break;
 
             default:
