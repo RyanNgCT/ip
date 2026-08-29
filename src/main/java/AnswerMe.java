@@ -17,7 +17,7 @@ public class AnswerMe {
         do {
             String userResponse = ui.readUserInput();
             try {
-                exitProgram = process(userResponse);
+                exitProgram = process(userResponse, ui, storage);
             }
             catch(AnswerMeException e) {
                 ui.showMessage(e.getMessage());
@@ -28,50 +28,32 @@ public class AnswerMe {
     }
 
 
-    public static boolean process(String userResponse) throws AnswerMeException {
+    public static boolean process(String userResponse, Ui ui, Storage storage) throws AnswerMeException {
         String[] responseParts = userResponse.split(" ");
-        Ui ui = new Ui();
-        Storage storage = new Storage();
 
         switch (responseParts[0].toLowerCase()){
             case "bye":
                 return true;
 
             case "list":
-                ui.listTasks(AnswerMe.taskList);
+                new ListCommand().execute(AnswerMe.taskList, ui, storage);
                 break;
 
             case "mark":
             case "unmark":
             case "delete":
-                if (AnswerMe.taskList.isEmpty()) {
-                    ui.showMessage("The list is empty so we have nothing to " + responseParts[0] + ".");
-                    break;
-                }
-                try {
-                    Integer index = extractListIndex(responseParts);
-                    Task t = AnswerMe.taskList.get(index);
+                Integer index = extractListIndex(responseParts);
+                String command = responseParts[0];
 
-                    // set, unset or delete based on first arg
-                    if (responseParts[0].equals("mark")) {
-                        t.setComplete();
-                        ui.showMessage("Nice! I have marked this task as done:\n" + t);
-                    }
-                    else if (responseParts[0].equals("unmark")) {
-                        t.setIncomplete();
-                        ui.showMessage("OK, I've marked this task as not done yet\n" + t);
-                    }
-                    else {
-                        AnswerMe.taskList.remove(t);
-                        ui.printDeleteItem(t, AnswerMe.taskList.size());
-                    }
-                    storage.saveTasks(AnswerMe.taskList);
+                // set, unset or delete based on first arg
+                if (command.equals("mark")) {
+                   new MarkCommand(index).execute(AnswerMe.taskList, ui, storage);
                 }
-                catch (AnswerMeException e) {
-                    ui.showMessage(e.getMessage());
+                else if (command.equals("unmark")) {
+                    new UnmarkCommand(index).execute(AnswerMe.taskList, ui, storage);
                 }
-                catch (IndexOutOfBoundsException e) {
-                    ui.showMessage("Please supply a valid index!");
+                else {
+                    new DeleteCommand(index).execute(AnswerMe.taskList, ui, storage);
                 }
                 break;
 
