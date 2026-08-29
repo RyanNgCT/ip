@@ -1,7 +1,6 @@
 // imports
 import java.time.LocalDateTime;
 
-import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -59,7 +58,7 @@ public class AnswerMe {
 
             default:
                 try {
-                    addTask(userResponse);
+                    addTask(userResponse, ui, storage);
                 }
                 catch (AnswerMeException e) {
                     ui.showMessage(e.getMessage());
@@ -86,27 +85,21 @@ public class AnswerMe {
         return index - 1;
     }
 
-    public static void addTask(String userResponse) throws AnswerMeException{
+    public static void addTask(String userResponse, Ui ui, Storage storage) throws AnswerMeException{
         String[] responseParts = userResponse.split(" ");
         String command = responseParts[0].toLowerCase();
-        Task t;
-        Ui ui = new Ui();
-        Storage storage = new Storage();
+        String args = extractArgs(responseParts);
+
         switch (command) {
             case "todo":
-                String todoArgs = extractArgs(responseParts);
-                if (todoArgs.isEmpty()) {
+                if (args.isEmpty()) {
                     throw new AnswerMeException("Format: todo <description>");
                 }
-                t = new ToDo(todoArgs);
-                AnswerMe.taskList.add(t);
-                ui.printAddNewItem(t, AnswerMe.taskList.size());
-                storage.saveTasks(AnswerMe.taskList);
+                new AddToDoCommand(args).execute(AnswerMe.taskList, ui, storage);
                 break;
 
             case "deadline":
             case "event":
-                String args = extractArgs(responseParts);
                 String[] segments = args.split("(?=/by|/from|/to)");
                 String desc = segments[0].trim(); // task title
                 HashMap<String, String> flags = new HashMap<>();
@@ -121,16 +114,13 @@ public class AnswerMe {
                     }
                     flags.put(argList[0], argList[1]);
                 }
+
                 if (command.equals("deadline")) {
                     if (!flags.containsKey("/by")) {
                         throw new AnswerMeException("Format: <deadline> <description> /by <when>.");
                     }
-                    try {
-                        LocalDateTime by = dtParser.parseDateTime(flags.get("/by"));
-                        t = new Deadline(desc, by);
-                    } catch (DateTimeParseException e) {
-                        throw new AnswerMeException("Ensure date/time is formatted correctly.");
-                    }
+                    LocalDateTime by = dtParser.parseDateTime(flags.get("/by"));
+                    new AddDeadlineCommand(desc, by).execute(AnswerMe.taskList, ui, storage);
                 }
                 else {
                     if (!flags.containsKey("/from") || !flags.containsKey("/to")) {
@@ -141,11 +131,8 @@ public class AnswerMe {
                     if (!from.isBefore(to)) {
                         throw new AnswerMeException("'From' datetime must occur before 'To'");
                     }
-                    t = new Event(desc, from, to);
+                    new AddEventCommand(desc, from, to).execute(AnswerMe.taskList, ui, storage);
                 }
-                AnswerMe.taskList.add(t);
-                ui.printAddNewItem(t, AnswerMe.taskList.size());
-                storage.saveTasks(AnswerMe.taskList);
                 break;
 
             default:
