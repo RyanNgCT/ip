@@ -1,11 +1,11 @@
 import java.util.Scanner;
 
-public class UI {
-    public static final String BOTNAME = "AnswerMe";
-    public static final String HLINE = "____________________________________________________________";
-    private static final Scanner SCANNER = new Scanner(System.in);
+public class Ui {
+    private final String BOTNAME = "AnswerMe";
+    private final String HLINE = "____________________________________________________________";
+    private final Scanner SCANNER = new Scanner(System.in);
 
-    public UI() {
+    public Ui() {
 
     }
 
@@ -26,11 +26,11 @@ public class UI {
         System.out.println(HLINE);
     }
 
-    public static String readUserInput() {
+    public String readUserInput() {
         return SCANNER.nextLine();
     }
 
-    public static void listTasks(TaskList taskList) {
+    public void listTasks(TaskList taskList) {
         if (!taskList.isEmpty()) {
             System.out.println("\t" + HLINE);
             System.out.println("\tHere are the tasks in your list:");
@@ -39,11 +39,11 @@ public class UI {
         }
         else {
             // empty list -> print message
-            showMessage("Task List is Empty!");
+            this.showMessage("Task List is Empty!");
         }
     }
 
-    public static void showMessage(String toPrint) {
+    public void showMessage(String toPrint) {
         System.out.println("\t" + HLINE);
         for (String line: toPrint.split("\n")) {
             System.out.println("\t" + line);
@@ -51,12 +51,12 @@ public class UI {
         System.out.println("\t" + HLINE + "\n");
     }
 
-    public static void printAddNewItem(Task t, int taskCount) {
-        showMessage("Got it. I have added this task:\n"
+    public void printAddNewItem(Task t, int taskCount) {
+        this.showMessage("Got it. I have added this task:\n"
                 + t + "\nYou now have " + taskCount + " tasks in the list.");
     }
-    public static void printDeleteItem(Task t, int taskCount) {
-        showMessage("Noted. I will remove this task:\n"
+    public void printDeleteItem(Task t, int taskCount) {
+        this.showMessage("Noted. I will remove this task:\n"
                 + t + "\nYou now have " + taskCount + " tasks in the list.");
     }
 }

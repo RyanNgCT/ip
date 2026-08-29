@@ -12,8 +12,8 @@ public class Storage {
 
     }
 
-    public static void saveTasks(TaskList taskList) {
-        if (!Storage.doesFileExists()) {
+    public void saveTasks(TaskList taskList) {
+        if (!this.doesFileExists()) {
             try {
                 createDataFile();
             }
@@ -33,7 +33,7 @@ public class Storage {
         }
     }
 
-    public static TaskList loadTasks() {
+    public TaskList loadTasks() {
         TaskList taskList = new TaskList();
         try (Scanner scanner = new Scanner(new File(DATA_FILE_PATH))) {
             int lineNumber = 1;
@@ -58,11 +58,11 @@ public class Storage {
         return taskList;
     }
 
-    public static boolean doesFileExists() {
+    public boolean doesFileExists() {
         return new File(DATA_FILE_PATH).exists();
     }
 
-    public static void createDataFile() throws AnswerMeException {
+    public void createDataFile() throws AnswerMeException {
         File f = new File(DATA_FILE_PATH);
         File dir = f.getParentFile();
         if (dir != null && !dir.exists()) {
@@ -76,7 +76,7 @@ public class Storage {
         }
     }
 
-    public static Task parseTask(String line, int lineNumber) throws AnswerMeException {
+    public Task parseTask(String line, int lineNumber) throws AnswerMeException {
         String[] fields = line.split("\\s*\\|\\s*", -1);
         if (fields.length < 3) {
             throw new AnswerMeException("Invalid task found on line " + lineNumber);

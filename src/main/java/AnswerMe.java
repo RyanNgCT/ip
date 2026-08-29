@@ -9,40 +9,43 @@ public class AnswerMe {
     private static TaskList taskList = new TaskList();
 
     public static void main(String[] args) {
-        AnswerMe.taskList = Storage.loadTasks();
-        UI ui = new UI();
+        Storage storage = new Storage();
+        AnswerMe.taskList = storage.loadTasks();
+        Ui ui = new Ui();
         ui.showWelcome();
         boolean exitProgram = false;
         do {
-            String userResponse = UI.readUserInput();
+            String userResponse = ui.readUserInput();
             try {
                 exitProgram = process(userResponse);
             }
             catch(AnswerMeException e) {
-                UI.showMessage(e.getMessage());
+                ui.showMessage(e.getMessage());
             }
         }
         while (!exitProgram);
-        UI.showMessage("Bye. Hope to see you again soon!");
+        ui.showMessage("Bye. Hope to see you again soon!");
     }
 
 
     public static boolean process(String userResponse) throws AnswerMeException {
         String[] responseParts = userResponse.split(" ");
+        Ui ui = new Ui();
+        Storage storage = new Storage();
 
         switch (responseParts[0].toLowerCase()){
             case "bye":
                 return true;
 
             case "list":
-                UI.listTasks(AnswerMe.taskList);
+                ui.listTasks(AnswerMe.taskList);
                 break;
 
             case "mark":
             case "unmark":
             case "delete":
                 if (AnswerMe.taskList.isEmpty()) {
-                    UI.showMessage("The list is empty so we have nothing to " + responseParts[0] + ".");
+                    ui.showMessage("The list is empty so we have nothing to " + responseParts[0] + ".");
                     break;
                 }
                 try {
@@ -52,23 +55,23 @@ public class AnswerMe {
                     // set, unset or delete based on first arg
                     if (responseParts[0].equals("mark")) {
                         t.setComplete();
-                        UI.showMessage("Nice! I have marked this task as done:\n" + t);
+                        ui.showMessage("Nice! I have marked this task as done:\n" + t);
                     }
                     else if (responseParts[0].equals("unmark")) {
                         t.setIncomplete();
-                        UI.showMessage("OK, I've marked this task as not done yet\n" + t);
+                        ui.showMessage("OK, I've marked this task as not done yet\n" + t);
                     }
                     else {
                         AnswerMe.taskList.remove(t);
-                        UI.printDeleteItem(t, AnswerMe.taskList.size());
+                        ui.printDeleteItem(t, AnswerMe.taskList.size());
                     }
-                    Storage.saveTasks(AnswerMe.taskList);
+                    storage.saveTasks(AnswerMe.taskList);
                 }
                 catch (AnswerMeException e) {
-                    UI.showMessage(e.getMessage());
+                    ui.showMessage(e.getMessage());
                 }
                 catch (IndexOutOfBoundsException e) {
-                    UI.showMessage("Please supply a valid index!");
+                    ui.showMessage("Please supply a valid index!");
                 }
                 break;
 
@@ -77,7 +80,7 @@ public class AnswerMe {
                     addTask(userResponse);
                 }
                 catch (AnswerMeException e) {
-                    UI.showMessage(e.getMessage());
+                    ui.showMessage(e.getMessage());
                 }
                 break;
         }
@@ -105,6 +108,8 @@ public class AnswerMe {
         String[] responseParts = userResponse.split(" ");
         String command = responseParts[0].toLowerCase();
         Task t;
+        Ui ui = new Ui();
+        Storage storage = new Storage();
         switch (command) {
             case "todo":
                 String todoArgs = extractArgs(responseParts);
@@ -113,8 +118,8 @@ public class AnswerMe {
                 }
                 t = new ToDo(todoArgs);
                 AnswerMe.taskList.add(t);
-                UI.printAddNewItem(t, AnswerMe.taskList.size());
-                Storage.saveTasks(AnswerMe.taskList);
+                ui.printAddNewItem(t, AnswerMe.taskList.size());
+                storage.saveTasks(AnswerMe.taskList);
                 break;
 
             case "deadline":
@@ -157,8 +162,8 @@ public class AnswerMe {
                     t = new Event(desc, from, to);
                 }
                 AnswerMe.taskList.add(t);
-                UI.printAddNewItem(t, AnswerMe.taskList.size());
-                Storage.saveTasks(AnswerMe.taskList);
+                ui.printAddNewItem(t, AnswerMe.taskList.size());
+                storage.saveTasks(AnswerMe.taskList);
                 break;
 
             default:
