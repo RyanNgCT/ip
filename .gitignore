@@ -7,7 +7,7 @@
 *.class
 
 # logs directory
-src/main/java/answerme/data/*
+/data/*
 
 # Misc files
 .codex/*
