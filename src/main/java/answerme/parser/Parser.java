@@ -1,3 +1,15 @@
+package answerme.parser;
+
+import answerme.command.Command;
+import answerme.command.ExitCommand;
+import answerme.command.ListCommand;
+import answerme.command.MarkCommand;
+import answerme.command.UnmarkCommand;
+import answerme.command.DeleteCommand;
+import answerme.command.AddToDoCommand;
+import answerme.command.AddDeadlineCommand;
+import answerme.command.AddEventCommand;
+import answerme.exception.AnswerMeException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -105,7 +117,7 @@ public class Parser {
         LocalDateTime from = dateTimeParser.parseDateTime(flags.get("/from"));
         LocalDateTime to = dateTimeParser.parseDateTime(flags.get("/to"));
 
-        if (!from.isBefore(to)) {
+        if (from.isAfter(to)) {
             throw new AnswerMeException("'From' datetime must occur before 'To'.");
         }
         return new AddEventCommand(description, from, to);

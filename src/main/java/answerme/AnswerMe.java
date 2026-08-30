@@ -1,3 +1,12 @@
+package answerme;
+
+import answerme.command.Command;
+import answerme.exception.AnswerMeException;
+import answerme.parser.Parser;
+import answerme.storage.Storage;
+import answerme.task.TaskList;
+import answerme.ui.Ui;
+
 public class AnswerMe {
     private Storage storage;
     private TaskList taskList;
