@@ -52,6 +52,10 @@ shadowJar {
     archiveFileName = 'duke.jar'
 }
 
+checkstyle {
+    toolVersion = '11.0.0'
+}
+
 run {
     standardInput = System.in
 }
