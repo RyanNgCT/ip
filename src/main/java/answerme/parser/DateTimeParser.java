@@ -30,8 +30,8 @@ public class DateTimeParser {
                 DateTimeFormatter.ofPattern("d/M/yyyy HH:mm"));
     }
 
-    public LocalDateTime parse(String toParse)
-            throws DateTimeParseException {
+    public LocalDateTime parseDateTime(String toParse)
+            throws AnswerMeException {
         String toParseTrimmed = toParse.trim();
         for (DateTimeFormatter format : dateTimeFormats) {
             try {
@@ -46,16 +46,7 @@ public class DateTimeParser {
                 // move on to the next format
             }
         }
-        throw new DateTimeParseException("Invalid datetime format!", "", 0);
-    }
-
-    public LocalDateTime parseDateTime(String input)
-            throws AnswerMeException {
-        try {
-            return this.parse(input);
-        } catch (DateTimeParseException e) {
-            throw new AnswerMeException("Ensure date/time is formatted correctly.");
-        }
+        throw new AnswerMeException("Ensure date/time is formatted correctly.");
     }
 
     public static String dtToString(LocalDateTime toUpdate) {

@@ -40,4 +40,17 @@ public class Event extends Task{
         return getLogFormat("Event") + " | " + DateTimeParser.dtToString(from) +
                 " | " + DateTimeParser.dtToString(to);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        else if (obj instanceof Event other) {
+            return description.equals(other.description) &&
+                    from.equals(other.from) &&
+                    to.equals(other.to);
+        }
+        return true;
+    }
 }
