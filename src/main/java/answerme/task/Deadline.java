@@ -28,4 +28,16 @@ public class Deadline extends Task{
     public String toStorageFormat() {
         return getLogFormat("Deadline") + " | " + DateTimeParser.dtToString(by);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        else if (obj instanceof Deadline other) {
+            return description.equals(other.description) &&
+                    by.equals(other.by);
+        }
+        return true;
+    }
 }

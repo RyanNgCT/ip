@@ -18,4 +18,15 @@ public abstract class AddCommand extends Command {
         ui.printAddNewItem(task, taskList.size());
         storage.saveTasks(taskList);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        else if (obj instanceof AddCommand other) {
+            return task.equals(other.task);
+        }
+        return false;
+    }
 }
