@@ -38,6 +38,6 @@ public class Deadline extends Task{
             return description.equals(other.description) &&
                     by.equals(other.by);
         }
-        return true;
+        return false;
     }
 }

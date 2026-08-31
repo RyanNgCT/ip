@@ -23,6 +23,6 @@ public class ToDo extends Task {
         else if (obj instanceof ToDo other) {
             return description.equals(other.description);
         }
-        return true;
+        return false;
     }
 }

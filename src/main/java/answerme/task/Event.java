@@ -51,6 +51,6 @@ public class Event extends Task{
                     from.equals(other.from) &&
                     to.equals(other.to);
         }
-        return true;
+        return false;
     }
 }
