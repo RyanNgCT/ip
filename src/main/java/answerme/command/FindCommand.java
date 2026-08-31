@@ -17,7 +17,7 @@ public class FindCommand extends Command {
     public void execute(TaskList taskList, Ui ui, Storage storage) throws AnswerMeException {
         TaskList foundTasks = new TaskList();
         for (Task t: taskList) {
-            if (t.getDesc().contains(toFind)) {
+            if (t.toString().toLowerCase().contains(toFind.toLowerCase())) {
                 foundTasks.add(t);
             }
         }
