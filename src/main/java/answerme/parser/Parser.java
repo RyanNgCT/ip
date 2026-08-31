@@ -9,6 +9,7 @@ import answerme.command.DeleteCommand;
 import answerme.command.AddToDoCommand;
 import answerme.command.AddDeadlineCommand;
 import answerme.command.AddEventCommand;
+import answerme.command.FindCommand;
 import answerme.exception.AnswerMeException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -53,6 +54,9 @@ public class Parser {
             case "event":
                 return parseEvent(args);
 
+            case "find":
+                return parseFind(args);
+
             default:
                 throw new AnswerMeException("I'm not sure what you mean :(");
         }
@@ -77,6 +81,14 @@ public class Parser {
     private static String extractArgs(String[] responseParts) {
         String[] resized = Arrays.copyOfRange(responseParts,1,responseParts.length);
         return String.join(" ", resized);
+    }
+
+    private static Command parseFind(String args)
+            throws AnswerMeException {
+        if (args.isBlank()) {
+            throw new AnswerMeException("Format: find <string>");
+        }
+        return new FindCommand(args);
     }
 
     private static Command parseToDo(String args)
