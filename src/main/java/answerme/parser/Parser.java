@@ -14,10 +14,26 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashMap;
 
+/**
+ * Parses user input into the corresponding command objects.
+ */
 public class Parser {
-    Parser() {
+
+    /**
+     * Constructs a new Parser object.
+     */
+    public Parser() {
 
     }
+
+    /**
+     * Parses a user input string into the corresponding command.
+     *
+     * @param userResponse The raw command string entered by the user.
+     * @return The command object to be executed.
+     * @throws AnswerMeException If the raw command is empty, unknown or
+     *                           malformed.
+     */
     public static Command parse(String userResponse)
             throws AnswerMeException {
         if (userResponse == null || userResponse.isBlank()) {
@@ -58,6 +74,14 @@ public class Parser {
         }
     }
 
+    /**
+     * Extracts a task index from the command arguments.
+     *
+     * @param args The arguments containing the task index.
+     * @return The extracted task index.
+     * @throws AnswerMeException If the index is missing, invalid or
+     *                           less than one.
+     */
     private static int extractTaskIndex(String args) throws AnswerMeException {
         if (args.isBlank()) {
             throw new AnswerMeException("An index must be supplied for this command.");
@@ -74,11 +98,24 @@ public class Parser {
         }
     }
 
+    /**
+     * Extracts and joins the argument components of a command.
+     *
+     * @param responseParts The components of the user command.
+     * @return The arguments joined into a single string.
+     */
     private static String extractArgs(String[] responseParts) {
         String[] resized = Arrays.copyOfRange(responseParts,1,responseParts.length);
         return String.join(" ", resized);
     }
 
+    /**
+     * Parses arguments for a command that adds a todo task.
+     *
+     * @param args The arguments containing the task description.
+     * @return A command that adds the specified todo task.
+     * @throws AnswerMeException If the task description is missing.
+     */
     private static Command parseToDo(String args)
             throws AnswerMeException{
         if (args.isBlank()) {
@@ -87,6 +124,14 @@ public class Parser {
         return new AddToDoCommand(args);
     }
 
+    /**
+     * Parses arguments for a command that adds a deadline task.
+     *
+     * @param args The arguments containing the task description and deadline.
+     * @return A command that adds the specified deadline task.
+     * @throws AnswerMeException If the description, deadline flag, or deadline
+     *                           value is invalid.
+     */
     private static Command parseDeadline(String args)
             throws AnswerMeException {
         String[] segments = args.split("(?=/by)");
@@ -102,6 +147,15 @@ public class Parser {
         return new AddDeadlineCommand(desc, by);
     }
 
+    /**
+     * Parses arguments for a command that adds an event task.
+     *
+     * @param args The arguments containing the task description, start time
+     *             and end time.
+     * @return A command that adds the specified event task.
+     * @throws AnswerMeException If the event details are missing, invalid or
+     *                           in the wrong order.
+     */
     private static Command parseEvent(String args)
             throws AnswerMeException {
         String[] segments = args.split("(?=/(?:from|to)\\b)");
@@ -123,6 +177,13 @@ public class Parser {
         return new AddEventCommand(description, from, to);
     }
 
+    /**
+     * Extracts command flags and their values from supplied argument segments.
+     *
+     * @param segments The argument segments from which to extract flags.
+     * @return A mapping from each flag to its value.
+     * @throws AnswerMeException If a flag does not have a specified value.
+     */
     private static HashMap<String, String> extractFlags(String[] segments)
             throws AnswerMeException {
         HashMap<String, String> flags = new HashMap<>();
