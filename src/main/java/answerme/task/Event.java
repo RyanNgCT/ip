@@ -71,9 +71,9 @@ public class Event extends Task {
         if (this == obj) {
             return true;
         } else if (obj instanceof Event other) {
-            return description.equals(other.description) &&
-                    eventStart.equals(other.eventStart) &&
-                    eventEnd.equals(other.eventEnd);
+            return description.equals(other.description)
+                    && eventStart.equals(other.eventStart)
+                    && eventEnd.equals(other.eventEnd);
         }
         return false;
     }
