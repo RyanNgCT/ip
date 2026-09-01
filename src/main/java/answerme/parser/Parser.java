@@ -88,7 +88,8 @@ public class Parser {
      * and creates a corresponding FindCommand object.
      *
      * @param args The search string entered by the user.
-     * @return A {@code FindCommand} object that searches for the supplied string.
+     * @return A command that searches for the supplied string in current tasks contained
+     *         within the task list.
      * @throws AnswerMeException If no search string is provided.
      */
     private static Command parseFind(String args)

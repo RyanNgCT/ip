@@ -23,12 +23,11 @@ public class FindCommand extends Command {
     }
 
     /**
+     * {@inheritDoc}
+     *
      * Finds and displays all tasks that contains the specified search term
      * and ignores case-sensitivity.
      *
-     * @param taskList The list of tasks to search through.
-     * @param ui The user interface used to display matching tasks.
-     * @param storage Storage handler to persist changes in a text file.
      * @throws AnswerMeException If an error occurs while executing the find command.
      */
     @Override
