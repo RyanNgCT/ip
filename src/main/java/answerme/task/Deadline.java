@@ -59,8 +59,8 @@ public class Deadline extends Task {
         if (this == obj) {
             return true;
         } else if (obj instanceof Deadline other) {
-            return description.equals(other.description) &&
-                    deadline.equals(other.deadline);
+            return description.equals(other.description)
+                    && deadline.equals(other.deadline);
         }
         return false;
     }
