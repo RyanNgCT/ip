@@ -16,7 +16,7 @@ public class FindCommand extends Command {
     /**
      * Constructs a new FindCommand using user-supplied input.
      *
-     * @param toFind
+     * @param toFind The keyword string that the task should contain.
      */
     public FindCommand(String toFind) {
         this.toFind = toFind;
