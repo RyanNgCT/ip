@@ -58,7 +58,8 @@ public class Storage {
      *
      * @return A populated {@code TaskList} containing the tasks stored in the data
      *         file, or an empty {@code TaskList} is the file does not exist.
-     * @throws AnswerMeException
+     * @throws AnswerMeException If the parsed line cannot be converted to a valid
+     *                           task.
      */
     public TaskList loadTasks() throws AnswerMeException {
         TaskList taskList = new TaskList();
