@@ -1,15 +1,16 @@
 package answerme.task;
 
-import answerme.exception.AnswerMeException;
 import java.util.ArrayList;
 import java.util.Collection;
+
+import answerme.exception.AnswerMeException;
 
 /**
  * Represents a list of tasks.
  */
-public class TaskList extends ArrayList<Task>{
+public class TaskList extends ArrayList<Task> {
     /**
-     * Constructs an empty task list.
+     * Represents a list of tasks.
      */
     public TaskList() {
         super();
@@ -18,10 +19,10 @@ public class TaskList extends ArrayList<Task>{
     /**
      * Constructs a task list from a collection of tasks.
      *
-     * @param collection The collection of tasks to be added.
+     * @param tasks The collection of tasks to be added.
      */
-    public TaskList(Collection<Task> collection) {
-        super(collection);
+    public TaskList(Collection<Task> tasks) {
+        super(tasks);
     }
 
     /**

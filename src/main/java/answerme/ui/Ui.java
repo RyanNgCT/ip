@@ -1,17 +1,17 @@
 package answerme.ui;
 
+import java.util.Scanner;
+
 import answerme.task.Task;
 import answerme.task.TaskList;
-
-import java.util.Scanner;
 
 /**
  * Handles the user's interaction with the AnswerMe chatbot.
  */
 public class Ui {
-    private final String BOTNAME = "AnswerMe";
-    private final String HLINE = "____________________________________________________________";
-    private final Scanner SCANNER = new Scanner(System.in);
+    private final String botName = "AnswerMe";
+    private final String horizontalLine = "____________________________________________________________";
+    private final Scanner scanner = new Scanner(System.in);
 
     /**
      * Constructs the user interface for the chatbot.
@@ -34,10 +34,11 @@ public class Ui {
                 >=>        >=> >==>  >=> >=> >=> >==>    >==>  >====>   >==>    >=>       >=>  >====>  \s
                 """;
         System.out.println(banner);
-        System.out.println("Hello! I'm " + BOTNAME + ", your personal assistant bot.\nWhat can I do for you today?\n");
-        System.out.println(HLINE);
+        System.out.println("Hello! I'm " + botName + ", your personal assistant bot.\n"
+                + "What can I do for you today?\n");
+        System.out.println(horizontalLine);
         System.out.println("What can I do for you today?");
-        System.out.println(HLINE);
+        System.out.println(horizontalLine);
     }
 
     /**
@@ -46,7 +47,7 @@ public class Ui {
      * @return The input entered by the user.
      */
     public String readUserInput() {
-        return SCANNER.nextLine();
+        return scanner.nextLine();
     }
 
     /**
@@ -58,13 +59,13 @@ public class Ui {
      */
     public void listTasks(TaskList taskList, String heading, String emptyMessage) {
         if (!taskList.isEmpty()) {
-            System.out.println("\t" + HLINE);
+            System.out.println("\t" + horizontalLine);
             System.out.println("\t" + heading);
             System.out.print(taskList.toString());
-            System.out.println("\t" + HLINE + "\n");
+            System.out.println("\t" + horizontalLine + "\n");
         }
         else {
-            showMessage(emptyMessage);
+            this.showMessage(emptyMessage);
         }
     }
 
@@ -74,11 +75,11 @@ public class Ui {
      * @param toPrint The message to display.
      */
     public void showMessage(String toPrint) {
-        System.out.println("\t" + HLINE);
-        for (String line: toPrint.split("\n")) {
+        System.out.println("\t" + horizontalLine);
+        for (String line : toPrint.split("\n")) {
             System.out.println("\t" + line);
         }
-        System.out.println("\t" + HLINE + "\n");
+        System.out.println("\t" + horizontalLine + "\n");
     }
 
     /**
@@ -86,30 +87,30 @@ public class Ui {
      * from Storage.
      */
     public void showLoadingError() {
-        System.out.println(HLINE);
+        System.out.println(horizontalLine);
         System.out.println("!ERROR! Unable to load saved file.\nInitializing task list as empty...");
-        System.out.println(HLINE);
+        System.out.println(horizontalLine);
     }
 
     /**
      * Displays an informational message that a task has been added.
      *
-     * @param t The added task.
+     * @param task The added task.
      * @param taskCount The number of tasks currently in the list.
      */
-    public void printAddNewItem(Task t, int taskCount) {
-        this.showMessage("Got it. I have added this task:\n"
-                + t + "\nYou now have " + taskCount + " tasks in the list.");
+    public void printAddNewItem(Task task, int taskCount) {
+        showMessage("Got it. I have added this task:\n"
+                + task + "\nYou now have " + taskCount + " tasks in the list.");
     }
 
     /**
      * Displays an informational message that a task has been deleted.
      *
-     * @param t The deleted task.
+     * @param task The deleted task.
      * @param taskCount The number of tasks currently in the list.
      */
-    public void printDeleteItem(Task t, int taskCount) {
-        this.showMessage("Noted. I will remove this task:\n"
-                + t + "\nYou now have " + taskCount + " tasks in the list.");
+    public void printDeleteItem(Task task, int taskCount) {
+        showMessage("Noted. I will remove this task:\n"
+                + task + "\nYou now have " + taskCount + " tasks in the list.");
     }
 }

@@ -1,7 +1,8 @@
 package answerme.command;
 
-import answerme.task.Event;
 import java.time.LocalDateTime;
+
+import answerme.task.Event;
 
 /**
  * Represents a command that adds an event task to the task list.

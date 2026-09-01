@@ -1,34 +1,34 @@
 package answerme.task;
 
-import answerme.parser.DateTimeParser;
 import java.time.LocalDateTime;
+
+import answerme.parser.DateTimeParser;
 
 /**
  * Represents a task that must be completed by a specified date
  * and/or time.
  */
-public class Deadline extends Task{
-    protected LocalDateTime by;
+public class Deadline extends Task {
+    protected LocalDateTime deadline;
 
     /**
      * Creates a deadline task with the specified description and deadline
-     * (i.e. {@code by}).
+     * (i.e. {@code deadline}).
      *
      * @param description The deadline's description.
-     * @param by The date and time by which the deadline must be completed.
+     * @param deadline The date and time by which the deadline must be completed.
      */
-    public Deadline(String description, LocalDateTime by) {
+    public Deadline(String description, LocalDateTime deadline) {
         super(description);
-        this.by = by;
+        this.deadline = deadline;
     }
 
-    // accessors
-    public void setDeadLine(LocalDateTime newDeadline) {
-        by = newDeadline;
+    public void setDeadline(LocalDateTime newDeadline) {
+        deadline = newDeadline;
     }
 
     public LocalDateTime getDueBy() {
-        return by;
+        return deadline;
     }
 
     /**
@@ -38,7 +38,7 @@ public class Deadline extends Task{
      */
     @Override
     public String toString() {
-        return "[D]" + super.toString() + " (by: " + DateTimeParser.dtToString(by) + ")";
+        return "[D]" + super.toString() + " (by: " + DateTimeParser.dateTimeToString(deadline) + ")";
     }
 
     /**
@@ -48,7 +48,7 @@ public class Deadline extends Task{
      */
     @Override
     public String toStorageFormat() {
-        return getLogFormat("Deadline") + " | " + DateTimeParser.dtToString(by);
+        return getLogFormat("Deadline") + " | " + DateTimeParser.dateTimeToString(deadline);
     }
 
     /**
@@ -58,10 +58,9 @@ public class Deadline extends Task{
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
-        }
-        else if (obj instanceof Deadline other) {
+        } else if (obj instanceof Deadline other) {
             return description.equals(other.description) &&
-                    by.equals(other.by);
+                    deadline.equals(other.deadline);
         }
         return false;
     }

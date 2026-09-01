@@ -1,9 +1,9 @@
 package answerme.command;
 
 import answerme.exception.AnswerMeException;
+import answerme.storage.Storage;
 import answerme.task.Task;
 import answerme.task.TaskList;
-import answerme.storage.Storage;
 import answerme.ui.Ui;
 
 /**
@@ -31,9 +31,9 @@ public class DeleteCommand extends Command {
     @Override
     public void execute(TaskList taskList, Ui ui, Storage storage)
             throws AnswerMeException {
-        Task t = taskList.getTask(taskIndex);
-        taskList.remove(t);
-        ui.printDeleteItem(t, taskList.size());
+        Task task = taskList.getTask(taskIndex);
+        taskList.remove(task);
+        ui.printDeleteItem(task, taskList.size());
         storage.saveTasks(taskList);
     }
 }

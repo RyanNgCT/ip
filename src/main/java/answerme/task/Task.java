@@ -36,15 +36,15 @@ public class Task {
      *                     {@code " "} character.
      */
     public String getStatusIcon() {
-        return (getCompletedStatus() ? "X" : " ");
+        return isComplete() ? "X" : " ";
     }
 
     // accessors
-    public void setDesc(String newDesc) {
-        this.description = newDesc;
+    public void setDescription(String newDescription) {
+        this.description = newDescription;
     }
 
-    public String getDesc() {
+    public String getDescription() {
         return this.description;
     }
 
@@ -56,7 +56,7 @@ public class Task {
         this.isComplete = false;
     }
 
-    public boolean getCompletedStatus() {
+    public boolean isComplete() {
         return this.isComplete;
     }
 

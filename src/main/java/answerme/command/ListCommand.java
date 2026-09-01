@@ -1,21 +1,13 @@
 package answerme.command;
 
-import answerme.task.TaskList;
 import answerme.storage.Storage;
+import answerme.task.TaskList;
 import answerme.ui.Ui;
 
 /**
  * Represents a command that displays all tasks in the task list.
  */
 public class ListCommand extends Command {
-
-    /**
-     * Creates a command that displays all tasks.
-     */
-    public ListCommand() {
-
-    }
-
     /**
      * {@inheritDoc}
      *

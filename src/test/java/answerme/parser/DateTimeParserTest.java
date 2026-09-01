@@ -1,19 +1,20 @@
 package answerme.parser;
 
-import answerme.exception.AnswerMeException;
-import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeParseException;
+
+import org.junit.jupiter.api.Test;
+
+import answerme.exception.AnswerMeException;
 
 public class DateTimeParserTest {
     @Test
     public void parseTest_validDateFormat_success() throws AnswerMeException {
         String toParse = "31/8/2026 14:00";
-        LocalDateTime ldt = LocalDateTime.of(2026,8,31,14,00);
-        assertEquals(new DateTimeParser().parseDateTime(toParse), ldt);
+        LocalDateTime expectedDateTime = LocalDateTime.of(2026, 8, 31, 14, 0);
+        assertEquals(new DateTimeParser().parseDateTime(toParse), expectedDateTime);
     }
 
     @Test

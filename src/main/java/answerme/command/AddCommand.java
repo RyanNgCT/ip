@@ -1,8 +1,8 @@
 package answerme.command;
 
+import answerme.storage.Storage;
 import answerme.task.Task;
 import answerme.task.TaskList;
-import answerme.storage.Storage;
 import answerme.ui.Ui;
 
 /**
@@ -27,7 +27,7 @@ public abstract class AddCommand extends Command {
      * and saves the task list.
      */
     @Override
-    public void execute(TaskList taskList, Ui ui, Storage storage)  {
+    public void execute(TaskList taskList, Ui ui, Storage storage) {
         taskList.add(task);
         ui.printAddNewItem(task, taskList.size());
         storage.saveTasks(taskList);
@@ -43,8 +43,7 @@ public abstract class AddCommand extends Command {
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
-        }
-        else if (obj instanceof AddCommand other) {
+        } else if (obj instanceof AddCommand other) {
             return task.equals(other.task);
         }
         return false;

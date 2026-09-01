@@ -1,21 +1,13 @@
 package answerme.command;
 
-import answerme.task.TaskList;
 import answerme.storage.Storage;
+import answerme.task.TaskList;
 import answerme.ui.Ui;
 
 /**
  * Represents a command that exits the application.
  */
 public class ExitCommand extends Command {
-
-    /**
-     * Creates a command that exits the application.
-     */
-    public ExitCommand() {
-
-    }
-
     /**
      * {@inheritDoc}
      *
@@ -23,7 +15,7 @@ public class ExitCommand extends Command {
      */
     @Override
     public void execute(TaskList taskList, Ui ui, Storage storage) {
-        ui.showMessage(" Bye. Hope to see you again soon!");
+        ui.showMessage("Bye. Hope to see you again soon!");
     }
 
     /**
