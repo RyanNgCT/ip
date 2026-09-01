@@ -83,6 +83,14 @@ public class Parser {
         return String.join(" ", resized);
     }
 
+    /**
+     * Parses the arguments supplied to the Find command
+     * and creates a corresponding FindCommand object.
+     *
+     * @param args The search string entered by the user.
+     * @return A {@code FindCommand} object that searches for the supplied string.
+     * @throws AnswerMeException If no search string is provided.
+     */
     private static Command parseFind(String args)
             throws AnswerMeException {
         if (args.isBlank()) {
