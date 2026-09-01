@@ -1,22 +1,23 @@
 package answerme.parser;
 
-import answerme.command.Command;
-import answerme.exception.AnswerMeException;
-import answerme.command.AddEventCommand;
-
-import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.time.LocalDateTime;
 
+import org.junit.jupiter.api.Test;
+
+import answerme.command.AddEventCommand;
+import answerme.command.Command;
+import answerme.exception.AnswerMeException;
+
 public class ParserTest {
     @Test
     public void addNewEvent_allParamsPresent_success() throws AnswerMeException {
         String newEvent = "event wedding dinner /from 31/8/2026 17:00 /to 1/9/2026 02:00";
-        LocalDateTime d1 = LocalDateTime.of(2026,8,31,17,00);
-        LocalDateTime d2 = LocalDateTime.of(2026,9,1,02,00);
-        assertEquals(Parser.parse(newEvent), new AddEventCommand("wedding dinner", d1, d2));
+        LocalDateTime startTime = LocalDateTime.of(2026, 8, 31, 17, 0);
+        LocalDateTime endTime = LocalDateTime.of(2026, 9, 1, 2, 0);
+        assertEquals(Parser.parse(newEvent), new AddEventCommand("wedding dinner", startTime, endTime));
     }
 
     @Test
