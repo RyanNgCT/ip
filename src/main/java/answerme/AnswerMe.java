@@ -7,11 +7,18 @@ import answerme.storage.Storage;
 import answerme.task.TaskList;
 import answerme.ui.Ui;
 
+/**
+ * Represents the AnswerMe task-management chatbot.
+ */
 public class AnswerMe {
     private Storage storage;
     private TaskList taskList;
     private Ui ui;
 
+    /**
+     * Constructs the chatbot application and loads saved tasks
+     * from storage if available.
+     */
     public AnswerMe() {
         storage = new Storage();
         ui = new Ui();
@@ -23,6 +30,9 @@ public class AnswerMe {
         }
     }
 
+    /**
+     * Runs the application until the user enters the exit command.
+     */
     public void run() {
         ui.showWelcome();
         boolean isExit = false;
@@ -38,6 +48,11 @@ public class AnswerMe {
         }
     }
 
+    /**
+     * Starts a new instance of the AnswerMe chatbot application.
+     *
+     * @param args Command-line arguments.
+     */
     public static void main(String[] args) {
         AnswerMe answerMeBot = new AnswerMe();
         answerMeBot.run();

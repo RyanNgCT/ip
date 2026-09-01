@@ -11,16 +11,27 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.FileNotFoundException;
-
 import java.util.Scanner;
 
+/**
+ * Represents a Storage Manager for persisting tasks in a text file
+ * on disk.
+ */
 public class Storage {
     private static final String DATA_FILE_PATH = "data/tasks.txt";
 
+    /**
+     * Constructs a new Storage Manager
+     */
     public Storage() {
 
     }
 
+    /**
+     * Saves tasks in the file specified by {@code DATA_FILE_PATH}
+     *
+     * @param taskList The list of tasks to be saved in the output file.
+     */
     public void saveTasks(TaskList taskList) {
         if (!this.doesFileExists()) {
             try {
@@ -42,6 +53,14 @@ public class Storage {
         }
     }
 
+    /**
+     * Loads tasks from the data file into a task list.
+     *
+     * @return A populated {@code TaskList} containing the tasks stored in the data
+     *         file, or an empty {@code TaskList} is the file does not exist.
+     * @throws AnswerMeException If the parsed line cannot be converted to a valid
+     *                           task.
+     */
     public TaskList loadTasks() throws AnswerMeException {
         TaskList taskList = new TaskList();
         try (Scanner scanner = new Scanner(new File(DATA_FILE_PATH))) {
@@ -63,10 +82,21 @@ public class Storage {
         return taskList;
     }
 
+    /**
+     * Checks whether the data file at {@code DATA_FILE_PATH} exists.
+     *
+     * @return {@code true} if the file exists and {@code false} if not.
+     */
     public boolean doesFileExists() {
         return new File(DATA_FILE_PATH).exists();
     }
 
+    /**
+     * Creates the task data file and any missing parent directory if they
+     * do not exist.
+     *
+     * @throws AnswerMeException If the data file cannot be created.
+     */
     public void createDataFile() throws AnswerMeException {
         File f = new File(DATA_FILE_PATH);
         File dir = f.getParentFile();
@@ -81,6 +111,14 @@ public class Storage {
         }
     }
 
+    /**
+     * Converts individual lines into corresponding {@code Task} objects.
+     *
+     * @param line The serialised task data to parse.
+     * @param lineNumber The current line number being parsed, used in error messages.
+     * @return The task represented by the given line.
+     * @throws AnswerMeException If the task has an invalid format, status or type.
+     */
     public Task parseTask(String line, int lineNumber) throws AnswerMeException {
         String[] fields = line.split("\\s*\\|\\s*", -1);
         if (fields.length < 3) {

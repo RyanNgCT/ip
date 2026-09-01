@@ -8,6 +8,10 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
+/**
+ * Parses date and time strings into datetime values.
+ * Formats datetime values for display.
+ */
 public class DateTimeParser {
     private static final DateTimeFormatter DATETIME_OUTPUT_FORMAT =
             DateTimeFormatter.ofPattern("MMM d yyyy HH:mm");
@@ -15,6 +19,10 @@ public class DateTimeParser {
             DateTimeFormatter.ofPattern("MMM d yyyy");
     private final List<DateTimeFormatter> dateTimeFormats;
 
+    /**
+     * Constructs a parser that details the application's accepted date and
+     * time formats.
+     */
     public DateTimeParser() {
         // allowed list of formats
         this.dateTimeFormats = List.of(DateTimeFormatter.ofPattern("yyyy-M-d"),
@@ -30,6 +38,14 @@ public class DateTimeParser {
                 DateTimeFormatter.ofPattern("d/M/yyyy HH:mm"));
     }
 
+    /**
+     * Parses a raw date/datetime string into a {@code LocalDateTime} object.
+     * A string without a specified time is interpreted as the start of the day.
+     *
+     * @param toParse The date or datetime string to parse.
+     * @return The parsed datetime value.
+     * @throws AnswerMeException If the input does not match a supported date or time format.
+     */
     public LocalDateTime parseDateTime(String toParse)
             throws AnswerMeException {
         String toParseTrimmed = toParse.trim();
@@ -49,6 +65,13 @@ public class DateTimeParser {
         throw new AnswerMeException("Ensure date/time is formatted correctly.");
     }
 
+    /**
+     * Formats a datetime value into the application's display format.
+     *
+     * @param toUpdate The datetime value to format.
+     * @return The formatted date or datetime string.
+     * @throws DateTimeParseException If the datetime value is {@code null}.
+     */
     public static String dtToString(LocalDateTime toUpdate) {
         if (toUpdate == null) {
             throw new DateTimeParseException("Datetime cannot be null.", "", 0);
