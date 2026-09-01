@@ -1,7 +1,8 @@
 package answerme.command;
 
-import answerme.task.Deadline;
 import java.time.LocalDateTime;
+
+import answerme.task.Deadline;
 
 public class AddDeadlineCommand extends AddCommand {
     public AddDeadlineCommand(String description, LocalDateTime by) {

@@ -1,18 +1,18 @@
 package answerme.storage;
 
-import answerme.task.ToDo;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
+
+import answerme.exception.AnswerMeException;
+import answerme.parser.DateTimeParser;
 import answerme.task.Deadline;
 import answerme.task.Event;
 import answerme.task.Task;
 import answerme.task.TaskList;
-import answerme.exception.AnswerMeException;
-import answerme.parser.DateTimeParser;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.FileNotFoundException;
-
-import java.util.Scanner;
+import answerme.task.ToDo;
 
 public class Storage {
     private static final String DATA_FILE_PATH = "data/tasks.txt";
@@ -22,22 +22,21 @@ public class Storage {
     }
 
     public void saveTasks(TaskList taskList) {
-        if (!this.doesFileExists()) {
+        if (!hasDataFile()) {
             try {
                 createDataFile();
-            }
-            catch (AnswerMeException e) {
+            } catch (AnswerMeException exception) {
                 // TODO: modify behavior later
-                System.out.println(e.getMessage());
+                System.out.println(exception.getMessage());
             }
         }
         try {
             FileWriter writer = new FileWriter(DATA_FILE_PATH);
-            for (Task t: taskList) {
-                writer.write(t.toStorageFormat() + "\n");
+            for (Task task : taskList) {
+                writer.write(task.toStorageFormat() + "\n");
             }
             writer.close();
-        } catch (IOException e) {
+        } catch (IOException exception) {
             System.out.println("Error opening the file.");
         }
     }
@@ -55,28 +54,26 @@ public class Storage {
                 }
                 lineNumber++;
             }
-        }
-        catch (FileNotFoundException e) {
-            // missing file -> return empty task list
+        } catch (FileNotFoundException exception) {
+            // Returns an empty task list when the data file is missing.
             return taskList;
         }
         return taskList;
     }
 
-    public boolean doesFileExists() {
+    public boolean hasDataFile() {
         return new File(DATA_FILE_PATH).exists();
     }
 
     public void createDataFile() throws AnswerMeException {
-        File f = new File(DATA_FILE_PATH);
-        File dir = f.getParentFile();
-        if (dir != null && !dir.exists()) {
-            dir.mkdirs();
+        File dataFile = new File(DATA_FILE_PATH);
+        File parentDirectory = dataFile.getParentFile();
+        if (parentDirectory != null && !parentDirectory.exists()) {
+            parentDirectory.mkdirs();
         }
         try {
-            f.createNewFile();
-        }
-        catch (IOException e) {
+            dataFile.createNewFile();
+        } catch (IOException exception) {
             throw new AnswerMeException("File: " + Storage.DATA_FILE_PATH + " cannot be created!");
         }
     }
@@ -88,42 +85,43 @@ public class Storage {
         }
         String type = fields[0].toLowerCase();
         String status = fields[1].toLowerCase();
-        String desc = fields[2];
+        String description = fields[2];
 
         if (!status.equals("complete") && !status.equals("incomplete")) {
             throw new AnswerMeException("Status is malformed");
         }
 
-        Task t = new Task(desc);
-        DateTimeParser dtParser = new DateTimeParser();
+        Task task = new Task(description);
+        DateTimeParser dateTimeParser = new DateTimeParser();
         switch (type) {
             case "todo":
                 if (fields.length != 3) {
                     throw new AnswerMeException("Invalid ToDo on line " + lineNumber);
                 }
-                t = new ToDo(desc);
+                task = new ToDo(description);
                 break;
 
             case "deadline":
                 if (fields.length != 4) {
                     throw new AnswerMeException("Invalid Deadline on line " + lineNumber);
                 }
-                t = new Deadline(desc, dtParser.parseDateTime(fields[3]));
+                task = new Deadline(description, dateTimeParser.parseDateTime(fields[3]));
                 break;
 
             case "event":
                 if (fields.length != 5) {
                     throw new AnswerMeException("Invalid Event on line " + lineNumber);
                 }
-                t = new Event(desc, dtParser.parseDateTime(fields[3]), dtParser.parseDateTime(fields[4]));
+                task = new Event(description, dateTimeParser.parseDateTime(fields[3]),
+                        dateTimeParser.parseDateTime(fields[4]));
                 break;
 
             default:
                 throw new AnswerMeException("Unknown Task type on line " + lineNumber);
         }
         if (status.equals("complete")) {
-            t.setComplete();
+            task.setComplete();
         }
-        return t;
+        return task;
     }
 }

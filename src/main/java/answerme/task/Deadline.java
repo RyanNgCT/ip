@@ -1,42 +1,42 @@
 package answerme.task;
 
-import answerme.parser.DateTimeParser;
 import java.time.LocalDateTime;
 
-public class Deadline extends Task{
-    protected LocalDateTime by;
+import answerme.parser.DateTimeParser;
 
-    public Deadline(String description, LocalDateTime by) {
+public class Deadline extends Task {
+    protected LocalDateTime deadline;
+
+    public Deadline(String description, LocalDateTime deadline) {
         super(description);
-        this.by = by;
+        this.deadline = deadline;
     }
 
-    public void setDeadLine(LocalDateTime newDeadline) {
-        by = newDeadline;
+    public void setDeadline(LocalDateTime newDeadline) {
+        deadline = newDeadline;
     }
 
     public LocalDateTime getDueBy() {
-        return by;
+        return deadline;
     }
 
     @Override
     public String toString() {
-        return "[D]" + super.toString() + " (by: " + DateTimeParser.dtToString(by) + ")";
+        return "[D]" + super.toString() + " (by: " + DateTimeParser.dateTimeToString(deadline) + ")";
     }
 
     @Override
     public String toStorageFormat() {
-        return getLogFormat("Deadline") + " | " + DateTimeParser.dtToString(by);
+        return getLogFormat("Deadline") + " | " + DateTimeParser.dateTimeToString(deadline);
     }
 
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
-        }
-        else if (obj instanceof Deadline other) {
+        } else if (obj instanceof Deadline other) {
             return description.equals(other.description) &&
-                    by.equals(other.by);
+                    deadline.equals(other.deadline);
         }
         return false;
     }

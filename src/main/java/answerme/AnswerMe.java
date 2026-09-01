@@ -29,9 +29,9 @@ public class AnswerMe {
         while (!isExit) {
             try {
                 String input = ui.readUserInput();
-                Command cmd = Parser.parse(input);
-                cmd.execute(taskList, ui, storage);
-                isExit = cmd.isExit();
+                Command command = Parser.parse(input);
+                command.execute(taskList, ui, storage);
+                isExit = command.isExit();
             } catch (AnswerMeException e) {
                 ui.showMessage(e.getMessage());
             }

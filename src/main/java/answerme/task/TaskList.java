@@ -1,16 +1,17 @@
 package answerme.task;
 
-import answerme.exception.AnswerMeException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class TaskList extends ArrayList<Task>{
+import answerme.exception.AnswerMeException;
+
+public class TaskList extends ArrayList<Task> {
     public TaskList() {
         super();
     }
 
-    public TaskList(Collection<Task> collection) {
-        super(collection);
+    public TaskList(Collection<Task> tasks) {
+        super(tasks);
     }
 
     public Task getTask(int taskIndex)

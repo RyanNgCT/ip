@@ -1,23 +1,24 @@
 package answerme.parser;
 
-import answerme.command.Command;
-import answerme.command.ExitCommand;
-import answerme.command.ListCommand;
-import answerme.command.MarkCommand;
-import answerme.command.UnmarkCommand;
-import answerme.command.DeleteCommand;
-import answerme.command.AddToDoCommand;
-import answerme.command.AddDeadlineCommand;
-import answerme.command.AddEventCommand;
-import answerme.exception.AnswerMeException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class Parser {
-    Parser() {
+import answerme.command.AddDeadlineCommand;
+import answerme.command.AddEventCommand;
+import answerme.command.AddToDoCommand;
+import answerme.command.Command;
+import answerme.command.DeleteCommand;
+import answerme.command.ExitCommand;
+import answerme.command.ListCommand;
+import answerme.command.MarkCommand;
+import answerme.command.UnmarkCommand;
+import answerme.exception.AnswerMeException;
 
+public class Parser {
+    private Parser() {
     }
+
     public static Command parse(String userResponse)
             throws AnswerMeException {
         if (userResponse == null || userResponse.isBlank()) {
@@ -28,7 +29,7 @@ public class Parser {
         String command = responseParts[0].toLowerCase();
         String args = extractArgs(responseParts);
 
-        switch(command) {
+        switch (command) {
             case "bye":
                 return new ExitCommand();
 
@@ -75,12 +76,12 @@ public class Parser {
     }
 
     private static String extractArgs(String[] responseParts) {
-        String[] resized = Arrays.copyOfRange(responseParts,1,responseParts.length);
-        return String.join(" ", resized);
+        String[] argumentParts = Arrays.copyOfRange(responseParts, 1, responseParts.length);
+        return String.join(" ", argumentParts);
     }
 
     private static Command parseToDo(String args)
-            throws AnswerMeException{
+            throws AnswerMeException {
         if (args.isBlank()) {
             throw new AnswerMeException("Format: todo <description>");
         }
@@ -90,16 +91,16 @@ public class Parser {
     private static Command parseDeadline(String args)
             throws AnswerMeException {
         String[] segments = args.split("(?=/by)");
-        String desc = segments[0].trim();
+        String description = segments[0].trim();
         HashMap<String, String> flags = extractFlags(segments);
 
-        if (desc.isBlank() || !flags.containsKey("/by")) {
+        if (description.isBlank() || !flags.containsKey("/by")) {
             throw new AnswerMeException("Format: deadline <description> /by <when>");
         }
 
         DateTimeParser dateTimeParser = new DateTimeParser();
         LocalDateTime by = dateTimeParser.parseDateTime(flags.get("/by"));
-        return new AddDeadlineCommand(desc, by);
+        return new AddDeadlineCommand(description, by);
     }
 
     private static Command parseEvent(String args)
@@ -129,11 +130,11 @@ public class Parser {
 
         for (int i = 1; i < segments.length; i++) {
             String segment = segments[i].trim();
-            String[] argList = segment.split(" ", 2);
-            if (argList.length < 2 || argList[1].isBlank()) {
+            String[] flagArguments = segment.split(" ", 2);
+            if (flagArguments.length < 2 || flagArguments[1].isBlank()) {
                 throw new AnswerMeException("Every flag must be followed by an argument.");
             }
-            flags.put(argList[0], argList[1]);
+            flags.put(flagArguments[0], flagArguments[1]);
         }
         return flags;
     }

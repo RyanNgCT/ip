@@ -1,55 +1,55 @@
 package answerme.task;
 
-import answerme.parser.DateTimeParser;
 import java.time.LocalDateTime;
 
-public class Event extends Task{
-    protected LocalDateTime from;
-    protected LocalDateTime to;
+import answerme.parser.DateTimeParser;
 
-    public Event(String description, LocalDateTime from, LocalDateTime to) {
+public class Event extends Task {
+    protected LocalDateTime startTime;
+    protected LocalDateTime endTime;
+
+    public Event(String description, LocalDateTime startTime, LocalDateTime endTime) {
         super(description);
-        this.from = from;
-        this.to = to;
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 
-    public LocalDateTime getFrom () {
-        return from;
+    public LocalDateTime getFrom() {
+        return startTime;
     }
 
     public LocalDateTime getTo() {
-        return to;
+        return endTime;
     }
 
     public void setFrom(LocalDateTime newFrom) {
-        from = newFrom;
+        startTime = newFrom;
     }
 
     public void setTo(LocalDateTime newTo) {
-        to = newTo;
+        endTime = newTo;
     }
 
     @Override
     public String toString() {
-        return "[E]" + super.toString() + " (from: " + DateTimeParser.dtToString(from) +
-                " to: " + DateTimeParser.dtToString(to) + ")";
+        return "[E]" + super.toString() + " (from: " + DateTimeParser.dateTimeToString(startTime)
+                + " to: " + DateTimeParser.dateTimeToString(endTime) + ")";
     }
 
     @Override
     public String toStorageFormat() {
-        return getLogFormat("Event") + " | " + DateTimeParser.dtToString(from) +
-                " | " + DateTimeParser.dtToString(to);
+        return getLogFormat("Event") + " | " + DateTimeParser.dateTimeToString(startTime)
+                + " | " + DateTimeParser.dateTimeToString(endTime);
     }
 
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
-        }
-        else if (obj instanceof Event other) {
+        } else if (obj instanceof Event other) {
             return description.equals(other.description) &&
-                    from.equals(other.from) &&
-                    to.equals(other.to);
+                    startTime.equals(other.startTime) &&
+                    endTime.equals(other.endTime);
         }
         return false;
     }
