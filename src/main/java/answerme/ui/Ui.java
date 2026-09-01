@@ -35,16 +35,15 @@ public class Ui {
         return SCANNER.nextLine();
     }
 
-    public void listTasks(TaskList taskList) {
+    public void listTasks(TaskList taskList, String heading, String emptyMessage) {
         if (!taskList.isEmpty()) {
             System.out.println("\t" + HLINE);
-            System.out.println("\tHere are the tasks in your list:");
+            System.out.println("\t" + heading);
             System.out.print(taskList.toString());
             System.out.println("\t" + HLINE + "\n");
         }
         else {
-            // empty list -> print message
-            this.showMessage("Task List is Empty!");
+            showMessage(emptyMessage);
         }
     }
 
