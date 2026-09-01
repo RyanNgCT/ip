@@ -63,8 +63,7 @@ public class Ui {
             System.out.println("\t" + heading);
             System.out.print(taskList.toString());
             System.out.println("\t" + horizontalLine + "\n");
-        }
-        else {
+        } else {
             this.showMessage(emptyMessage);
         }
     }

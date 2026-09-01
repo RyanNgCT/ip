@@ -2,8 +2,8 @@ package answerme.command;
 
 import answerme.exception.AnswerMeException;
 import answerme.storage.Storage;
-import answerme.task.TaskList;
 import answerme.task.Task;
+import answerme.task.TaskList;
 import answerme.ui.Ui;
 
 /**
@@ -33,12 +33,12 @@ public class FindCommand extends Command {
     @Override
     public void execute(TaskList taskList, Ui ui, Storage storage) throws AnswerMeException {
         TaskList foundTasks = new TaskList();
-        for (Task t: taskList) {
-            if (t.getDescription().toLowerCase().contains(toFind.toLowerCase())) {
-                foundTasks.add(t);
+        for (Task task : taskList) {
+            if (task.getDescription().toLowerCase().contains(toFind.toLowerCase())) {
+                foundTasks.add(task);
             }
         }
         ui.listTasks(foundTasks, "Here are the matching tasks in your list:",
-                "No tasks matching " + toFind + " were found" );
+                "No tasks matching " + toFind + " were found");
     }
 }

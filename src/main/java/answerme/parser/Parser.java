@@ -26,7 +26,6 @@ public class Parser {
     private Parser() {
     }
 
-
     /**
      * Parses a user input string into the corresponding command.
      *

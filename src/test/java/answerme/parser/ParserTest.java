@@ -24,7 +24,7 @@ public class ParserTest {
     public void addNewEvent_missingDescription_exceptionThrown() {
         String newEvent = "event /from 31/8/2026 17:00 /to 1/9/2026 02:00";
         try {
-            Command eventCmd = Parser.parse(newEvent);
+            Command eventCommand = Parser.parse(newEvent);
             fail();
         } catch (AnswerMeException e) {
             assertEquals("Oh no! Format: event <description> /from <when> /to <when>", e.getMessage());
@@ -35,7 +35,7 @@ public class ParserTest {
     public void addNewEvent_invalidDateTime_exceptionThrown() {
         String newEvent = "event wedding dinner /from 2-09-2026 1700 /to 3-09-2026 0200";
         try {
-            Command eventCmd = Parser.parse(newEvent);
+            Command eventCommand = Parser.parse(newEvent);
             fail();
         } catch (AnswerMeException e) {
             assertEquals("Oh no! Ensure date/time is formatted correctly.", e.getMessage());
@@ -46,7 +46,7 @@ public class ParserTest {
     public void addNewEvent_fromAfterTo_exceptionThrown() {
         String newEvent = "event wedding dinner /from 2/9/2026 17:00 /to 1/9/2026 02:00";
         try {
-            Command eventCmd = Parser.parse(newEvent);
+            Command eventCommand = Parser.parse(newEvent);
             fail();
         } catch (AnswerMeException e) {
             assertEquals("Oh no! 'From' datetime must occur before 'To'.", e.getMessage());

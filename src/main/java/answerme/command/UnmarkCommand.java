@@ -21,7 +21,6 @@ public class UnmarkCommand extends Command {
         this.taskIndex = taskIndex;
     }
 
-
     /**
      * {@inheritDoc}
      *
