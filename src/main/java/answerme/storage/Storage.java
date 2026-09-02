@@ -122,43 +122,43 @@ public class Storage {
         if (fields.length < 3) {
             throw new AnswerMeException("Invalid task found on line " + lineNumber);
         }
-        String type = fields[0].toLowerCase();
-        String status = fields[1].toLowerCase();
-        String description = fields[2];
+        String taskType = fields[0].toLowerCase();
+        String taskStatus = fields[1].toLowerCase();
+        String taskDescription = fields[2];
 
-        if (!status.equals("complete") && !status.equals("incomplete")) {
+        if (!taskStatus.equals("complete") && !taskStatus.equals("incomplete")) {
             throw new AnswerMeException("Status is malformed");
         }
 
-        Task task = new Task(description);
+        Task task = new Task(taskDescription);
         DateTimeParser dateTimeParser = new DateTimeParser();
-        switch (type) {
+        switch (taskType) {
             case "todo":
                 if (fields.length != 3) {
                     throw new AnswerMeException("Invalid ToDo on line " + lineNumber);
                 }
-                task = new ToDo(description);
+                task = new ToDo(taskDescription);
                 break;
 
             case "deadline":
                 if (fields.length != 4) {
                     throw new AnswerMeException("Invalid Deadline on line " + lineNumber);
                 }
-                task = new Deadline(description, dateTimeParser.parseDateTime(fields[3]));
+                task = new Deadline(taskDescription, dateTimeParser.parseDateTime(fields[3]));
                 break;
 
             case "event":
                 if (fields.length != 5) {
                     throw new AnswerMeException("Invalid Event on line " + lineNumber);
                 }
-                task = new Event(description, dateTimeParser.parseDateTime(fields[3]),
+                task = new Event(taskDescription, dateTimeParser.parseDateTime(fields[3]),
                         dateTimeParser.parseDateTime(fields[4]));
                 break;
 
             default:
                 throw new AnswerMeException("Unknown Task type on line " + lineNumber);
         }
-        if (status.equals("complete")) {
+        if (taskStatus.equals("complete")) {
             task.setComplete();
         }
         return task;
