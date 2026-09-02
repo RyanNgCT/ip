@@ -41,10 +41,10 @@ public class Parser {
         }
 
         String[] responseParts = userResponse.trim().split("\\s+", 2);
-        String command = responseParts[0].toLowerCase();
+        String commandName = responseParts[0].toLowerCase();
         String args = extractArgs(responseParts);
 
-        switch (command) {
+        switch (commandName) {
             case "bye":
                 return new ExitCommand();
 

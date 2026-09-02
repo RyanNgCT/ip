@@ -13,9 +13,9 @@ public class AddDeadlineCommand extends AddCommand {
      * and deadline.
      *
      * @param description The description of the deadline task.
-     * @param by The deadline date and time.
+     * @param deadline The deadline date and time.
      */
-    public AddDeadlineCommand(String description, LocalDateTime by) {
-        super(new Deadline(description, by));
+    public AddDeadlineCommand(String description, LocalDateTime deadline) {
+        super(new Deadline(description, deadline));
     }
 }

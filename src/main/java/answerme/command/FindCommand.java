@@ -25,7 +25,7 @@ public class FindCommand extends Command {
     /**
      * {@inheritDoc}
      *
-     * Finds and displays all tasks that contains the specified search term
+     * Finds and displays all tasks that contain the specified search term
      * and ignores case-sensitivity.
      *
      * @throws AnswerMeException If an error occurs while executing the find command.

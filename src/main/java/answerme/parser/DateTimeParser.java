@@ -43,22 +43,22 @@ public class DateTimeParser {
      * Parses a raw date/datetime string into a {@code LocalDateTime} object.
      * A string without a specified time is interpreted as the start of the day.
      *
-     * @param toParse The date or datetime string to parse.
+     * @param rawDateTime The date or datetime string to parse.
      * @return The parsed datetime value.
      * @throws AnswerMeException If the input does not match a supported date or time format.
      */
-    public LocalDateTime parseDateTime(String toParse)
+    public LocalDateTime parseDateTime(String rawDateTime)
             throws AnswerMeException {
-        String toParseTrimmed = toParse.trim();
+        String trimmedDateTime = rawDateTime.trim();
         for (DateTimeFormatter format : dateTimeFormats) {
             try {
-                return LocalDateTime.parse(toParseTrimmed, format);
+                return LocalDateTime.parse(trimmedDateTime, format);
             } catch (DateTimeParseException exception) {
                 // Continues with the next format.
             }
 
             try {
-                return LocalDate.parse(toParseTrimmed, format).atStartOfDay();
+                return LocalDate.parse(trimmedDateTime, format).atStartOfDay();
             } catch (DateTimeParseException exception) {
                 // Continues with the next format.
             }

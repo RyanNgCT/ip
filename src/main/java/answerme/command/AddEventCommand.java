@@ -12,10 +12,10 @@ public class AddEventCommand extends AddCommand {
      * Creates a command that adds an event task with the specified details.
      *
      * @param description The description of the event task.
-     * @param from The event start date and time.
-     * @param to The event end date and time.
+     * @param eventStart The event start date and time.
+     * @param eventEnd The event end date and time.
      */
-    public AddEventCommand(String description, LocalDateTime from, LocalDateTime to) {
-        super(new Event(description, from, to));
+    public AddEventCommand(String description, LocalDateTime eventStart, LocalDateTime eventEnd) {
+        super(new Event(description, eventStart, eventEnd));
     }
 }
