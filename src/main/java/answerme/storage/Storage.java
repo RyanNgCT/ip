@@ -22,14 +22,14 @@ public class Storage {
     private static final String DATA_FILE_PATH = "data/tasks.txt";
 
     /**
-     * Constructs a new Storage Manager
+     * Constructs a new Storage Manager.
      */
     public Storage() {
 
     }
 
     /**
-     * Saves tasks in the file specified by {@code DATA_FILE_PATH}
+     * Saves tasks in the file specified by {@code DATA_FILE_PATH}.
      *
      * @param taskList The list of tasks to be saved in the output file.
      */
@@ -57,7 +57,7 @@ public class Storage {
      * Loads tasks from the data file into a task list.
      *
      * @return A populated {@code TaskList} containing the tasks stored in the data
-     *         file, or an empty {@code TaskList} is the file does not exist.
+     *         file, or an empty {@code TaskList} if the file does not exist.
      * @throws AnswerMeException If the parsed line cannot be converted to a valid
      *                           task.
      */
@@ -112,7 +112,7 @@ public class Storage {
     /**
      * Converts individual lines into corresponding {@code Task} objects.
      *
-     * @param line The serialised task data to parse.
+     * @param line The serialized task data to parse.
      * @param lineNumber The current line number being parsed, used in error messages.
      * @return The task represented by the given line.
      * @throws AnswerMeException If the task has an invalid format, status or type.
