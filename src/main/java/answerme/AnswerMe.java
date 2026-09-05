@@ -48,6 +48,10 @@ public class AnswerMe {
         }
     }
 
+    public String getResponse(String input) {
+        return input;
+    }
+
     /**
      * Starts a new instance of the AnswerMe chatbot application.
      *
