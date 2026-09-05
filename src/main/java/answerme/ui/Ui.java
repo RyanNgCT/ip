@@ -34,10 +34,7 @@ public class Ui {
                 >=>        >=> >==>  >=> >=> >=> >==>    >==>  >====>   >==>    >=>       >=>  >====>  \s
                 """;
         System.out.println(banner);
-        System.out.println("Hello! I'm " + botName + ", your personal assistant bot.\n"
-                + "What can I do for you today?\n");
-        System.out.println(horizontalLine);
-        System.out.println("What can I do for you today?");
+        System.out.println(printShortWelcome());
         System.out.println(horizontalLine);
     }
 
@@ -111,5 +108,10 @@ public class Ui {
     public void printDeleteItem(Task task, int taskCount) {
         showMessage("Noted. I will remove this task:\n"
                 + task + "\nYou now have " + taskCount + " tasks in the list.");
+    }
+
+    public String printShortWelcome() {
+        return "Hello! I'm " + botName + ", your personal assistant bot.\n" +
+                "What can I do for you today?";
     }
 }
