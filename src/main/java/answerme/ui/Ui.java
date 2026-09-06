@@ -12,12 +12,19 @@ public class Ui {
     private final String botName = "AnswerMe";
     private final String horizontalLine = "____________________________________________________________";
     private final Scanner scanner = new Scanner(System.in);
+    private String latestResponse;
+    private boolean isCliInstance;
+    private String loadingErrorMessage;
 
     /**
-     * Constructs the user interface for the chatbot.
+     * Constructs the user interface for either the command-line or graphical
+     * application mode.
+     *
+     * @param isCliInstance whether this user interface is used by the
+     *                      command-line application.
      */
-    public Ui() {
-
+    public Ui(boolean isCliInstance) {
+        this.isCliInstance = isCliInstance;
     }
 
     /**
@@ -34,10 +41,7 @@ public class Ui {
                 >=>        >=> >==>  >=> >=> >=> >==>    >==>  >====>   >==>    >=>       >=>  >====>  \s
                 """;
         System.out.println(banner);
-        System.out.println("Hello! I'm " + botName + ", your personal assistant bot.\n"
-                + "What can I do for you today?\n");
-        System.out.println(horizontalLine);
-        System.out.println("What can I do for you today?");
+        System.out.println(printShortWelcome());
         System.out.println(horizontalLine);
     }
 
@@ -58,14 +62,11 @@ public class Ui {
      * @param emptyMessage The message to display if task list is empty.
      */
     public void listTasks(TaskList taskList, String heading, String emptyMessage) {
-        if (!taskList.isEmpty()) {
-            System.out.println("\t" + horizontalLine);
-            System.out.println("\t" + heading);
-            System.out.print(taskList.toString());
-            System.out.println("\t" + horizontalLine + "\n");
-        } else {
-            this.showMessage(emptyMessage);
+        if (taskList.isEmpty()) {
+            showMessage(emptyMessage);
+            return;
         }
+        showMessage(heading + "\n" + taskList);
     }
 
     /**
@@ -74,6 +75,12 @@ public class Ui {
      * @param toPrint The message to display.
      */
     public void showMessage(String toPrint) {
+        latestResponse = toPrint;
+
+        if (!isCliInstance) {
+            return;
+        }
+
         System.out.println("\t" + horizontalLine);
         for (String line : toPrint.split("\n")) {
             System.out.println("\t" + line);
@@ -86,9 +93,8 @@ public class Ui {
      * from Storage.
      */
     public void showLoadingError() {
-        System.out.println(horizontalLine);
-        System.out.println("!ERROR! Unable to load saved file.\nInitializing task list as empty...");
-        System.out.println(horizontalLine);
+        loadingErrorMessage = "!ERROR! Unable to load saved file.\nInitializing task list as empty...";
+        showMessage(loadingErrorMessage);
     }
 
     /**
@@ -111,5 +117,25 @@ public class Ui {
     public void printDeleteItem(Task task, int taskCount) {
         showMessage("Noted. I will remove this task:\n"
                 + task + "\nYou now have " + taskCount + " tasks in the list.");
+    }
+
+    /**
+     * Returns a shortened version of the welcome message tailored for
+     * graphical interfaces.
+     *
+     * @return A shortened version of the welcome message.
+     */
+    public String printShortWelcome() {
+        return "Hello! I'm " + botName + ", your personal assistant bot.\n"
+                + "What can I do for you today?";
+    }
+
+    // accessors
+    public String getLatestResponse() {
+        return latestResponse;
+    }
+
+    public String getLoadingErrorMessage() {
+        return loadingErrorMessage;
     }
 }

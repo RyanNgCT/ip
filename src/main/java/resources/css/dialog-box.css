@@ -1,0 +1,25 @@
+.label {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #173d2a;
+    -fx-border-color: #168a54;
+    -fx-border-width: 2px;
+    -fx-background-radius: 1em 1em 0 1em;
+    -fx-border-radius: 1em 1em 0 1em;
+    -fx-padding: 6px;
+}
+
+.reply-label {
+    -fx-background-color: #dff7e6;
+    -fx-background-radius: 1em 1em 1em 0;
+    -fx-border-radius: 1em 1em 1em 0;
+}
+
+#displayPicture {
+    /* Change size of image. */
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+
+    /* Rotate image clockwise by degrees. */
+    -fx-rotate: 0;
+}
+
