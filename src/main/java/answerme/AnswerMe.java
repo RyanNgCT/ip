@@ -19,6 +19,9 @@ public class AnswerMe {
     /**
      * Constructs the chatbot application and loads saved tasks
      * from storage if available.
+     *
+     * @param isCliInstance Whether the application is running
+     *                      in command-line mode.
      */
     public AnswerMe(boolean isCliInstance) {
         storage = new Storage();
