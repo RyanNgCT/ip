@@ -67,6 +67,10 @@ public class MainWindow extends AnchorPane {
         }
     }
 
+    /**
+     * Returns the default greeting message in the dialog container
+     * when the chatbot is launched.
+     */
     public void showWelcome() {
         dialogContainer.getChildren().addAll(
                 DialogBox.getAnswerMeDialog(answerMe.showWelcomeMessage(), botImage)

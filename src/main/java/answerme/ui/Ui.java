@@ -16,7 +16,11 @@ public class Ui {
     private boolean isCliInstance;
 
     /**
-     * Constructs the user interface for the chatbot.
+     * Constructs the user interface for either the command-line or graphical
+     * application mode.
+     *
+     * @param isCliInstance whether this user interface is used by the
+     *                      command-line application.
      */
     public Ui(boolean isCliInstance) {
         this.isCliInstance = isCliInstance;
@@ -113,11 +117,18 @@ public class Ui {
                 + task + "\nYou now have " + taskCount + " tasks in the list.");
     }
 
+    /**
+     * Returns a shortened version of the welcome message tailored for
+     * graphical interfaces.
+     *
+     * @return A shortened version of the welcome message.
+     */
     public String printShortWelcome() {
-        return "Hello! I'm " + botName + ", your personal assistant bot.\n" +
-                "What can I do for you today?";
+        return "Hello! I'm " + botName + ", your personal assistant bot.\n"
+                + "What can I do for you today?";
     }
 
+    // accessor for latestResponse
     public String getLatestResponse() {
         return latestResponse;
     }
