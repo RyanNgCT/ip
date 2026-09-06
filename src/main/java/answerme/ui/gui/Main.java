@@ -30,8 +30,12 @@ public class Main extends Application {
             stage.setTitle("AnswerMe");
             stage.setMinHeight(420);
             stage.setMinWidth(420);
+            stage.setWidth(550);
 
-            fxmlLoader.<MainWindow>getController().setAnswerMe(answerMe);
+            MainWindow controller = fxmlLoader.getController();
+            controller.setAnswerMe(answerMe);
+            controller.showWelcome();
+
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

@@ -1,6 +1,7 @@
 package answerme.ui.gui;
 
 import answerme.AnswerMe;
+import answerme.command.CommandResult;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -8,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 /**
  * Controls user interactions in the primary AnswerMe window.
@@ -52,12 +54,23 @@ public class MainWindow extends AnchorPane {
     @FXML
     private void handleUserInput() {
         String input = userInput.getText();
-        String response = answerMe.getResponse(input);
+        CommandResult result = answerMe.getResponse(input);
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input, userImage),
-                DialogBox.getAnswerMeDialog(response, botImage)
+                DialogBox.getAnswerMeDialog(result.response(), botImage)
         );
         userInput.clear();
+
+        if (result.shouldExit()) {
+            Stage stage = (Stage) userInput.getScene().getWindow();
+            stage.close();
+        }
+    }
+
+    public void showWelcome() {
+        dialogContainer.getChildren().addAll(
+                DialogBox.getAnswerMeDialog(answerMe.showWelcomeMessage(), botImage)
+        );
     }
 }
 
