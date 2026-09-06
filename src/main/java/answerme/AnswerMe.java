@@ -20,9 +20,9 @@ public class AnswerMe {
      * Constructs the chatbot application and loads saved tasks
      * from storage if available.
      */
-    public AnswerMe() {
+    public AnswerMe(boolean isCliInstance) {
         storage = new Storage();
-        ui = new Ui();
+        ui = new Ui(isCliInstance);
         try {
             taskList = new TaskList(storage.loadTasks());
         } catch (AnswerMeException e) {
@@ -69,7 +69,7 @@ public class AnswerMe {
      * @param args Command-line arguments.
      */
     public static void main(String[] args) {
-        AnswerMe answerMeBot = new AnswerMe();
+        AnswerMe answerMeBot = new AnswerMe(true);
         answerMeBot.run();
     }
 }

@@ -13,12 +13,13 @@ public class Ui {
     private final String horizontalLine = "____________________________________________________________";
     private final Scanner scanner = new Scanner(System.in);
     private String latestResponse;
+    private boolean isCliInstance;
 
     /**
      * Constructs the user interface for the chatbot.
      */
-    public Ui() {
-
+    public Ui(boolean isCliInstance) {
+        this.isCliInstance = isCliInstance;
     }
 
     /**
@@ -70,6 +71,11 @@ public class Ui {
      */
     public void showMessage(String toPrint) {
         latestResponse = toPrint;
+
+        if (!isCliInstance) {
+            return;
+        }
+
         System.out.println("\t" + horizontalLine);
         for (String line : toPrint.split("\n")) {
             System.out.println("\t" + line);

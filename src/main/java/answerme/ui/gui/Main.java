@@ -6,6 +6,7 @@ import answerme.AnswerMe;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -13,7 +14,8 @@ import javafx.stage.Stage;
  * Configures and displays the primary AnswerMe window.
  */
 public class Main extends Application {
-    private AnswerMe answerMe = new AnswerMe();
+    private AnswerMe answerMe = new AnswerMe(false);
+    private Image botImage = new Image(this.getClass().getResourceAsStream("/images/AnswerMe.jpg"));
 
     /**
      * Creates and displays the GUI application window.
@@ -31,6 +33,7 @@ public class Main extends Application {
             stage.setMinHeight(420);
             stage.setMinWidth(420);
             stage.setWidth(550);
+            stage.getIcons().add(botImage);
 
             MainWindow controller = fxmlLoader.getController();
             controller.setAnswerMe(answerMe);
