@@ -63,6 +63,10 @@ public class AnswerMe {
         return ui.printShortWelcome();
     }
 
+    public String getLoadingErrorMessage() {
+        return ui.getLoadingErrorMessage();
+    }
+
     /**
      * Starts a new instance of the AnswerMe chatbot application.
      *

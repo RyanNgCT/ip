@@ -68,13 +68,21 @@ public class MainWindow extends AnchorPane {
     }
 
     /**
-     * Returns the default greeting message in the dialog container
-     * when the chatbot is launched.
+     * Displays the chatbot's welcome message and if task loading failed,
+     * its loading error message in the dialog container.
      */
     public void showWelcome() {
+        String loadingErrorMessage = answerMe.getLoadingErrorMessage();
+
         dialogContainer.getChildren().addAll(
                 DialogBox.getAnswerMeDialog(answerMe.showWelcomeMessage(), botImage)
         );
+
+        if (loadingErrorMessage != null) {
+            dialogContainer.getChildren().add(
+                    DialogBox.getAnswerMeDialog(loadingErrorMessage, botImage)
+            );
+        }
     }
 }
 

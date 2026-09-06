@@ -14,6 +14,7 @@ public class Ui {
     private final Scanner scanner = new Scanner(System.in);
     private String latestResponse;
     private boolean isCliInstance;
+    private String loadingErrorMessage;
 
     /**
      * Constructs the user interface for either the command-line or graphical
@@ -92,7 +93,8 @@ public class Ui {
      * from Storage.
      */
     public void showLoadingError() {
-        showMessage("!ERROR! Unable to load saved file.\nInitializing task list as empty...");
+        loadingErrorMessage = "!ERROR! Unable to load saved file.\nInitializing task list as empty...";
+        showMessage(loadingErrorMessage);
     }
 
     /**
@@ -128,8 +130,12 @@ public class Ui {
                 + "What can I do for you today?";
     }
 
-    // accessor for latestResponse
+    // accessors
     public String getLatestResponse() {
         return latestResponse;
+    }
+
+    public String getLoadingErrorMessage() {
+        return loadingErrorMessage;
     }
 }
