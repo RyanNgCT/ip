@@ -54,7 +54,7 @@ public class MainWindow extends AnchorPane {
     @FXML
     private void handleUserInput() {
         String input = userInput.getText();
-        CommandResult result = answerMe.getResponse(input);
+        CommandResult result = answerMe.processCommand(input);
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input, userImage),
                 DialogBox.getAnswerMeDialog(result.response(), botImage)

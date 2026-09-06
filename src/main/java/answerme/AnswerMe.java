@@ -49,7 +49,14 @@ public class AnswerMe {
         }
     }
 
-    public CommandResult getResponse(String input) {
+    /**
+     * Process the user's input by parsing and executing the
+     * corresponding command.
+     *
+     * @param input The user's input.
+     * @return The command result containing the result and exit status.
+     */
+    public CommandResult processCommand(String input) {
         try {
             Command command = Parser.parse(input);
             command.execute(taskList, ui, storage);
@@ -59,10 +66,20 @@ public class AnswerMe {
         }
     }
 
+    /**
+     * Returns the chatbot's welcome message.
+     *
+     * @return The chatbot's welcome message.
+     */
     public String showWelcomeMessage() {
         return ui.printShortWelcome();
     }
 
+    /**
+     * Returns the loading error message when saved tasks could not be loaded.
+     *
+     * @return The loading error message, or {@code null} if loading succeeded.
+     */
     public String getLoadingErrorMessage() {
         return ui.getLoadingErrorMessage();
     }
