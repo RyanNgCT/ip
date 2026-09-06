@@ -12,6 +12,7 @@ public class Ui {
     private final String botName = "AnswerMe";
     private final String horizontalLine = "____________________________________________________________";
     private final Scanner scanner = new Scanner(System.in);
+    private String latestResponse;
 
     /**
      * Constructs the user interface for the chatbot.
@@ -55,14 +56,11 @@ public class Ui {
      * @param emptyMessage The message to display if task list is empty.
      */
     public void listTasks(TaskList taskList, String heading, String emptyMessage) {
-        if (!taskList.isEmpty()) {
-            System.out.println("\t" + horizontalLine);
-            System.out.println("\t" + heading);
-            System.out.print(taskList.toString());
-            System.out.println("\t" + horizontalLine + "\n");
-        } else {
-            this.showMessage(emptyMessage);
+        if (taskList.isEmpty()) {
+            showMessage(emptyMessage);
+            return;
         }
+        showMessage(heading + "\n" + taskList);
     }
 
     /**
@@ -71,6 +69,7 @@ public class Ui {
      * @param toPrint The message to display.
      */
     public void showMessage(String toPrint) {
+        latestResponse = toPrint;
         System.out.println("\t" + horizontalLine);
         for (String line : toPrint.split("\n")) {
             System.out.println("\t" + line);
@@ -83,9 +82,7 @@ public class Ui {
      * from Storage.
      */
     public void showLoadingError() {
-        System.out.println(horizontalLine);
-        System.out.println("!ERROR! Unable to load saved file.\nInitializing task list as empty...");
-        System.out.println(horizontalLine);
+        showMessage("!ERROR! Unable to load saved file.\nInitializing task list as empty...");
     }
 
     /**
@@ -113,5 +110,9 @@ public class Ui {
     public String printShortWelcome() {
         return "Hello! I'm " + botName + ", your personal assistant bot.\n" +
                 "What can I do for you today?";
+    }
+
+    public String getLatestResponse() {
+        return latestResponse;
     }
 }
