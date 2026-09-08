@@ -37,7 +37,8 @@ public class FindCommand extends Command {
         String lowerCaseSearchTerm = toFind.toLowerCase();
 
         TaskList foundTasks = new TaskList(taskList.stream()
-                                            .filter(task -> task.getDescription().contains(lowerCaseSearchTerm))
+                                            .filter(task -> task.getDescription().toLowerCase()
+                                                    .contains(lowerCaseSearchTerm))
                                             .toList());
 
         ui.listTasks(foundTasks, "Here are the matching tasks in your list:",
