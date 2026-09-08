@@ -78,6 +78,12 @@ public class Task {
      */
     protected String getLogFormat(String type) {
         String status = isComplete ? "Complete" : "Incomplete";
+
+        assert type.equals("Todo")
+                || type.equals("Deadline")
+                || type.equals("Event")
+                : "Unexpected task type: " + type;
+
         return type + " | " + status + " | " + description;
     }
 
