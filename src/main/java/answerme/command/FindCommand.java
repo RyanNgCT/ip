@@ -2,11 +2,8 @@ package answerme.command;
 
 import answerme.exception.AnswerMeException;
 import answerme.storage.Storage;
-import answerme.task.Task;
 import answerme.task.TaskList;
 import answerme.ui.Ui;
-
-import java.util.Collection;
 
 /**
  * Represents a command that searches the task list for tasks containing
