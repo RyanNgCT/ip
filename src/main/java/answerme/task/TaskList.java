@@ -2,6 +2,7 @@ package answerme.task;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.IntStream;
 
 import answerme.exception.AnswerMeException;
 
@@ -51,10 +52,8 @@ public class TaskList extends ArrayList<Task> {
      */
     @Override
     public String toString() {
-        String result = "";
-        for (int i = 0; i < this.size(); i++) {
-            result += "\t" + (i + 1) + ". " + this.get(i) + "\n";
-        }
-        return result;
+        return IntStream.range(0, size())
+                        .mapToObj(index -> "\t" + (index + 1) + ". " + get(index) + "\n")
+                        .reduce("", String::concat);
     }
 }
