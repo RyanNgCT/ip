@@ -6,6 +6,8 @@ import answerme.task.Task;
 import answerme.task.TaskList;
 import answerme.ui.Ui;
 
+import java.util.Collection;
+
 /**
  * Represents a command that searches the task list for tasks containing
  * a specified keyword.
@@ -32,12 +34,12 @@ public class FindCommand extends Command {
      */
     @Override
     public void execute(TaskList taskList, Ui ui, Storage storage) throws AnswerMeException {
-        TaskList foundTasks = new TaskList();
-        for (Task task : taskList) {
-            if (task.getDescription().toLowerCase().contains(toFind.toLowerCase())) {
-                foundTasks.add(task);
-            }
-        }
+        String lowerCaseSearchTerm = toFind.toLowerCase();
+
+        TaskList foundTasks = new TaskList(taskList.stream()
+                                            .filter(task -> task.getDescription().contains(lowerCaseSearchTerm))
+                                            .toList());
+
         ui.listTasks(foundTasks, "Here are the matching tasks in your list:",
                 "No tasks matching " + toFind + " were found");
     }
