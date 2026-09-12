@@ -154,7 +154,7 @@ public class Parser {
      */
     private static Command parseDeadline(String args)
             throws AnswerMeException {
-        String[] segments = args.split("(?=/by)");
+        String[] segments = args.split("\\s+(?=/by\\b)");
         String description = segments[0].trim();
         HashMap<String, String> flags = extractFlags(segments);
 
@@ -178,7 +178,7 @@ public class Parser {
      */
     private static Command parseEvent(String args)
             throws AnswerMeException {
-        String[] segments = args.split("(?=/(?:from|to)\\b)");
+        String[] segments = args.split("\\s+(?=/(?:from|to)\\b)");
         String description = segments[0].trim();
         HashMap<String, String> flags = extractFlags(segments);
 
@@ -210,11 +210,17 @@ public class Parser {
 
         for (int i = 1; i < segments.length; i++) {
             String segment = segments[i].trim();
-            String[] flagArguments = segment.split(" ", 2);
+            String[] flagArguments = segment.split("\\s+", 2);
             if (flagArguments.length < 2 || flagArguments[1].isBlank()) {
                 throw new AnswerMeException("Every flag must be followed by an argument.");
             }
-            flags.put(flagArguments[0], flagArguments[1]);
+            String flag = flagArguments[0];
+            String value = flagArguments[1];
+
+            if (flags.containsKey(flag)) {
+                throw new AnswerMeException("Flag " + flag + " cannot be repeated!");
+            }
+            flags.put(flag, value);
         }
         return flags;
     }
