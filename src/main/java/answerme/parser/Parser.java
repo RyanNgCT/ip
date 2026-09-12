@@ -192,7 +192,7 @@ public class Parser {
         LocalDateTime to = dateTimeParser.parseDateTime(flags.get("/to"));
 
         if (from.isAfter(to)) {
-            throw new AnswerMeException("'From' datetime must occur before 'To'.");
+            throw new AnswerMeException("'From' datetime cannot occur after 'To'.");
         }
         return new AddEventCommand(description, from, to);
     }
