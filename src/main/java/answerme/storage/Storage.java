@@ -19,37 +19,37 @@ import answerme.task.ToDo;
  * on disk.
  */
 public class Storage {
-    private static final String DATA_FILE_PATH = "data/tasks.txt";
+    private static final String DEFAULT_DATA_FILE_PATH = "data/tasks.txt";
+    private final File dataFile;
 
     /**
      * Constructs a new Storage Manager.
      */
     public Storage() {
+        this(new File(DEFAULT_DATA_FILE_PATH));
+    }
 
+    Storage(File dataFile) {
+        this.dataFile = dataFile;
     }
 
     /**
-     * Saves tasks in the file specified by {@code DATA_FILE_PATH}.
+     * Saves tasks in the configured data file.
      *
      * @param taskList The list of tasks to be saved in the output file.
+     * @throws AnswerMeException If the data file cannot be created or written.
      */
-    public void saveTasks(TaskList taskList) {
+    public void saveTasks(TaskList taskList) throws AnswerMeException {
         if (!hasDataFile()) {
-            try {
-                createDataFile();
-            } catch (AnswerMeException exception) {
-                // TODO: modify behavior later
-                System.out.println(exception.getMessage());
-            }
+            createDataFile();
         }
-        try {
-            FileWriter writer = new FileWriter(DATA_FILE_PATH);
+
+        try (FileWriter writer = new FileWriter(dataFile)) {
             for (Task task : taskList) {
                 writer.write(task.toStorageFormat() + "\n");
             }
-            writer.close();
         } catch (IOException exception) {
-            System.out.println("Error opening the file.");
+            throw new AnswerMeException("Unable to save tasks.");
         }
     }
 
@@ -63,7 +63,12 @@ public class Storage {
      */
     public TaskList loadTasks() throws AnswerMeException {
         TaskList taskList = new TaskList();
-        try (Scanner scanner = new Scanner(new File(DATA_FILE_PATH))) {
+
+        if (!hasDataFile()) {
+            return taskList;
+        }
+
+        try (Scanner scanner = new Scanner(dataFile)) {
             int lineNumber = 1;
 
             while (scanner.hasNextLine()) {
@@ -75,19 +80,19 @@ public class Storage {
                 lineNumber++;
             }
         } catch (FileNotFoundException exception) {
-            // Returns an empty task list when the data file is missing.
-            return taskList;
+            throw new AnswerMeException("Unable to read saved tasks from "
+                    + dataFile + ".");
         }
         return taskList;
     }
 
     /**
-     * Checks whether the data file at {@code DATA_FILE_PATH} exists.
+     * Checks whether the configured data file exists.
      *
      * @return {@code true} if the file exists and {@code false} if not.
      */
     public boolean hasDataFile() {
-        return new File(DATA_FILE_PATH).exists();
+        return dataFile.exists();
     }
 
     /**
@@ -97,7 +102,6 @@ public class Storage {
      * @throws AnswerMeException If the data file cannot be created.
      */
     public void createDataFile() throws AnswerMeException {
-        File dataFile = new File(DATA_FILE_PATH);
         File parentDirectory = dataFile.getParentFile();
         if (parentDirectory != null && !parentDirectory.exists()) {
             parentDirectory.mkdirs();
@@ -105,7 +109,7 @@ public class Storage {
         try {
             dataFile.createNewFile();
         } catch (IOException exception) {
-            throw new AnswerMeException("File: " + Storage.DATA_FILE_PATH + " cannot be created!");
+            throw new AnswerMeException("File: " + dataFile + " cannot be created!");
         }
     }
 
