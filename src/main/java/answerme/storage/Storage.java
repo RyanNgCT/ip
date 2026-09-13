@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Scanner;
 
 import answerme.exception.AnswerMeException;
@@ -193,6 +194,16 @@ public class Storage {
         }
     }
 
+    private LocalDateTime parseStoredDateTime(String value, int lineNumber, TaskType taskType)
+            throws AnswerMeException {
+        try {
+            return DateTimeParser.parseDateTime(value);
+        } catch (AnswerMeException exception) {
+            throw new AnswerMeException("Invalid " + taskType.displayName + " datetime on line "
+                    + lineNumber);
+        }
+    }
+
     private void checkFieldCount(TaskType taskType, String[] fields, int lineNumber)
             throws AnswerMeException {
         if (fields.length != taskType.expectedFieldCount) {
@@ -212,13 +223,13 @@ public class Storage {
 
             case DEADLINE:
                 return new Deadline(taskDescription,
-                        DateTimeParser.parseDateTime(fields[FIRST_DATE_FIELD_INDEX]));
+                        parseStoredDateTime(fields[FIRST_DATE_FIELD_INDEX], lineNumber, taskType));
 
             case EVENT:
                 return new Event(
                         taskDescription,
-                        DateTimeParser.parseDateTime(fields[FIRST_DATE_FIELD_INDEX]),
-                        DateTimeParser.parseDateTime(fields[SECOND_DATE_FIELD_INDEX]));
+                        parseStoredDateTime(fields[FIRST_DATE_FIELD_INDEX], lineNumber, taskType),
+                        parseStoredDateTime(fields[SECOND_DATE_FIELD_INDEX], lineNumber, taskType));
 
             default:
                 throw new AnswerMeException("Unknown Task type " + taskType
