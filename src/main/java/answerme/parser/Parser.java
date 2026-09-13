@@ -25,7 +25,7 @@ public class Parser {
     private static final String TO_FLAG = "/to";
 
     private static final String WHITESPACE_REGEX = "\\s+";
-    private static final int FLAG_VALUE_SPLIT_LIMIT = 2;
+    private static final int COMMAND_ARGUMENT_SPLIT_LIMIT = 2;
 
     /**
      * Constructs a new Parser object.
@@ -47,7 +47,7 @@ public class Parser {
             throw new AnswerMeException("Please enter a command.");
         }
 
-        String[] responseParts = userResponse.trim().split(WHITESPACE_REGEX, FLAG_VALUE_SPLIT_LIMIT);
+        String[] responseParts = userResponse.trim().split(WHITESPACE_REGEX, COMMAND_ARGUMENT_SPLIT_LIMIT);
         String commandName = responseParts[0].toLowerCase();
         String args = extractArgs(responseParts);
 
@@ -209,7 +209,8 @@ public class Parser {
      *
      * @param segments The argument segments from which to extract flags.
      * @return A mapping from each flag to its value.
-     * @throws AnswerMeException If a flag does not have a specified value.
+     * @throws AnswerMeException If a flag does not have a specified value or
+     *                           when there are duplicate flags.
      */
     private static HashMap<String, String> extractFlags(String[] segments)
             throws AnswerMeException {
@@ -217,7 +218,7 @@ public class Parser {
 
         for (int i = 1; i < segments.length; i++) {
             String segment = segments[i].trim();
-            String[] flagArguments = segment.split(WHITESPACE_REGEX, FLAG_VALUE_SPLIT_LIMIT);
+            String[] flagArguments = segment.split(WHITESPACE_REGEX, COMMAND_ARGUMENT_SPLIT_LIMIT);
             if (flagArguments.length < 2 || flagArguments[1].isBlank()) {
                 throw new AnswerMeException("Every flag must be followed by an argument.");
             }
