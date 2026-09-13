@@ -75,7 +75,7 @@ public class AnswerMe {
      * @return The chatbot's welcome message.
      */
     public String showWelcomeMessage() {
-        return ui.printShortWelcome();
+        return ui.getShortWelcome();
     }
 
     /**
