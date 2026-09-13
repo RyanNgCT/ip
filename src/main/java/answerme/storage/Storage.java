@@ -128,7 +128,7 @@ public class Storage {
      *
      * @return {@code true} if the file exists and {@code false} if not.
      */
-    public boolean hasDataFile() {
+    private boolean hasDataFile() {
         return dataFile.exists();
     }
 
@@ -138,7 +138,7 @@ public class Storage {
      *
      * @throws AnswerMeException If the data file cannot be created.
      */
-    public void createDataFile() throws AnswerMeException {
+    private void createDataFile() throws AnswerMeException {
         File parentDirectory = dataFile.getParentFile();
         if (parentDirectory != null && !parentDirectory.exists()) {
             parentDirectory.mkdirs();
@@ -158,7 +158,7 @@ public class Storage {
      * @return The task represented by the given line.
      * @throws AnswerMeException If the task has an invalid format, status or type.
      */
-    public Task parseTask(String line, int lineNumber) throws AnswerMeException {
+    private Task parseTask(String line, int lineNumber) throws AnswerMeException {
         String[] fields = parseFields(line, lineNumber);
         TaskType taskType = parseTaskType(fields[TYPE_FIELD_INDEX], lineNumber);
         TaskStatus taskStatus = parseTaskStatus(fields[STATUS_FIELD_INDEX]);
