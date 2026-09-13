@@ -20,6 +20,13 @@ import answerme.exception.AnswerMeException;
  * Parses user input into the corresponding command objects.
  */
 public class Parser {
+    private static final String BY_FLAG = "/by";
+    private static final String FROM_FLAG = "/from";
+    private static final String TO_FLAG = "/to";
+
+    private static final String WHITESPACE_REGEX = "\\s+";
+    private static final int FLAG_VALUE_SPLIT_LIMIT = 2;
+
     /**
      * Constructs a new Parser object.
      */
@@ -40,7 +47,7 @@ public class Parser {
             throw new AnswerMeException("Please enter a command.");
         }
 
-        String[] responseParts = userResponse.trim().split("\\s+", 2);
+        String[] responseParts = userResponse.trim().split(WHITESPACE_REGEX, FLAG_VALUE_SPLIT_LIMIT);
         String commandName = responseParts[0].toLowerCase();
         String args = extractArgs(responseParts);
 
@@ -158,12 +165,12 @@ public class Parser {
         String description = segments[0].trim();
         HashMap<String, String> flags = extractFlags(segments);
 
-        if (description.isBlank() || !flags.containsKey("/by")) {
+        if (description.isBlank() || !flags.containsKey(BY_FLAG)) {
             throw new AnswerMeException("Format: deadline <description> /by <when>");
         }
 
         DateTimeParser dateTimeParser = new DateTimeParser();
-        LocalDateTime by = dateTimeParser.parseDateTime(flags.get("/by"));
+        LocalDateTime by = dateTimeParser.parseDateTime(flags.get(BY_FLAG));
         return new AddDeadlineCommand(description, by);
     }
 
@@ -182,14 +189,14 @@ public class Parser {
         String description = segments[0].trim();
         HashMap<String, String> flags = extractFlags(segments);
 
-        if (description.isBlank() || !flags.containsKey("/from")
-                || !flags.containsKey("/to")) {
+        if (description.isBlank() || !flags.containsKey(FROM_FLAG)
+                || !flags.containsKey(TO_FLAG)) {
             throw new AnswerMeException("Format: event <description> /from <when> /to <when>");
         }
 
         DateTimeParser dateTimeParser = new DateTimeParser();
-        LocalDateTime from = dateTimeParser.parseDateTime(flags.get("/from"));
-        LocalDateTime to = dateTimeParser.parseDateTime(flags.get("/to"));
+        LocalDateTime from = dateTimeParser.parseDateTime(flags.get(FROM_FLAG));
+        LocalDateTime to = dateTimeParser.parseDateTime(flags.get(TO_FLAG));
 
         if (from.isAfter(to)) {
             throw new AnswerMeException("'From' datetime cannot occur after 'To'.");
@@ -210,7 +217,7 @@ public class Parser {
 
         for (int i = 1; i < segments.length; i++) {
             String segment = segments[i].trim();
-            String[] flagArguments = segment.split("\\s+", 2);
+            String[] flagArguments = segment.split(WHITESPACE_REGEX, FLAG_VALUE_SPLIT_LIMIT);
             if (flagArguments.length < 2 || flagArguments[1].isBlank()) {
                 throw new AnswerMeException("Every flag must be followed by an argument.");
             }
