@@ -206,20 +206,19 @@ public class Storage {
         checkFieldCount(taskType, fields, lineNumber);
         String taskDescription = fields[DESCRIPTION_FIELD_INDEX];
 
-        DateTimeParser dateTimeParser = new DateTimeParser();
         switch (taskType) {
             case TODO:
                 return new ToDo(taskDescription);
 
             case DEADLINE:
                 return new Deadline(taskDescription,
-                        dateTimeParser.parseDateTime(fields[FIRST_DATE_FIELD_INDEX]));
+                        DateTimeParser.parseDateTime(fields[FIRST_DATE_FIELD_INDEX]));
 
             case EVENT:
                 return new Event(
                         taskDescription,
-                        dateTimeParser.parseDateTime(fields[FIRST_DATE_FIELD_INDEX]),
-                        dateTimeParser.parseDateTime(fields[SECOND_DATE_FIELD_INDEX]));
+                        DateTimeParser.parseDateTime(fields[FIRST_DATE_FIELD_INDEX]),
+                        DateTimeParser.parseDateTime(fields[SECOND_DATE_FIELD_INDEX]));
 
             default:
                 throw new AnswerMeException("Unknown Task type " + taskType

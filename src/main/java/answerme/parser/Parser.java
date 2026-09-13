@@ -170,8 +170,7 @@ public class Parser {
             throw new AnswerMeException("Format: deadline <description> /by <when>");
         }
 
-        DateTimeParser dateTimeParser = new DateTimeParser();
-        LocalDateTime by = dateTimeParser.parseDateTime(flags.get(BY_FLAG));
+        LocalDateTime by = DateTimeParser.parseDateTime(flags.get(BY_FLAG));
         return new AddDeadlineCommand(description, by);
     }
 
@@ -194,10 +193,8 @@ public class Parser {
                 || !flags.containsKey(TO_FLAG)) {
             throw new AnswerMeException("Format: event <description> /from <when> /to <when>");
         }
-
-        DateTimeParser dateTimeParser = new DateTimeParser();
-        LocalDateTime from = dateTimeParser.parseDateTime(flags.get(FROM_FLAG));
-        LocalDateTime to = dateTimeParser.parseDateTime(flags.get(TO_FLAG));
+        LocalDateTime from = DateTimeParser.parseDateTime(flags.get(FROM_FLAG));
+        LocalDateTime to = DateTimeParser.parseDateTime(flags.get(TO_FLAG));
 
         if (from.isAfter(to)) {
             throw new AnswerMeException("'From' datetime cannot occur after 'To'.");
