@@ -29,8 +29,11 @@ public abstract class AddCommand extends Command {
      */
     @Override
     public void execute(TaskList taskList, Ui ui, Storage storage)
-            throws AnswerMeException {
+        throws AnswerMeException {
+        int originalListSize = taskList.size();
         taskList.add(task);
+        assert taskList.size() == originalListSize + 1;
+
         storage.saveTasks(taskList);
         ui.printAddNewItem(task, taskList.size());
     }
