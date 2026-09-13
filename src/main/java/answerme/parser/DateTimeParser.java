@@ -1,42 +1,46 @@
 package answerme.parser;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
+import java.time.temporal.ChronoField;
 import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
 
 import answerme.exception.AnswerMeException;
 
 /**
- * Parses date and time strings into datetime values.
- * Formats datetime values for display.
+ * Parses strings into datetime values and formats datetime values for display.
  */
 public class DateTimeParser {
-    private static final DateTimeFormatter OUTPUT_DATETIME_FORMAT =
-            DateTimeFormatter.ofPattern("MMM d yyyy HH:mm");
-    private static final DateTimeFormatter OUTPUT_DATE_FORMAT =
-            DateTimeFormatter.ofPattern("MMM d yyyy");
-    private final List<DateTimeFormatter> dateTimeFormats;
+    private static final DateTimeFormatter DISPLAY_DATETIME_FORMATTER =
+            DateTimeFormatter.ofPattern("MMM d yyyy HH:mm", Locale.ENGLISH);
+    private static final DateTimeFormatter DISPLAY_DATE_FORMATTER =
+            DateTimeFormatter.ofPattern("MMM d yyyy", Locale.ENGLISH);
+    private static final String INVALID_DATE_TIME_MESSAGE =
+            "Ensure that date/time is formatted correctly.\n"
+            + "Use a date such as 11/9/2026 or a date and time such as 11/9/2026 1800.";
 
-    /**
-     * Constructs a parser that details the application's accepted date and
-     * time formats.
-     */
-    public DateTimeParser() {
-        // Contains allowed date and time input formats.
-        this.dateTimeFormats = List.of(DateTimeFormatter.ofPattern("yyyy-M-d"),
-                DateTimeFormatter.ofPattern("yyyy/M/d"),
-                DateTimeFormatter.ofPattern("d-M-yyyy"),
-                DateTimeFormatter.ofPattern("d/M/yyyy"),
-                DateTimeFormatter.ofPattern("MMM d yyyy"),
-                DateTimeFormatter.ofPattern("MMM d yyyy HH:mm"),
-                DateTimeFormatter.ofPattern("d/M/yyyy HHmm"),
-                DateTimeFormatter.ofPattern("yyyy-M-d HH:mm"),
-                DateTimeFormatter.ofPattern("yyyy/M/d HH:mm"),
-                DateTimeFormatter.ofPattern("d-M-yyyy HH:mm"),
-                DateTimeFormatter.ofPattern("d/M/yyyy HH:mm"));
+    private static final List<DateTimeFormatter> INPUT_FORMATTERS = List.of(
+            createInputFormatter("uuuu-M-d"),
+            createInputFormatter("uuuu/M/d"),
+            createInputFormatter("d-M-uuuu"),
+            createInputFormatter("d/M/uuuu"),
+            createInputFormatter("MMM d uuuu"),
+            createInputFormatter("MMM d uuuu HH:mm"),
+            createInputFormatter("d/M/uuuu HHmm"),
+            createInputFormatter("d-M-uuuu HHmm"),
+            createInputFormatter("uuuu-M-d HH:mm"),
+            createInputFormatter("uuuu/M/d HH:mm"),
+            createInputFormatter("d-M-uuuu HH:mm"),
+            createInputFormatter("d/M/uuuu HH:mm")
+    );
+
+    private DateTimeParser() {
     }
 
     /**
@@ -47,39 +51,70 @@ public class DateTimeParser {
      * @return The parsed datetime value.
      * @throws AnswerMeException If the input does not match a supported date or time format.
      */
-    public LocalDateTime parseDateTime(String rawDateTime)
-            throws AnswerMeException {
-        String trimmedDateTime = rawDateTime.trim();
-        for (DateTimeFormatter format : dateTimeFormats) {
-            try {
-                return LocalDateTime.parse(trimmedDateTime, format);
-            } catch (DateTimeParseException exception) {
-                // Continues with the next format.
-            }
+    public static LocalDateTime parseDateTime(String rawDateTime) throws AnswerMeException {
+        if (rawDateTime == null || rawDateTime.isBlank()) {
+            throw new AnswerMeException(INVALID_DATE_TIME_MESSAGE);
+        }
 
-            try {
-                return LocalDate.parse(trimmedDateTime, format).atStartOfDay();
-            } catch (DateTimeParseException exception) {
-                // Continues with the next format.
+        String trimmedDateTime = rawDateTime.trim();
+
+        for (DateTimeFormatter formatter : INPUT_FORMATTERS) {
+            Optional<LocalDateTime> parsedDateTime = parseDateTimeHelper(trimmedDateTime, formatter);
+
+            if (parsedDateTime.isPresent()) {
+                return parsedDateTime.get();
             }
         }
-        throw new AnswerMeException("Ensure date/time is formatted correctly.");
+        throw new AnswerMeException(INVALID_DATE_TIME_MESSAGE);
     }
 
     /**
-     * Formats a datetime value into the application's display format.
+     * Formats a datetime value for display, omitting its time when it is midnight.
      *
      * @param dateTime The datetime value to format.
      * @return The formatted date or datetime string.
-     * @throws DateTimeParseException If the datetime value is {@code null}.
+     * @throws NullPointerException If {@code dateTime} is null.
      */
-    public static String dateTimeToString(LocalDateTime dateTime) {
+    public static String formatDateTime(LocalDateTime dateTime) {
         if (dateTime == null) {
-            throw new DateTimeParseException("Datetime cannot be null.", "", 0);
+            throw new NullPointerException("Datetime cannot be null.");
         }
         if (dateTime.toLocalTime().equals(LocalTime.MIDNIGHT)) {
-            return dateTime.format(DateTimeParser.OUTPUT_DATE_FORMAT);
+            return dateTime.format(DISPLAY_DATE_FORMATTER);
         }
-        return dateTime.format(DateTimeParser.OUTPUT_DATETIME_FORMAT);
+        return dateTime.format(DISPLAY_DATETIME_FORMATTER);
+    }
+
+    /**
+     * Creates a strict formatter for the specified datetime pattern.
+     * Defaults missing hour and minute fields to midnight.
+     *
+     * @param input The pattern used to parse datetime values.
+     * @return A formatter configured with the specified pattern.
+     */
+    private static DateTimeFormatter createInputFormatter(String input) {
+        return new DateTimeFormatterBuilder()
+                .appendPattern(input)
+                .parseDefaulting(ChronoField.HOUR_OF_DAY, 0)
+                .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0)
+                .toFormatter(Locale.ENGLISH)
+                .withResolverStyle(ResolverStyle.STRICT);
+    }
+
+    /**
+     * Attempts to parse a datetime value using the specified formatter.
+     *
+     * @param dateTime The datetime string to parse.
+     * @param formatter The formatter used for parsing.
+     * @return An optional containing the parsed datetime, or an empty
+     *         optional if parsing fails.
+     */
+    private static Optional<LocalDateTime> parseDateTimeHelper(
+            String dateTime, DateTimeFormatter formatter) {
+        try {
+            return Optional.of(LocalDateTime.parse(dateTime, formatter));
+        } catch (DateTimeParseException exception) {
+            return Optional.empty();
+        }
     }
 }

@@ -25,14 +25,6 @@ public class Deadline extends Task {
         this.deadline = deadline;
     }
 
-    public void setDeadline(LocalDateTime newDeadline) {
-        deadline = newDeadline;
-    }
-
-    public LocalDateTime getDueBy() {
-        return deadline;
-    }
-
     /**
      * {@inheritDoc}
      *
@@ -40,7 +32,7 @@ public class Deadline extends Task {
      */
     @Override
     public String toString() {
-        return "[D]" + super.toString() + " (by: " + DateTimeParser.dateTimeToString(deadline) + ")";
+        return "[D]" + super.toString() + " (by: " + DateTimeParser.formatDateTime(deadline) + ")";
     }
 
     /**
@@ -50,7 +42,7 @@ public class Deadline extends Task {
      */
     @Override
     public String toStorageFormat() {
-        return getLogFormat("Deadline") + " | " + DateTimeParser.dateTimeToString(deadline);
+        return getLogFormat("Deadline") + " | " + DateTimeParser.formatDateTime(deadline);
     }
 
     /**

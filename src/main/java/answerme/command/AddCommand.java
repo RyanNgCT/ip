@@ -1,5 +1,6 @@
 package answerme.command;
 
+import answerme.exception.AnswerMeException;
 import answerme.storage.Storage;
 import answerme.task.Task;
 import answerme.task.TaskList;
@@ -23,17 +24,18 @@ public abstract class AddCommand extends Command {
     /**
      * {@inheritDoc}
      *
-     * Adds this command's task to the task list, displays a confirmation,
-     * and saves the task list.
+     * Adds this command's task to the task list, saves the task list
+     * and displays a confirmation.
      */
     @Override
-    public void execute(TaskList taskList, Ui ui, Storage storage) {
+    public void execute(TaskList taskList, Ui ui, Storage storage)
+            throws AnswerMeException {
         int originalListSize = taskList.size();
         taskList.add(task);
         assert taskList.size() == originalListSize + 1;
 
-        ui.printAddNewItem(task, taskList.size());
         storage.saveTasks(taskList);
+        ui.printAddNewItem(task, taskList.size());
     }
 
     /**

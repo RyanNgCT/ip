@@ -3,7 +3,7 @@ package answerme.task;
 /**
  * Represents a task that can be marked as complete or incomplete.
  */
-public class Task {
+public abstract class Task {
     protected String description;
     protected boolean isComplete;
 
@@ -92,7 +92,5 @@ public class Task {
      *
      * @return The storage representation of this task.
      */
-    public String toStorageFormat() {
-        return "Task";
-    }
+    public abstract String toStorageFormat();
 }

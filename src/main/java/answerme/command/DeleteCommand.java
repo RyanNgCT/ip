@@ -24,9 +24,11 @@ public class DeleteCommand extends Command {
     /**
      * {@inheritDoc}
      *
-     * Deletes the task at the specified index, displays a confirmation, and saves the task list.
+     * Deletes the task at the specified index, saves the updated task list,
+     * and displays a confirmation.
      *
-     * @throws AnswerMeException If no task exists at the specified index.
+     * @throws AnswerMeException If no task exists at the specified index or
+     *                           the updated task list cannot be saved.
      */
     @Override
     public void execute(TaskList taskList, Ui ui, Storage storage)
@@ -37,7 +39,7 @@ public class DeleteCommand extends Command {
         taskList.remove(task);
         assert taskList.size() == originalListSize - 1;
 
-        ui.printDeleteItem(task, taskList.size());
         storage.saveTasks(taskList);
+        ui.printDeleteItem(task, taskList.size());
     }
 }
