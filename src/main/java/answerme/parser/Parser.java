@@ -1,7 +1,6 @@
 package answerme.parser;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.HashMap;
 
 import answerme.command.AddDeadlineCommand;
@@ -26,6 +25,7 @@ public class Parser {
 
     private static final String WHITESPACE_REGEX = "\\s+";
     private static final int COMMAND_ARGUMENT_SPLIT_LIMIT = 2;
+    private static final int ARGUMENTS_INDEX = 1;
 
     /**
      * Constructs a new Parser object.
@@ -115,8 +115,9 @@ public class Parser {
      * @return The arguments joined into a single string.
      */
     private static String extractArgs(String[] responseParts) {
-        String[] argumentParts = Arrays.copyOfRange(responseParts, 1, responseParts.length);
-        return String.join(" ", argumentParts);
+        return responseParts.length > ARGUMENTS_INDEX
+                ? responseParts[ARGUMENTS_INDEX]
+                : "";
     }
 
     /**
