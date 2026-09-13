@@ -25,3 +25,28 @@ Apply the [SE-EDU Git conventions](https://se-education.org/guides/conventions/g
 
 - Use meaningful, relevant keywords in kebab case, for example `refactor-ui-tests`.
 - For issue-related branches, use `issueNumber-keywords-from-issue-title`, for example `1234-ui-freeze-error`.
+
+## Pull requests
+
+- Write the PR title as `type(scope): Imperative description`, with a
+  lowercase, relevant `type` and `scope`. For example,
+  `refactor(core): Improve code quality and error handling` or
+  `chore(java): Add defensive assertions for task management`.
+- Choose a type that reflects the primary intent: use `feat` for a new
+  user-facing capability, `fix` for a defect correction, `refactor` for
+  internal restructuring and `chore` for maintenance work.
+- Keep titles informative, capitalized after the prefix, without an ending
+  period, and within 72 characters.
+- Use this PR description structure:
+
+  ```markdown
+  ## Summary
+
+  - Describe the user-visible or design-relevant changes.
+  - Where possible, use bullet points and keep descriptions brief.
+
+  ## Rationale
+
+  Explain the problem addressed and why this approach is appropriate.
+  ```
+- Exclude other non-necessary sections.
