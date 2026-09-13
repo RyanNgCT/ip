@@ -92,11 +92,14 @@ public class Ui {
     }
 
     /**
-     * Displays an error message when saved tasks cannot be loaded
-     * from Storage.
+     * Displays the reason saved tasks could not be loaded from Storage.
+     *
+     * @param reason The reason task loading failed.
      */
-    public void showLoadingError() {
-        loadingErrorMessage = "!ERROR! Unable to load saved file.\nInitializing task list as empty...";
+    public void showLoadingError(String reason) {
+        loadingErrorMessage = "[ERROR] Unable to load saved file.\n"
+                + reason + "\n"
+                + "Initializing task list as empty...";
         showMessage(loadingErrorMessage);
     }
 
