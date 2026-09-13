@@ -49,7 +49,7 @@ public class ParserTest {
             Command eventCommand = Parser.parse(newEvent);
             fail();
         } catch (AnswerMeException e) {
-            assertEquals("Oh no! 'From' datetime must occur before 'To'.", e.getMessage());
+            assertEquals("Oh no! 'From' datetime cannot occur after 'To'.", e.getMessage());
         }
     }
 }
