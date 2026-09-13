@@ -33,7 +33,7 @@ public class DeleteCommand extends Command {
             throws AnswerMeException {
         Task task = taskList.getTask(taskIndex);
         taskList.remove(task);
-        ui.printDeleteItem(task, taskList.size());
         storage.saveTasks(taskList);
+        ui.printDeleteItem(task, taskList.size());
     }
 }
