@@ -8,6 +8,7 @@ import answerme.command.AddEventCommand;
 import answerme.command.AddToDoCommand;
 import answerme.command.Command;
 import answerme.command.DeleteCommand;
+import answerme.command.DedupCommand;
 import answerme.command.ExitCommand;
 import answerme.command.FindCommand;
 import answerme.command.ListCommand;
@@ -78,6 +79,9 @@ public class Parser {
 
             case "find":
                 return parseFind(args);
+
+            case "dedup":
+                return new DedupCommand();
 
             default:
                 throw new AnswerMeException("I'm not sure what you mean :(");
