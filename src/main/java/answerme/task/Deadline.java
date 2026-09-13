@@ -1,6 +1,7 @@
 package answerme.task;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import answerme.parser.DateTimeParser;
 
@@ -57,5 +58,12 @@ public class Deadline extends Task {
                     && deadline.equals(other.deadline);
         }
         return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public int hashCode() {
+        return Objects.hash(description, deadline);
     }
 }

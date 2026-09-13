@@ -1,6 +1,7 @@
 package answerme.task;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import answerme.parser.DateTimeParser;
 
@@ -62,5 +63,12 @@ public class Event extends Task {
                     && eventEnd.equals(other.eventEnd);
         }
         return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public int hashCode() {
+        return Objects.hash(description, eventStart, eventEnd);
     }
 }

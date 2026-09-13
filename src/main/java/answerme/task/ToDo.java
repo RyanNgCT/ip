@@ -1,5 +1,7 @@
 package answerme.task;
 
+import java.util.Objects;
+
 /**
  * Represents a todo task.
  */
@@ -44,5 +46,12 @@ public class ToDo extends Task {
             return description.equals(other.description);
         }
         return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public int hashCode() {
+        return Objects.hash(description);
     }
 }
