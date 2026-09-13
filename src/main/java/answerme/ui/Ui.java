@@ -126,6 +126,18 @@ public class Ui {
     }
 
     /**
+     * Displays the duplicate tasks that were removed and the remaining
+     * task count.
+     *
+     * @param duplicateTasks The list of tasks removed as duplicates.
+     * @param taskCount The number of tasks remaining in the list.
+     */
+    public void printDedupItem(TaskList duplicateTasks, int taskCount) {
+        showMessage("Removed the following duplicate task(s):\n"
+                + duplicateTasks + "You now have " + taskCount + " tasks in the list.");
+    }
+
+    /**
      * Returns a shortened version of the welcome message tailored for
      * graphical interfaces.
      *
