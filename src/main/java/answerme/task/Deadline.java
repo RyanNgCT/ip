@@ -25,14 +25,6 @@ public class Deadline extends Task {
         this.deadline = deadline;
     }
 
-    public void setDeadline(LocalDateTime newDeadline) {
-        deadline = newDeadline;
-    }
-
-    public LocalDateTime getDueBy() {
-        return deadline;
-    }
-
     /**
      * {@inheritDoc}
      *

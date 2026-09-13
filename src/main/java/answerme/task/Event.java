@@ -27,23 +27,6 @@ public class Event extends Task {
         this.eventEnd = eventEnd;
     }
 
-    // accessors
-    public LocalDateTime getEventStart() {
-        return eventStart;
-    }
-
-    public LocalDateTime getEventEnd() {
-        return eventEnd;
-    }
-
-    public void setEventStart(LocalDateTime newFrom) {
-        eventStart = newFrom;
-    }
-
-    public void setEventEnd(LocalDateTime newTo) {
-        eventEnd = newTo;
-    }
-
     /**
      * {@inheritDoc}
      *
