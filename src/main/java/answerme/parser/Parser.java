@@ -1,7 +1,6 @@
 package answerme.parser;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.HashMap;
 
 import answerme.command.AddDeadlineCommand;
@@ -20,6 +19,14 @@ import answerme.exception.AnswerMeException;
  * Parses user input into the corresponding command objects.
  */
 public class Parser {
+    private static final String BY_FLAG = "/by";
+    private static final String FROM_FLAG = "/from";
+    private static final String TO_FLAG = "/to";
+
+    private static final String WHITESPACE_REGEX = "\\s+";
+    private static final int COMMAND_ARGUMENT_SPLIT_LIMIT = 2;
+    private static final int ARGUMENTS_INDEX = 1;
+
     /**
      * Constructs a new Parser object.
      */
@@ -40,7 +47,7 @@ public class Parser {
             throw new AnswerMeException("Please enter a command.");
         }
 
-        String[] responseParts = userResponse.trim().split("\\s+", 2);
+        String[] responseParts = userResponse.trim().split(WHITESPACE_REGEX, COMMAND_ARGUMENT_SPLIT_LIMIT);
         String commandName = responseParts[0].toLowerCase();
         String args = extractArgs(responseParts);
 
@@ -108,8 +115,9 @@ public class Parser {
      * @return The arguments joined into a single string.
      */
     private static String extractArgs(String[] responseParts) {
-        String[] argumentParts = Arrays.copyOfRange(responseParts, 1, responseParts.length);
-        return String.join(" ", argumentParts);
+        return responseParts.length > ARGUMENTS_INDEX
+                ? responseParts[ARGUMENTS_INDEX]
+                : "";
     }
 
     /**
@@ -154,16 +162,15 @@ public class Parser {
      */
     private static Command parseDeadline(String args)
             throws AnswerMeException {
-        String[] segments = args.split("(?=/by)");
+        String[] segments = args.split("\\s+(?=/by\\b)");
         String description = segments[0].trim();
         HashMap<String, String> flags = extractFlags(segments);
 
-        if (description.isBlank() || !flags.containsKey("/by")) {
+        if (description.isBlank() || !flags.containsKey(BY_FLAG)) {
             throw new AnswerMeException("Format: deadline <description> /by <when>");
         }
 
-        DateTimeParser dateTimeParser = new DateTimeParser();
-        LocalDateTime by = dateTimeParser.parseDateTime(flags.get("/by"));
+        LocalDateTime by = DateTimeParser.parseDateTime(flags.get(BY_FLAG));
         return new AddDeadlineCommand(description, by);
     }
 
@@ -178,21 +185,19 @@ public class Parser {
      */
     private static Command parseEvent(String args)
             throws AnswerMeException {
-        String[] segments = args.split("(?=/(?:from|to)\\b)");
+        String[] segments = args.split("\\s+(?=/(?:from|to)\\b)");
         String description = segments[0].trim();
         HashMap<String, String> flags = extractFlags(segments);
 
-        if (description.isBlank() || !flags.containsKey("/from")
-                || !flags.containsKey("/to")) {
+        if (description.isBlank() || !flags.containsKey(FROM_FLAG)
+                || !flags.containsKey(TO_FLAG)) {
             throw new AnswerMeException("Format: event <description> /from <when> /to <when>");
         }
-
-        DateTimeParser dateTimeParser = new DateTimeParser();
-        LocalDateTime from = dateTimeParser.parseDateTime(flags.get("/from"));
-        LocalDateTime to = dateTimeParser.parseDateTime(flags.get("/to"));
+        LocalDateTime from = DateTimeParser.parseDateTime(flags.get(FROM_FLAG));
+        LocalDateTime to = DateTimeParser.parseDateTime(flags.get(TO_FLAG));
 
         if (from.isAfter(to)) {
-            throw new AnswerMeException("'From' datetime must occur before 'To'.");
+            throw new AnswerMeException("'From' datetime cannot occur after 'To'.");
         }
         return new AddEventCommand(description, from, to);
     }
@@ -202,7 +207,8 @@ public class Parser {
      *
      * @param segments The argument segments from which to extract flags.
      * @return A mapping from each flag to its value.
-     * @throws AnswerMeException If a flag does not have a specified value.
+     * @throws AnswerMeException If a flag does not have a specified value or
+     *                           when there are duplicate flags.
      */
     private static HashMap<String, String> extractFlags(String[] segments)
             throws AnswerMeException {
@@ -210,11 +216,17 @@ public class Parser {
 
         for (int i = 1; i < segments.length; i++) {
             String segment = segments[i].trim();
-            String[] flagArguments = segment.split(" ", 2);
+            String[] flagArguments = segment.split(WHITESPACE_REGEX, COMMAND_ARGUMENT_SPLIT_LIMIT);
             if (flagArguments.length < 2 || flagArguments[1].isBlank()) {
                 throw new AnswerMeException("Every flag must be followed by an argument.");
             }
-            flags.put(flagArguments[0], flagArguments[1]);
+            String flag = flagArguments[0];
+            String value = flagArguments[1];
+
+            if (flags.containsKey(flag)) {
+                throw new AnswerMeException("Flag " + flag + " cannot be repeated!");
+            }
+            flags.put(flag, value);
         }
         return flags;
     }

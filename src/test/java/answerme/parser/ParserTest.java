@@ -33,12 +33,14 @@ public class ParserTest {
 
     @Test
     public void addNewEvent_invalidDateTime_exceptionThrown() {
-        String newEvent = "event wedding dinner /from 2-09-2026 1700 /to 3-09-2026 0200";
+        String newEvent = "event wedding dinner /from 2-09-2026 1700 /to 3-09-2026 0267";
         try {
             Command eventCommand = Parser.parse(newEvent);
             fail();
         } catch (AnswerMeException e) {
-            assertEquals("Oh no! Ensure date/time is formatted correctly.", e.getMessage());
+            assertEquals("Oh no! Ensure that date/time is formatted correctly.\n"
+                            + "Use a date such as 11/9/2026 or a date and time such as 11/9/2026 1800.",
+                            e.getMessage());
         }
     }
 
@@ -49,7 +51,7 @@ public class ParserTest {
             Command eventCommand = Parser.parse(newEvent);
             fail();
         } catch (AnswerMeException e) {
-            assertEquals("Oh no! 'From' datetime must occur before 'To'.", e.getMessage());
+            assertEquals("Oh no! 'From' datetime cannot occur after 'To'.", e.getMessage());
         }
     }
 }

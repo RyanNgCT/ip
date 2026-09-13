@@ -14,17 +14,19 @@ public class DateTimeParserTest {
     public void parseTest_validDateFormat_success() throws AnswerMeException {
         String toParse = "31/8/2026 14:00";
         LocalDateTime expectedDateTime = LocalDateTime.of(2026, 8, 31, 14, 0);
-        assertEquals(new DateTimeParser().parseDateTime(toParse), expectedDateTime);
+        assertEquals(expectedDateTime, DateTimeParser.parseDateTime(toParse));
     }
 
     @Test
     public void parseTest_invalidDateFormat_exceptionThrown() {
         String toParse = "31/8/26 14:67";
         try {
-            new DateTimeParser().parseDateTime(toParse);
+            DateTimeParser.parseDateTime(toParse);
             fail();
         } catch (AnswerMeException e) {
-            assertEquals("Oh no! Ensure date/time is formatted correctly.", e.getMessage());
+            assertEquals("Oh no! Ensure that date/time is formatted correctly.\n"
+                    + "Use a date such as 11/9/2026 or a date and time such as 11/9/2026 1800.",
+                    e.getMessage());
         }
     }
 }

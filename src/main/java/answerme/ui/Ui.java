@@ -9,11 +9,11 @@ import answerme.task.TaskList;
  * Handles the user's interaction with the AnswerMe chatbot.
  */
 public class Ui {
-    private final String botName = "AnswerMe";
-    private final String horizontalLine = "____________________________________________________________";
+    private static final String BOT_NAME = "AnswerMe";
+    private static final String HORIZONTAL_LINE = "____________________________________________________________";
     private final Scanner scanner = new Scanner(System.in);
     private String latestResponse;
-    private boolean isCliInstance;
+    private final boolean isCliInstance;
     private String loadingErrorMessage;
 
     /**
@@ -41,8 +41,8 @@ public class Ui {
                 >=>        >=> >==>  >=> >=> >=> >==>    >==>  >====>   >==>    >=>       >=>  >====>  \s
                 """;
         System.out.println(banner);
-        System.out.println(printShortWelcome());
-        System.out.println(horizontalLine);
+        System.out.println(getShortWelcome());
+        System.out.println(HORIZONTAL_LINE);
     }
 
     /**
@@ -70,30 +70,36 @@ public class Ui {
     }
 
     /**
-     * Prints the default message template to screen.
+     * Records the latest message/response and displays it in command-line
+     * mode.
      *
-     * @param toPrint The message to display.
+     * @param message The message to display.
      */
-    public void showMessage(String toPrint) {
-        latestResponse = toPrint;
+    public void showMessage(String message) {
+        latestResponse = message;
 
-        if (!isCliInstance) {
-            return;
+        if (isCliInstance) {
+            printMessageToConsole(message);
         }
+    }
 
-        System.out.println("\t" + horizontalLine);
-        for (String line : toPrint.split("\n")) {
+    private void printMessageToConsole(String message) {
+        System.out.println("\t" + HORIZONTAL_LINE);
+        for (String line : message.split("\n")) {
             System.out.println("\t" + line);
         }
-        System.out.println("\t" + horizontalLine + "\n");
+        System.out.println("\t" + HORIZONTAL_LINE + "\n");
     }
 
     /**
-     * Displays an error message when saved tasks cannot be loaded
-     * from Storage.
+     * Displays the reason saved tasks could not be loaded from Storage.
+     *
+     * @param reason The reason task loading failed.
      */
-    public void showLoadingError() {
-        loadingErrorMessage = "!ERROR! Unable to load saved file.\nInitializing task list as empty...";
+    public void showLoadingError(String reason) {
+        loadingErrorMessage = "[ERROR] Unable to load saved file.\n"
+                + reason + "\n"
+                + "Initializing task list as empty...";
         showMessage(loadingErrorMessage);
     }
 
@@ -125,8 +131,8 @@ public class Ui {
      *
      * @return A shortened version of the welcome message.
      */
-    public String printShortWelcome() {
-        return "Hello! I'm " + botName + ", your personal assistant bot.\n"
+    public String getShortWelcome() {
+        return "Hello! I'm " + BOT_NAME + ", your personal assistant bot.\n"
                 + "What can I do for you today?";
     }
 

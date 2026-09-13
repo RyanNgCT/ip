@@ -28,8 +28,8 @@ public class AnswerMe {
         ui = new Ui(isCliInstance);
         try {
             taskList = new TaskList(storage.loadTasks());
-        } catch (AnswerMeException e) {
-            ui.showLoadingError();
+        } catch (AnswerMeException exception) {
+            ui.showLoadingError(exception.getMessage());
             taskList = new TaskList();
         }
     }
@@ -39,33 +39,30 @@ public class AnswerMe {
      */
     public void run() {
         ui.showWelcome();
-        boolean isExit = false;
-        while (!isExit) {
-            try {
-                String input = ui.readUserInput();
-                Command command = Parser.parse(input);
-                command.execute(taskList, ui, storage);
-                isExit = command.isExit();
-            } catch (AnswerMeException e) {
-                ui.showMessage(e.getMessage());
-            }
+        boolean shouldExit = false;
+        while (!shouldExit) {
+            String input = ui.readUserInput();
+            CommandResult result = processCommand(input);
+            shouldExit = result.shouldExit();
         }
     }
 
     /**
-     * Process the user's input by parsing and executing the
-     * corresponding command.
+     * Processes the user's input by parsing and executing commands.
      *
      * @param input The user's input.
-     * @return The command result containing the result and exit status.
+     * @return The command result containing the response and exit status.
      */
     public CommandResult processCommand(String input) {
         try {
             Command command = Parser.parse(input);
             command.execute(taskList, ui, storage);
             return new CommandResult(ui.getLatestResponse(), command.isExit());
-        } catch (AnswerMeException e) {
-            return new CommandResult(e.getMessage(), false);
+        } catch (AnswerMeException exception) {
+            String errorMessage = exception.getMessage();
+            ui.showMessage(errorMessage);
+
+            return new CommandResult(errorMessage, false);
         }
     }
 
@@ -75,7 +72,7 @@ public class AnswerMe {
      * @return The chatbot's welcome message.
      */
     public String showWelcomeMessage() {
-        return ui.printShortWelcome();
+        return ui.getShortWelcome();
     }
 
     /**

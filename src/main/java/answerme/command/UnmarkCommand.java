@@ -26,14 +26,15 @@ public class UnmarkCommand extends Command {
      *
      * Marks the task at the specified index as incomplete and saves the task list.
      *
-     * @throws AnswerMeException If no task exists at the specified index.
+     * @throws AnswerMeException If no task exists at the specified index or
+     *                           the updated task list cannot be saved.
      */
     @Override
     public void execute(TaskList taskList, Ui ui, Storage storage)
             throws AnswerMeException {
         Task task = taskList.getTask(taskIndex);
         task.setIncomplete();
-        ui.showMessage("OK, I've marked this task as not done yet\n" + task);
         storage.saveTasks(taskList);
+        ui.showMessage("OK, I've marked this task as not done yet\n" + task);
     }
 }

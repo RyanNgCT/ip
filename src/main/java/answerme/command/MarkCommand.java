@@ -26,14 +26,15 @@ public class MarkCommand extends Command {
      *
      * Marks the task at the specified index as complete and saves the task list.
      *
-     * @throws AnswerMeException If no task exists at the specified index.
+     * @throws AnswerMeException If no task exists at the specified index or
+     *                           the updated task list cannot be saved.
      */
     @Override
     public void execute(TaskList taskList, Ui ui, Storage storage)
             throws AnswerMeException {
         Task task = taskList.getTask(taskIndex);
         task.setComplete();
-        ui.showMessage("Nice! I have marked this task as done:\n" + task);
         storage.saveTasks(taskList);
+        ui.showMessage("Nice! I have marked this task as done:\n" + task);
     }
 }

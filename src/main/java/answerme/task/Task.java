@@ -3,7 +3,7 @@ package answerme.task;
 /**
  * Represents a task that can be marked as complete or incomplete.
  */
-public class Task {
+public abstract class Task {
     protected String description;
     protected boolean isComplete;
 
@@ -14,6 +14,7 @@ public class Task {
      * @param description The task description.
      */
     public Task(String description) {
+        assert description != null;
         this.description = description;
         this.isComplete = false;
     }
@@ -25,6 +26,7 @@ public class Task {
      * @param isComplete The completion status of the task.
      */
     public Task(String description, boolean isComplete) {
+        assert description != null;
         this.description = description;
         this.isComplete = isComplete;
     }
@@ -76,6 +78,12 @@ public class Task {
      */
     protected String getLogFormat(String type) {
         String status = isComplete ? "Complete" : "Incomplete";
+
+        assert type.equals("Todo")
+                || type.equals("Deadline")
+                || type.equals("Event")
+                : "Unexpected task type: " + type;
+
         return type + " | " + status + " | " + description;
     }
 
@@ -84,7 +92,5 @@ public class Task {
      *
      * @return The storage representation of this task.
      */
-    public String toStorageFormat() {
-        return "Task";
-    }
+    public abstract String toStorageFormat();
 }

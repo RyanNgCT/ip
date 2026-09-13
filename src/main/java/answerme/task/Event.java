@@ -20,25 +20,11 @@ public class Event extends Task {
      */
     public Event(String description, LocalDateTime eventStart, LocalDateTime eventEnd) {
         super(description);
+        assert eventStart != null;
+        assert eventEnd != null;
+
         this.eventStart = eventStart;
         this.eventEnd = eventEnd;
-    }
-
-    // accessors
-    public LocalDateTime getEventStart() {
-        return eventStart;
-    }
-
-    public LocalDateTime getEventEnd() {
-        return eventEnd;
-    }
-
-    public void setEventStart(LocalDateTime newFrom) {
-        eventStart = newFrom;
-    }
-
-    public void setEventEnd(LocalDateTime newTo) {
-        eventEnd = newTo;
     }
 
     /**
@@ -48,8 +34,8 @@ public class Event extends Task {
      */
     @Override
     public String toString() {
-        return "[E]" + super.toString() + " (from: " + DateTimeParser.dateTimeToString(eventStart)
-                + " to: " + DateTimeParser.dateTimeToString(eventEnd) + ")";
+        return "[E]" + super.toString() + " (from: " + DateTimeParser.formatDateTime(eventStart)
+                + " to: " + DateTimeParser.formatDateTime(eventEnd) + ")";
     }
 
     /**
@@ -59,8 +45,8 @@ public class Event extends Task {
      */
     @Override
     public String toStorageFormat() {
-        return getLogFormat("Event") + " | " + DateTimeParser.dateTimeToString(eventStart)
-                + " | " + DateTimeParser.dateTimeToString(eventEnd);
+        return getLogFormat("Event") + " | " + DateTimeParser.formatDateTime(eventStart)
+                + " | " + DateTimeParser.formatDateTime(eventEnd);
     }
 
     /**
