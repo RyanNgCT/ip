@@ -51,6 +51,7 @@ public class ToDo extends Task {
     /**
      * {@inheritDoc}
      */
+    @Override
     public int hashCode() {
         return Objects.hash(description);
     }

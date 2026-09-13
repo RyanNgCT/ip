@@ -68,6 +68,7 @@ public class Event extends Task {
     /**
      * {@inheritDoc}
      */
+    @Override
     public int hashCode() {
         return Objects.hash(description, eventStart, eventEnd);
     }
