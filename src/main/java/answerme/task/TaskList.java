@@ -46,6 +46,39 @@ public class TaskList extends ArrayList<Task> {
     }
 
     /**
+     * Returns whether an equivalent task already exists in
+     * the current task list.
+     *
+     * @param targetTask The task to check.
+     * @return {@code true} if the tasks exists and {@code false} if not.
+     */
+    public boolean containsDuplicateTask(Task targetTask) {
+        return stream().anyMatch(task -> task.isDuplicateOf(targetTask));
+    }
+
+    /**
+     * Removes duplicate tasks and retains the first occurrence of each.
+     *
+     * @return The list of duplicate tasks.
+     */
+    public TaskList removeDuplicateTasks() {
+        TaskList uniqueTasks = new TaskList();
+        TaskList duplicateTasks = new TaskList();
+
+        for (Task task : this) {
+            if (uniqueTasks.containsDuplicateTask(task)) {
+                duplicateTasks.add(task);
+            } else {
+                uniqueTasks.add(task);
+            }
+        }
+
+        clear();
+        addAll(uniqueTasks);
+        return duplicateTasks;
+    }
+
+    /**
      * {@inheritDoc}
      *
      * Returns the tasks as a printable numbered list.

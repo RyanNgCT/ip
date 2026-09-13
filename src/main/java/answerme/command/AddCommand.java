@@ -30,6 +30,11 @@ public abstract class AddCommand extends Command {
     @Override
     public void execute(TaskList taskList, Ui ui, Storage storage)
             throws AnswerMeException {
+        if (taskList.containsDuplicateTask(task)) {
+            throw new AnswerMeException("A duplicate task cannot be added. "
+                    + "Please name it something else.");
+        }
+
         int originalListSize = taskList.size();
         taskList.add(task);
         assert taskList.size() == originalListSize + 1;
@@ -52,5 +57,13 @@ public abstract class AddCommand extends Command {
             return task.equals(other.task);
         }
         return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        return task.hashCode();
     }
 }
