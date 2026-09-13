@@ -57,6 +57,28 @@ public class TaskList extends ArrayList<Task> {
     }
 
     /**
+     * Removes duplicate tasks and retains the first occurrence of each.
+     *
+     * @return The list of duplicate tasks.
+     */
+    public TaskList removeDuplicateTasks() {
+        TaskList uniqueTasks = new TaskList();
+        TaskList duplicateTasks = new TaskList();
+
+        for (Task task : this) {
+            if (uniqueTasks.containsDuplicateTask(task)) {
+                duplicateTasks.add(task);
+            } else {
+                uniqueTasks.add(task);
+            }
+        }
+
+        clear();
+        addAll(uniqueTasks);
+        return duplicateTasks;
+    }
+
+    /**
      * {@inheritDoc}
      *
      * Returns the tasks as a printable numbered list.
