@@ -2,7 +2,6 @@ package answerme.command;
 
 import answerme.exception.AnswerMeException;
 import answerme.storage.Storage;
-import answerme.task.Task;
 import answerme.task.TaskList;
 import answerme.ui.Ui;
 
@@ -32,12 +31,14 @@ public class FindCommand extends Command {
      */
     @Override
     public void execute(TaskList taskList, Ui ui, Storage storage) throws AnswerMeException {
-        TaskList foundTasks = new TaskList();
-        for (Task task : taskList) {
-            if (task.getDescription().toLowerCase().contains(toFind.toLowerCase())) {
-                foundTasks.add(task);
-            }
-        }
+        String lowerCaseSearchTerm = toFind.toLowerCase();
+
+        TaskList foundTasks = new TaskList(taskList
+                                        .stream()
+                                        .filter(task -> task.getDescription().toLowerCase()
+                                                .contains(lowerCaseSearchTerm))
+                                        .toList());
+
         ui.listTasks(foundTasks, "Here are the matching tasks in your list:",
                 "No tasks matching " + toFind + " were found");
     }
