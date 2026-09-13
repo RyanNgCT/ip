@@ -24,7 +24,8 @@ public class DeleteCommand extends Command {
     /**
      * {@inheritDoc}
      *
-     * Deletes the task at the specified index, displays a confirmation, and saves the task list.
+     * Deletes the task at the specified index, saves the updated task list,
+     * and displays a confirmation.
      *
      * @throws AnswerMeException If no task exists at the specified index.
      */
