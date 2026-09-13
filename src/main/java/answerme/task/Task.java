@@ -93,4 +93,17 @@ public abstract class Task {
      * @return The storage representation of this task.
      */
     public abstract String toStorageFormat();
+
+    /**
+     * Returns whether the current task is considered to be a duplicate
+     * of the other specified task (i.e. same type and description)
+     *
+     * @param other The task to compare against.
+     * @return {@code true} if both tasks have the same type and description,
+     *         while ignoring case.
+     */
+    public boolean isDuplicateOf(Task other) {
+        return getClass() == other.getClass()
+                && description.equalsIgnoreCase(other.description);
+    }
 }

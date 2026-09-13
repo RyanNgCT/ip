@@ -49,11 +49,11 @@ public class TaskList extends ArrayList<Task> {
      * Returns whether an equivalent task already exists in
      * the current task list.
      *
-     * @param targetTask The task to be checked.
-     * @return {@code true} if the tasks exist and {@code false} if not.
+     * @param targetTask The task to check.
+     * @return {@code true} if the tasks exists and {@code false} if not.
      */
-    public boolean containsTask(Task targetTask) {
-        return contains(targetTask);
+    public boolean containsDuplicateTask(Task targetTask) {
+        return stream().anyMatch(task -> task.isDuplicateOf(targetTask));
     }
 
     /**

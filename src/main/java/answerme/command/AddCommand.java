@@ -30,8 +30,8 @@ public abstract class AddCommand extends Command {
     @Override
     public void execute(TaskList taskList, Ui ui, Storage storage)
             throws AnswerMeException {
-        if (taskList.containsTask(task)) {
-            throw new AnswerMeException("An identical task cannot be added. "
+        if (taskList.containsDuplicateTask(task)) {
+            throw new AnswerMeException("A duplicate task cannot be added. "
                     + "Please name it something else.");
         }
 
