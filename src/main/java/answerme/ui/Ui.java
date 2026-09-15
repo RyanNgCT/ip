@@ -51,6 +51,9 @@ public class Ui {
      * @return The input entered by the user.
      */
     public String readUserInput() {
+        if (!scanner.hasNextLine()) {
+            return "bye";
+        }
         return scanner.nextLine();
     }
 

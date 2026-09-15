@@ -33,8 +33,16 @@ public class MarkCommand extends Command {
     public void execute(TaskList taskList, Ui ui, Storage storage)
             throws AnswerMeException {
         Task task = taskList.getTask(taskIndex);
-        task.setComplete();
-        storage.saveTasks(taskList);
+        boolean wasComplete = task.isComplete();
+        task.setCompletionStatus(true);
+
+        try {
+            storage.saveTasks(taskList);
+        } catch (AnswerMeException exception) {
+            task.setCompletionStatus(wasComplete);
+            throw exception;
+        }
+
         ui.showMessage("Nice! I have marked this task as done:\n" + task);
     }
 }

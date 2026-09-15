@@ -33,8 +33,16 @@ public class UnmarkCommand extends Command {
     public void execute(TaskList taskList, Ui ui, Storage storage)
             throws AnswerMeException {
         Task task = taskList.getTask(taskIndex);
-        task.setIncomplete();
-        storage.saveTasks(taskList);
+        boolean wasComplete = task.isComplete();
+        task.setCompletionStatus(false);
+
+        try {
+            storage.saveTasks(taskList);
+        } catch (AnswerMeException exception) {
+            task.setCompletionStatus(wasComplete);
+            throw exception;
+        }
+
         ui.showMessage("OK, I've marked this task as not done yet\n" + task);
     }
 }

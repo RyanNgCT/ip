@@ -153,6 +153,7 @@ public class Parser {
         if (args.isBlank()) {
             throw new AnswerMeException("Format: todo <description>");
         }
+        validateDescription(args);
         return new AddToDoCommand(args);
     }
 
@@ -174,6 +175,7 @@ public class Parser {
             throw new AnswerMeException("Format: deadline <description> /by <when>");
         }
 
+        validateDescription(description);
         LocalDateTime by = DateTimeParser.parseDateTime(flags.get(BY_FLAG));
         return new AddDeadlineCommand(description, by);
     }
@@ -203,6 +205,7 @@ public class Parser {
         if (from.isAfter(to)) {
             throw new AnswerMeException("'From' datetime cannot occur after 'To'.");
         }
+        validateDescription(description);
         return new AddEventCommand(description, from, to);
     }
 
@@ -233,5 +236,12 @@ public class Parser {
             flags.put(flag, value);
         }
         return flags;
+    }
+
+    private static void validateDescription(String description)
+            throws AnswerMeException {
+        if (description.contains("|")) {
+            throw new AnswerMeException("Task description cannot contain pipe characters!");
+        }
     }
 }
