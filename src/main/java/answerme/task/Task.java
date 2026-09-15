@@ -46,12 +46,8 @@ public abstract class Task {
         return this.description;
     }
 
-    public void setComplete() {
-        this.isComplete = true;
-    }
-
-    public void setIncomplete() {
-        this.isComplete = false;
+    public void setCompletionStatus(boolean isComplete) {
+        this.isComplete = isComplete;
     }
 
     public boolean isComplete() {

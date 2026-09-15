@@ -173,7 +173,7 @@ public class Storage {
         Task task = createTask(taskType, fields, lineNumber);
 
         if (taskStatus == TaskStatus.COMPLETE) {
-            task.setComplete();
+            task.setCompletionStatus(true);
         }
         return task;
     }
