@@ -95,28 +95,36 @@ public class Storage {
      *
      * @return A populated {@code TaskList} containing the tasks stored in the data
      *         file, or an empty {@code TaskList} if the file does not exist.
-     * @throws AnswerMeException If the data file cannot be read or contains
-     *                           an invalid task.
+     * @throws AnswerMeException If the data file cannot be read, cannot be located or
+     *                           contains an invalid task.
      */
     public TaskList loadTasks() throws AnswerMeException {
-        TaskList taskList = new TaskList();
-
         if (!hasDataFile()) {
-            return taskList;
+            return new TaskList();
         }
 
         try (Scanner scanner = new Scanner(dataFile)) {
-            int lineNumber = 1;
-
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-
-                if (!line.isBlank()) {
-                    taskList.add(parseTask(line, lineNumber));
-                }
-                lineNumber++;
-            }
+            return readTasks(scanner);
         } catch (FileNotFoundException exception) {
+            throw new AnswerMeException("Unable to find "
+                    + dataFile + " to load from.");
+        }
+    }
+
+    private TaskList readTasks(Scanner scanner) throws AnswerMeException {
+        TaskList taskList = new TaskList();
+        int lineNumber = 1;
+
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+
+            if (!line.isBlank()) {
+                taskList.add(parseTask(line, lineNumber));
+            }
+            lineNumber++;
+        }
+
+        if (scanner.ioException() != null) {
             throw new AnswerMeException("Unable to read saved tasks from "
                     + dataFile + ".");
         }
