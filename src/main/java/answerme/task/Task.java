@@ -42,10 +42,6 @@ public abstract class Task {
     }
 
     // accessors
-    public void setDescription(String newDescription) {
-        this.description = newDescription;
-    }
-
     public String getDescription() {
         return this.description;
     }
