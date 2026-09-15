@@ -12,6 +12,9 @@ import answerme.command.Command;
 import answerme.exception.AnswerMeException;
 
 public class ParserTest {
+    private static final String PIPE_ERROR_MESSAGE = "Oh no! "
+            + "Task description cannot contain pipe characters!";
+
     @Test
     public void addNewEvent_allParamsPresent_success() throws AnswerMeException {
         String newEvent = "event wedding dinner /from 31/8/2026 17:00 /to 1/9/2026 02:00";
@@ -52,6 +55,39 @@ public class ParserTest {
             fail();
         } catch (AnswerMeException e) {
             assertEquals("Oh no! 'From' datetime cannot occur after 'To'.", e.getMessage());
+        }
+    }
+
+    @Test
+    public void addNewTodo_descriptionContainsStorageSeparator_exceptionThrown() {
+        String newTodo = "todo research | draft outline";
+        try {
+            Parser.parse(newTodo);
+            fail();
+        } catch (AnswerMeException e) {
+            assertEquals(PIPE_ERROR_MESSAGE, e.getMessage());
+        }
+    }
+
+    @Test
+    public void addNewDeadline_descriptionContainsStorageSeparator_exceptionThrown() {
+        String newDeadline = "deadline submit | report /by 1/1/2027";
+        try {
+            Parser.parse(newDeadline);
+            fail();
+        } catch (AnswerMeException e) {
+            assertEquals(PIPE_ERROR_MESSAGE, e.getMessage());
+        }
+    }
+
+    @Test
+    public void addNewEvent_descriptionContainsStorageSeparator_exceptionThrown() {
+        String newEvent = "event team | sync /from 1/1/2027 0900 /to 1/1/2027 1000";
+        try {
+            Parser.parse(newEvent);
+            fail();
+        } catch (AnswerMeException e) {
+            assertEquals(PIPE_ERROR_MESSAGE, e.getMessage());
         }
     }
 }
