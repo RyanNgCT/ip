@@ -39,7 +39,13 @@ public abstract class AddCommand extends Command {
         taskList.add(task);
         assert taskList.size() == originalListSize + 1;
 
-        storage.saveTasks(taskList);
+        try {
+            storage.saveTasks(taskList);
+        } catch (AnswerMeException exception) {
+            taskList.remove(task);
+            throw exception;
+        }
+
         ui.printAddNewItem(task, taskList.size());
     }
 
