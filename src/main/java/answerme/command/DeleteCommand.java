@@ -36,7 +36,7 @@ public class DeleteCommand extends Command {
         Task task = taskList.getTask(taskIndex);
 
         int originalListSize = taskList.size();
-        taskList.remove(task);
+        taskList.remove(taskIndex);
         assert taskList.size() == originalListSize - 1;
 
         storage.saveTasks(taskList);
