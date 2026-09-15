@@ -148,8 +148,8 @@ public class Storage {
      */
     private void createDataFile() throws AnswerMeException {
         File parentDirectory = dataFile.getParentFile();
-        if (parentDirectory != null && !parentDirectory.exists()) {
-            parentDirectory.mkdirs();
+        if (parentDirectory != null && !parentDirectory.exists() && !parentDirectory.mkdirs()) {
+            throw new AnswerMeException("Unable to create data directory.");
         }
         try {
             dataFile.createNewFile();
