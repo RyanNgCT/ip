@@ -24,7 +24,7 @@ public class DateTimeParserTest {
             DateTimeParser.parseDateTime(toParse);
             fail();
         } catch (AnswerMeException e) {
-            assertEquals("Oh no! Ensure that date/time is formatted correctly.\n"
+            assertEquals("Ensure that date/time is formatted correctly.\n"
                     + "Use a date such as 11/9/2026 or a date and time such as 11/9/2026 1800.",
                     e.getMessage());
         }

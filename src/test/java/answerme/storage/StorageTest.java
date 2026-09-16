@@ -45,7 +45,7 @@ public class StorageTest {
                 storage.saveTasks(new TaskList()));
 
         assertEquals(
-                "Oh no! File: " + dataFile + " cannot be created!",
+                "File: " + dataFile + " cannot be created!",
                 exception.getMessage()
         );
     }
@@ -63,7 +63,7 @@ public class StorageTest {
                 storage.saveTasks(new TaskList()));
 
         assertEquals(
-                "Oh no! Unable to create data directory.",
+                "Unable to create data directory.",
                 exception.getMessage()
         );
     }
@@ -80,7 +80,7 @@ public class StorageTest {
         assertEquals(0, result.taskList().size());
         assertEquals(1, result.warnings().size());
         assertEquals(
-                "Oh no! Event start cannot occur after its end on line 1.",
+                "Event start cannot occur after its end on line 1.",
                 result.warnings().get(0)
         );
     }
@@ -103,7 +103,7 @@ public class StorageTest {
         assertEquals("Todo | Complete | second valid task",
                 result.taskList().get(1).toStorageFormat());
         assertEquals(1, result.warnings().size());
-        assertEquals("Oh no! Event start cannot occur after its end on line 2.",
+        assertEquals("Event start cannot occur after its end on line 2.",
                 result.warnings().get(0));
     }
 
@@ -117,7 +117,7 @@ public class StorageTest {
                 assertThrows(AnswerMeException.class, storage::loadTasks);
 
         assertEquals(
-                "Oh no! Unable to open " + dataFile + " for loading.",
+                "Unable to open " + dataFile + " for loading.",
                 exception.getMessage()
         );
     }
