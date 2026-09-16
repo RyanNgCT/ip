@@ -92,9 +92,9 @@ public class AnswerMe {
     }
 
     /**
-     * Returns the loading warning message when saved tasks could not be loaded.
+     * Returns the loading warning message when one or more saved tasks were skipped.
      *
-     * @return The loading warning message, or {@code null} if loading succeeded.
+     * @return The loading warning message, or {@code null} if no warnings occurred.
      */
     public String getLoadingWarningMessage() {
         return ui.getLoadingWarningMessage();
