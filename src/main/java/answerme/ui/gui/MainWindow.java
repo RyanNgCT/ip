@@ -82,6 +82,8 @@ public class MainWindow extends AnchorPane {
             dialogContainer.getChildren().add(
                     DialogBox.getAnswerMeDialog(loadingErrorMessage, botImage)
             );
+            userInput.setDisable(true);
+            sendButton.setDisable(true);
         }
     }
 }

@@ -30,6 +30,7 @@ public class AnswerMe {
             taskList = new TaskList(storage.loadTasks());
         } catch (AnswerMeException exception) {
             ui.showLoadingError(exception.getMessage());
+            storage.disableSaving();
             taskList = new TaskList();
         }
     }
@@ -38,6 +39,9 @@ public class AnswerMe {
      * Runs the application until the user enters the exit command.
      */
     public void run() {
+        if (ui.getLoadingErrorMessage() != null) {
+            return;
+        }
         ui.showWelcome();
         boolean shouldExit = false;
         while (!shouldExit) {

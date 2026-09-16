@@ -53,6 +53,7 @@ public class Storage {
     }
 
     private final File dataFile;
+    private boolean isSavingEnabled;
 
     /**
      * Constructs a new Storage Manager.
@@ -68,6 +69,7 @@ public class Storage {
      */
     public Storage(File dataFile) {
         this.dataFile = dataFile;
+        this.isSavingEnabled = true;
     }
 
     /**
@@ -77,6 +79,12 @@ public class Storage {
      * @throws AnswerMeException If the data file cannot be created or written.
      */
     public void saveTasks(TaskList taskList) throws AnswerMeException {
+        if (!isSavingEnabled) {
+            throw new AnswerMeException(
+                    "Cannot save changes because saved tasks could not be loaded. "
+                            + "Please repair the data file and then restart the application.");
+        }
+
         if (!hasDataFile()) {
             createDataFile();
         }
@@ -88,6 +96,14 @@ public class Storage {
         } catch (IOException exception) {
             throw new AnswerMeException("Unable to save tasks.");
         }
+    }
+
+    /**
+     * Disables saving when loading the existing data file fails, preventing
+     * later commands from overwriting it.
+     */
+    public void disableSaving() {
+        isSavingEnabled = false;
     }
 
     /**
