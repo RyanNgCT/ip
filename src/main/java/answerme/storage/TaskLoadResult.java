@@ -12,7 +12,8 @@ import answerme.task.Task;
  */
 public record TaskLoadResult(List<Task> taskList, List<String> warnings) {
     /**
-     * Creates an immutable task-loading result.
+     * Creates a task-loading result whose task and warning lists cannot be
+     * structurally modified.
      */
     public TaskLoadResult {
         taskList = List.copyOf(taskList);
