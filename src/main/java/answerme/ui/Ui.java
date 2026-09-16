@@ -51,6 +51,9 @@ public class Ui {
      * @return The input entered by the user.
      */
     public String readUserInput() {
+        if (!scanner.hasNextLine()) {
+            return "bye";
+        }
         return scanner.nextLine();
     }
 
@@ -97,9 +100,8 @@ public class Ui {
      * @param reason The reason task loading failed.
      */
     public void showLoadingError(String reason) {
-        loadingErrorMessage = "[ERROR] Unable to load saved file.\n"
-                + reason + "\n"
-                + "Initializing task list as empty...";
+        loadingErrorMessage = "Issue loading saved tasks.\n" + reason
+                + "\nPlease repair the data file and then restart the application.";
         showMessage(loadingErrorMessage);
     }
 

@@ -23,13 +23,21 @@ public class DedupCommand extends Command {
      */
     @Override
     public void execute(TaskList taskList, Ui ui, Storage storage) throws AnswerMeException {
+        TaskList originalTasks = new TaskList(taskList);
         TaskList duplicateTasks = taskList.removeDuplicateTasks();
         if (duplicateTasks.isEmpty()) {
             ui.showMessage("No duplicate tasks found.");
             return;
         }
 
-        storage.saveTasks(taskList);
+        try {
+            storage.saveTasks(taskList);
+        } catch (AnswerMeException exception) {
+            taskList.clear();
+            taskList.addAll(originalTasks);
+            throw exception;
+        }
+
         ui.printDedupItem(duplicateTasks, taskList.size());
     }
 }

@@ -42,20 +42,12 @@ public abstract class Task {
     }
 
     // accessors
-    public void setDescription(String newDescription) {
-        this.description = newDescription;
-    }
-
     public String getDescription() {
         return this.description;
     }
 
-    public void setComplete() {
-        this.isComplete = true;
-    }
-
-    public void setIncomplete() {
-        this.isComplete = false;
+    public void setCompletionStatus(boolean isComplete) {
+        this.isComplete = isComplete;
     }
 
     public boolean isComplete() {

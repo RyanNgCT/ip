@@ -53,6 +53,7 @@ public class Storage {
     }
 
     private final File dataFile;
+    private boolean isSavingEnabled;
 
     /**
      * Constructs a new Storage Manager.
@@ -68,6 +69,7 @@ public class Storage {
      */
     public Storage(File dataFile) {
         this.dataFile = dataFile;
+        this.isSavingEnabled = true;
     }
 
     /**
@@ -77,6 +79,12 @@ public class Storage {
      * @throws AnswerMeException If the data file cannot be created or written.
      */
     public void saveTasks(TaskList taskList) throws AnswerMeException {
+        if (!isSavingEnabled) {
+            throw new AnswerMeException(
+                    "Cannot save changes because saved tasks could not be loaded. "
+                            + "Please repair the data file and then restart the application.");
+        }
+
         if (!hasDataFile()) {
             createDataFile();
         }
@@ -91,32 +99,48 @@ public class Storage {
     }
 
     /**
+     * Disables saving when loading the existing data file fails, preventing
+     * later commands from overwriting it.
+     */
+    public void disableSaving() {
+        isSavingEnabled = false;
+    }
+
+    /**
      * Loads tasks from the data file into a task list.
      *
      * @return A populated {@code TaskList} containing the tasks stored in the data
      *         file, or an empty {@code TaskList} if the file does not exist.
-     * @throws AnswerMeException If the data file cannot be read or contains
-     *                           an invalid task.
+     * @throws AnswerMeException If the data file cannot be read, cannot be located or
+     *                           contains an invalid task.
      */
     public TaskList loadTasks() throws AnswerMeException {
-        TaskList taskList = new TaskList();
-
         if (!hasDataFile()) {
-            return taskList;
+            return new TaskList();
         }
 
         try (Scanner scanner = new Scanner(dataFile)) {
-            int lineNumber = 1;
-
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-
-                if (!line.isBlank()) {
-                    taskList.add(parseTask(line, lineNumber));
-                }
-                lineNumber++;
-            }
+            return readTasks(scanner);
         } catch (FileNotFoundException exception) {
+            throw new AnswerMeException("Unable to find "
+                    + dataFile + " to load from.");
+        }
+    }
+
+    private TaskList readTasks(Scanner scanner) throws AnswerMeException {
+        TaskList taskList = new TaskList();
+        int lineNumber = 1;
+
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+
+            if (!line.isBlank()) {
+                taskList.add(parseTask(line, lineNumber));
+            }
+            lineNumber++;
+        }
+
+        if (scanner.ioException() != null) {
             throw new AnswerMeException("Unable to read saved tasks from "
                     + dataFile + ".");
         }
@@ -140,8 +164,8 @@ public class Storage {
      */
     private void createDataFile() throws AnswerMeException {
         File parentDirectory = dataFile.getParentFile();
-        if (parentDirectory != null && !parentDirectory.exists()) {
-            parentDirectory.mkdirs();
+        if (parentDirectory != null && !parentDirectory.exists() && !parentDirectory.mkdirs()) {
+            throw new AnswerMeException("Unable to create data directory.");
         }
         try {
             dataFile.createNewFile();
@@ -165,7 +189,7 @@ public class Storage {
         Task task = createTask(taskType, fields, lineNumber);
 
         if (taskStatus == TaskStatus.COMPLETE) {
-            task.setComplete();
+            task.setCompletionStatus(true);
         }
         return task;
     }
@@ -226,10 +250,17 @@ public class Storage {
                         parseStoredDateTime(fields[FIRST_DATE_FIELD_INDEX], lineNumber, taskType));
 
             case EVENT:
-                return new Event(
-                        taskDescription,
-                        parseStoredDateTime(fields[FIRST_DATE_FIELD_INDEX], lineNumber, taskType),
-                        parseStoredDateTime(fields[SECOND_DATE_FIELD_INDEX], lineNumber, taskType));
+                LocalDateTime eventStart = parseStoredDateTime(fields[FIRST_DATE_FIELD_INDEX],
+                                                lineNumber, taskType);
+                LocalDateTime eventEnd = parseStoredDateTime(fields[SECOND_DATE_FIELD_INDEX],
+                                                lineNumber, taskType);
+
+                if (eventStart.isAfter(eventEnd)) {
+                    throw new AnswerMeException("Event start cannot occur after its end on line "
+                            + lineNumber + ".");
+                }
+
+                return new Event(taskDescription, eventStart, eventEnd);
 
             default:
                 throw new AnswerMeException("Unknown Task type " + taskType
