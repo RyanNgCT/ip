@@ -69,16 +69,55 @@ public class StorageTest {
     }
 
     @Test
-    public void loadTasks_eventStartAfterEnd_throwsException() throws IOException {
+    public void loadTasks_eventStartAfterEnd_reportsWarning() throws AnswerMeException, IOException {
         File dataFile = temporaryDirectory.resolve("tasks.txt").toFile();
         Files.writeString(dataFile.toPath(),
                 "Event | Incomplete | project meeting | 2/9/2026 17:00 | 1/9/2026 02:00\n");
         Storage storage = new Storage(dataFile);
 
-        AnswerMeException exception = assertThrows(AnswerMeException.class, storage::loadTasks);
+        TaskLoadResult result = storage.loadTasks();
 
+        assertEquals(0, result.taskList().size());
+        assertEquals(1, result.warnings().size());
         assertEquals(
                 "Oh no! Event start cannot occur after its end on line 1.",
+                result.warnings().get(0)
+        );
+    }
+
+    @Test
+    public void loadTasks_malformedTaskBetweenValidTasks_loadsValidTasksAndReportsWarning()
+            throws AnswerMeException, IOException {
+        File dataFile = temporaryDirectory.resolve("tasks.txt").toFile();
+        Files.writeString(dataFile.toPath(),
+                "Todo | Incomplete | first valid task\n"
+                        + "Event | Incomplete | project meeting | 2/9/2026 17:00 | 1/9/2026 02:00\n"
+                        + "Todo | Complete | second valid task\n");
+        Storage storage = new Storage(dataFile);
+
+        TaskLoadResult result = storage.loadTasks();
+
+        assertEquals(2, result.taskList().size());
+        assertEquals("Todo | Incomplete | first valid task",
+                result.taskList().get(0).toStorageFormat());
+        assertEquals("Todo | Complete | second valid task",
+                result.taskList().get(1).toStorageFormat());
+        assertEquals(1, result.warnings().size());
+        assertEquals("Oh no! Event start cannot occur after its end on line 2.",
+                result.warnings().get(0));
+    }
+
+    @Test
+    public void loadTasks_dataPathIsDirectory_throwsException() {
+        File dataFile = temporaryDirectory.resolve("tasks.txt").toFile();
+        assertTrue(dataFile.mkdir());
+        Storage storage = new Storage(dataFile);
+
+        AnswerMeException exception =
+                assertThrows(AnswerMeException.class, storage::loadTasks);
+
+        assertEquals(
+                "Oh no! Unable to open " + dataFile + " for loading.",
                 exception.getMessage()
         );
     }

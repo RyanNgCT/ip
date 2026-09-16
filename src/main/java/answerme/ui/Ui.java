@@ -1,5 +1,6 @@
 package answerme.ui;
 
+import java.util.List;
 import java.util.Scanner;
 
 import answerme.task.Task;
@@ -15,6 +16,7 @@ public class Ui {
     private String latestResponse;
     private final boolean isCliInstance;
     private String loadingErrorMessage;
+    private String loadingWarningMessage;
 
     /**
      * Constructs the user interface for either the command-line or graphical
@@ -106,6 +108,19 @@ public class Ui {
     }
 
     /**
+     * Displays warnings for malformed tasks that were skipped while loading.
+     *
+     * @param warnings The warnings encountered while loading saved tasks.
+     */
+    public void showLoadingWarning(List<String> warnings) {
+        loadingWarningMessage = "Some saved tasks could not be loaded and were skipped:\n"
+                + String.join("\n", warnings)
+                + "\n\nThe remaining tasks were loaded successfully. "
+                + "Skipped entries will be removed the next time tasks are saved.";
+        showMessage(loadingWarningMessage);
+    }
+
+    /**
      * Displays an informational message that a task has been added.
      *
      * @param task The added task.
@@ -157,5 +172,9 @@ public class Ui {
 
     public String getLoadingErrorMessage() {
         return loadingErrorMessage;
+    }
+
+    public String getLoadingWarningMessage() {
+        return loadingWarningMessage;
     }
 }

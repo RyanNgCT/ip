@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import answerme.exception.AnswerMeException;
@@ -109,42 +111,43 @@ public class Storage {
     /**
      * Loads tasks from the data file into a task list.
      *
-     * @return A populated {@code TaskList} containing the tasks stored in the data
-     *         file, or an empty {@code TaskList} if the file does not exist.
-     * @throws AnswerMeException If the data file cannot be read, cannot be located or
-     *                           contains an invalid task.
+     * @return The successfully loaded tasks and any warnings from malformed tasks,
+     *         or an empty result if the file does not exist.
+     * @throws AnswerMeException If the data file cannot be read or located.
      */
-    public TaskList loadTasks() throws AnswerMeException {
+    public TaskLoadResult loadTasks() throws AnswerMeException {
         if (!hasDataFile()) {
-            return new TaskList();
+            return new TaskLoadResult(List.of(), List.of());
         }
 
         try (Scanner scanner = new Scanner(dataFile)) {
             return readTasks(scanner);
         } catch (FileNotFoundException exception) {
-            throw new AnswerMeException("Unable to find "
-                    + dataFile + " to load from.");
+            throw new AnswerMeException("Unable to open " + dataFile + " for loading.");
         }
     }
 
-    private TaskList readTasks(Scanner scanner) throws AnswerMeException {
+    private TaskLoadResult readTasks(Scanner scanner) throws AnswerMeException {
         TaskList taskList = new TaskList();
-        int lineNumber = 1;
+        List<String> loadingWarnings = new ArrayList<>();
 
-        while (scanner.hasNextLine()) {
+        for (int lineNumber = 1; scanner.hasNextLine(); lineNumber++) {
             String line = scanner.nextLine();
-
-            if (!line.isBlank()) {
-                taskList.add(parseTask(line, lineNumber));
+            if (line.isBlank()) {
+                continue;
             }
-            lineNumber++;
+            try {
+                taskList.add(parseTask(line, lineNumber));
+            } catch (AnswerMeException exception) {
+                loadingWarnings.add(exception.getMessage());
+            }
         }
 
         if (scanner.ioException() != null) {
             throw new AnswerMeException("Unable to read saved tasks from "
                     + dataFile + ".");
         }
-        return taskList;
+        return new TaskLoadResult(taskList, loadingWarnings);
     }
 
     /**
@@ -185,7 +188,7 @@ public class Storage {
     private Task parseTask(String line, int lineNumber) throws AnswerMeException {
         String[] fields = parseFields(line, lineNumber);
         TaskType taskType = parseTaskType(fields[TYPE_FIELD_INDEX], lineNumber);
-        TaskStatus taskStatus = parseTaskStatus(fields[STATUS_FIELD_INDEX]);
+        TaskStatus taskStatus = parseTaskStatus(fields[STATUS_FIELD_INDEX], lineNumber);
         Task task = createTask(taskType, fields, lineNumber);
 
         if (taskStatus == TaskStatus.COMPLETE) {
@@ -210,11 +213,13 @@ public class Storage {
         }
     }
 
-    private TaskStatus parseTaskStatus(String value) throws AnswerMeException {
+    private TaskStatus parseTaskStatus(String value, int lineNumber)
+            throws AnswerMeException {
         try {
             return TaskStatus.valueOf(value.toUpperCase());
         } catch (IllegalArgumentException exception) {
-            throw new AnswerMeException("Status is malformed");
+            throw new AnswerMeException("Invalid task status on line "
+                    + lineNumber + ".");
         }
     }
 

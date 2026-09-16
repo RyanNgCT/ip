@@ -68,11 +68,12 @@ public class MainWindow extends AnchorPane {
     }
 
     /**
-     * Displays the chatbot's welcome message and if task loading failed,
-     * its loading error message in the dialog container.
+     * Displays the chatbot's welcome message followed by any warning or error
+     * encountered while loading saved tasks.
      */
     public void showWelcome() {
         String loadingErrorMessage = answerMe.getLoadingErrorMessage();
+        String loadingWarningMessage = answerMe.getLoadingWarningMessage();
 
         dialogContainer.getChildren().addAll(
                 DialogBox.getAnswerMeDialog(answerMe.showWelcomeMessage(), botImage)
@@ -84,6 +85,12 @@ public class MainWindow extends AnchorPane {
             );
             userInput.setDisable(true);
             sendButton.setDisable(true);
+        }
+
+        if (loadingWarningMessage != null) {
+            dialogContainer.getChildren().add(
+                    DialogBox.getAnswerMeDialog(loadingWarningMessage, botImage)
+            );
         }
     }
 }
