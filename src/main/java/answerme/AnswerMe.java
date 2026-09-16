@@ -68,10 +68,8 @@ public class AnswerMe {
             command.execute(taskList, ui, storage);
             return new CommandResult(ui.getLatestResponse(), command.isExit());
         } catch (AnswerMeException exception) {
-            String errorMessage = exception.getMessage();
-            ui.showMessage(errorMessage);
-
-            return new CommandResult(errorMessage, false);
+            ui.showError(exception.getMessage());
+            return new CommandResult(ui.getLatestResponse(), false);
         }
     }
 

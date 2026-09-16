@@ -12,6 +12,8 @@ import answerme.task.TaskList;
 public class Ui {
     private static final String BOT_NAME = "AnswerMe";
     private static final String HORIZONTAL_LINE = "____________________________________________________________";
+    private static final String ERROR_PREFIX = "Oh no! ";
+
     private final Scanner scanner = new Scanner(System.in);
     private String latestResponse;
     private final boolean isCliInstance;
@@ -113,10 +115,11 @@ public class Ui {
      * @param warnings The warnings encountered while loading saved tasks.
      */
     public void showLoadingWarning(List<String> warnings) {
-        loadingWarningMessage = "Some saved tasks could not be loaded and were skipped:\n"
-                + String.join("\n", warnings)
-                + "\n\nThe remaining tasks were loaded successfully. "
-                + "Skipped entries will be removed the next time tasks are saved.";
+        loadingWarningMessage =
+                "Some saved tasks could not be loaded and were skipped:\n- "
+                        + String.join("\n- ", warnings)
+                        + "\n\nThe remaining tasks were loaded successfully. "
+                        + "Skipped entries will be removed the next time tasks are saved.";
         showMessage(loadingWarningMessage);
     }
 
@@ -163,6 +166,15 @@ public class Ui {
     public String getShortWelcome() {
         return "Hello! I'm " + BOT_NAME + ", your personal assistant bot.\n"
                 + "What can I do for you today?";
+    }
+
+    /**
+     * Displays an ordinary command error.
+     *
+     * @param reason The reason the command failed.
+     */
+    public void showError(String reason) {
+        showMessage(ERROR_PREFIX + reason);
     }
 
     // accessors

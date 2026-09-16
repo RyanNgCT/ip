@@ -12,6 +12,6 @@ public class AnswerMeException extends Exception {
      * @param message The message describing the exception.
      */
     public AnswerMeException(String message) {
-        super("Oh no! " + message);
+        super(message);
     }
 }
