@@ -234,10 +234,17 @@ public class Storage {
                         parseStoredDateTime(fields[FIRST_DATE_FIELD_INDEX], lineNumber, taskType));
 
             case EVENT:
-                return new Event(
-                        taskDescription,
-                        parseStoredDateTime(fields[FIRST_DATE_FIELD_INDEX], lineNumber, taskType),
-                        parseStoredDateTime(fields[SECOND_DATE_FIELD_INDEX], lineNumber, taskType));
+                LocalDateTime eventStart = parseStoredDateTime(fields[FIRST_DATE_FIELD_INDEX],
+                                                lineNumber, taskType);
+                LocalDateTime eventEnd = parseStoredDateTime(fields[SECOND_DATE_FIELD_INDEX],
+                                                lineNumber, taskType);
+
+                if (eventStart.isAfter(eventEnd)) {
+                    throw new AnswerMeException("Event start cannot occur after its end on line "
+                            + lineNumber + ".");
+                }
+
+                return new Event(taskDescription, eventStart, eventEnd);
 
             default:
                 throw new AnswerMeException("Unknown Task type " + taskType
