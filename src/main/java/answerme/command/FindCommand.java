@@ -1,6 +1,5 @@
 package answerme.command;
 
-import answerme.exception.AnswerMeException;
 import answerme.storage.Storage;
 import answerme.task.TaskList;
 import answerme.ui.Ui;
@@ -28,7 +27,7 @@ public class FindCommand extends Command {
      * and ignores case-sensitivity.
      */
     @Override
-    public void execute(TaskList taskList, Ui ui, Storage storage)  {
+    public void execute(TaskList taskList, Ui ui, Storage storage) {
         String lowerCaseSearchTerm = toFind.toLowerCase();
 
         TaskList foundTasks = new TaskList(taskList
