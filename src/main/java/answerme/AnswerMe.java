@@ -5,6 +5,7 @@ import answerme.command.CommandResult;
 import answerme.exception.AnswerMeException;
 import answerme.parser.Parser;
 import answerme.storage.Storage;
+import answerme.storage.TaskLoadResult;
 import answerme.task.TaskList;
 import answerme.ui.Ui;
 
@@ -27,7 +28,11 @@ public class AnswerMe {
         storage = new Storage();
         ui = new Ui(isCliInstance);
         try {
-            taskList = new TaskList(storage.loadTasks());
+            TaskLoadResult loadResult = storage.loadTasks();
+            taskList = new TaskList(loadResult.taskList());
+            if (loadResult.hasWarnings()) {
+                ui.showLoadingWarning(loadResult.warnings());
+            }
         } catch (AnswerMeException exception) {
             ui.showLoadingError(exception.getMessage());
             storage.disableSaving();
@@ -63,10 +68,8 @@ public class AnswerMe {
             command.execute(taskList, ui, storage);
             return new CommandResult(ui.getLatestResponse(), command.isExit());
         } catch (AnswerMeException exception) {
-            String errorMessage = exception.getMessage();
-            ui.showMessage(errorMessage);
-
-            return new CommandResult(errorMessage, false);
+            ui.showError(exception.getMessage());
+            return new CommandResult(ui.getLatestResponse(), false);
         }
     }
 
@@ -86,6 +89,15 @@ public class AnswerMe {
      */
     public String getLoadingErrorMessage() {
         return ui.getLoadingErrorMessage();
+    }
+
+    /**
+     * Returns the loading warning message when one or more saved tasks were skipped.
+     *
+     * @return The loading warning message, or {@code null} if no warnings occurred.
+     */
+    public String getLoadingWarningMessage() {
+        return ui.getLoadingWarningMessage();
     }
 
     /**
