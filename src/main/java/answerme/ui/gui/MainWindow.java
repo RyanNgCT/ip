@@ -31,11 +31,12 @@ public class MainWindow extends AnchorPane {
     private Image botImage = new Image(this.getClass().getResourceAsStream("/images/AnswerMe.jpg"));
 
     /**
-     * Configures the scroll pane to follow the newest dialog box.
+     * Configures the scroll pane to show the newest dialog box while allowing manual scrolling.
      */
     @FXML
     public void initialize() {
-        scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
+        dialogContainer.heightProperty().addListener((observable, oldHeight, newHeight)
+                -> scrollPane.setVvalue(scrollPane.getVmax()));
     }
 
     /**
