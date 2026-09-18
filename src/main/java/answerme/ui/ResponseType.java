@@ -1,4 +1,4 @@
-package answerme.command;
+package answerme.ui;
 
 /**
  * Represents the visual category of a response from AnswerMe.

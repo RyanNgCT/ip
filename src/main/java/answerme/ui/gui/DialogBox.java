@@ -3,7 +3,7 @@ package answerme.ui.gui;
 import java.io.IOException;
 import java.util.Collections;
 
-import answerme.command.ResponseType;
+import answerme.ui.ResponseType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;

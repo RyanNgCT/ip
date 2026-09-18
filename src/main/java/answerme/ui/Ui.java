@@ -3,7 +3,6 @@ package answerme.ui;
 import java.util.List;
 import java.util.Scanner;
 
-import answerme.command.ResponseType;
 import answerme.task.Task;
 import answerme.task.TaskList;
 
@@ -99,6 +98,7 @@ public class Ui {
 
     /**
      * Records and displays an error response.
+     *
      * @param message The error message to display.
      */
     public void showErrorMessage(String message) {

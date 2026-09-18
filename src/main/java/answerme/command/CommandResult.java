@@ -1,5 +1,7 @@
 package answerme.command;
 
+import answerme.ui.ResponseType;
+
 /**
  * Represents the result produced after processing a user command.
  *

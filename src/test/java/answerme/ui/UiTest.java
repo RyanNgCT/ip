@@ -6,8 +6,6 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import answerme.command.ResponseType;
-
 public class UiTest {
     @Test
     public void showMessage_validMessage_setsNormalResponseType() {

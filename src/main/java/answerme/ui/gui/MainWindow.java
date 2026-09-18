@@ -2,7 +2,7 @@ package answerme.ui.gui;
 
 import answerme.AnswerMe;
 import answerme.command.CommandResult;
-import answerme.command.ResponseType;
+import answerme.ui.ResponseType;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;

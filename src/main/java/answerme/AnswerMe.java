@@ -2,12 +2,12 @@ package answerme;
 
 import answerme.command.Command;
 import answerme.command.CommandResult;
-import answerme.command.ResponseType;
 import answerme.exception.AnswerMeException;
 import answerme.parser.Parser;
 import answerme.storage.Storage;
 import answerme.storage.TaskLoadResult;
 import answerme.task.TaskList;
+import answerme.ui.ResponseType;
 import answerme.ui.Ui;
 
 /**
