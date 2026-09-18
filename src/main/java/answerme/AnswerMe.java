@@ -2,6 +2,7 @@ package answerme;
 
 import answerme.command.Command;
 import answerme.command.CommandResult;
+import answerme.command.ResponseType;
 import answerme.exception.AnswerMeException;
 import answerme.parser.Parser;
 import answerme.storage.Storage;
@@ -57,12 +58,12 @@ public class AnswerMe {
         try {
             Command command = Parser.parse(input);
             command.execute(taskList, ui, storage);
-            return new CommandResult(ui.getLatestResponse(), command.isExit());
+            return new CommandResult(ui.getLatestResponse(), ui.getLatestResponseType(), command.isExit());
         } catch (AnswerMeException exception) {
             String errorMessage = exception.getMessage();
-            ui.showMessage(errorMessage);
+            ui.showErrorMessage(errorMessage);
 
-            return new CommandResult(errorMessage, false);
+            return new CommandResult(errorMessage, ResponseType.ERROR, false);
         }
     }
 

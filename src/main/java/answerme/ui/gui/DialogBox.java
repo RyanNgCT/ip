@@ -3,6 +3,7 @@ package answerme.ui.gui;
 import java.io.IOException;
 import java.util.Collections;
 
+import answerme.command.ResponseType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -53,12 +54,26 @@ public class DialogBox extends HBox {
      * Flips the dialog box such that the ImageView is on the left and
      * text on the right.
      */
-    private void flip() {
+    private void flip(ResponseType responseType) {
         ObservableList<Node> tmp = FXCollections.observableArrayList(this.getChildren());
         Collections.reverse(tmp);
         getChildren().setAll(tmp);
         setAlignment(Pos.TOP_LEFT);
         dialog.getStyleClass().add("reply-label");
+
+        switch (responseType) {
+        case NORMAL:
+            dialog.getStyleClass().add("normal-reply-label");
+            break;
+        case SUCCESS:
+            dialog.getStyleClass().add("success-reply-label");
+            break;
+        case ERROR:
+            dialog.getStyleClass().add("error-reply-label");
+            break;
+        default:
+            throw new IllegalArgumentException("Unknown response type");
+        }
     }
 
     /**
@@ -76,12 +91,13 @@ public class DialogBox extends HBox {
      * Creates a dialog box for an AnswerMe response.
      *
      * @param text AnswerMe's response.
+     * @param responseType the visual category of the response.
      * @param image AnswerMe's profile image.
      * @return a dialog box displaying the AnswerMe response.
      */
-    public static DialogBox getAnswerMeDialog(String text, Image image) {
+    public static DialogBox getAnswerMeDialog(String text, ResponseType responseType, Image image) {
         DialogBox db = new DialogBox(text, image);
-        db.flip();
+        db.flip(responseType);
         return db;
     }
 }

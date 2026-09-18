@@ -25,7 +25,7 @@ public class DedupCommand extends Command {
     public void execute(TaskList taskList, Ui ui, Storage storage) throws AnswerMeException {
         TaskList duplicateTasks = taskList.removeDuplicateTasks();
         if (duplicateTasks.isEmpty()) {
-            ui.showMessage("No duplicate tasks found.");
+            ui.showSuccessMessage("No duplicate tasks found.");
             return;
         }
 

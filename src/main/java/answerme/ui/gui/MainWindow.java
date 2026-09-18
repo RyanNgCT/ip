@@ -2,6 +2,7 @@ package answerme.ui.gui;
 
 import answerme.AnswerMe;
 import answerme.command.CommandResult;
+import answerme.command.ResponseType;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -57,7 +58,7 @@ public class MainWindow extends AnchorPane {
         CommandResult result = answerMe.processCommand(input);
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input, userImage),
-                DialogBox.getAnswerMeDialog(result.response(), botImage)
+                DialogBox.getAnswerMeDialog(result.response(), result.responseType(), botImage)
         );
         userInput.clear();
 
@@ -75,12 +76,12 @@ public class MainWindow extends AnchorPane {
         String loadingErrorMessage = answerMe.getLoadingErrorMessage();
 
         dialogContainer.getChildren().addAll(
-                DialogBox.getAnswerMeDialog(answerMe.showWelcomeMessage(), botImage)
+                DialogBox.getAnswerMeDialog(answerMe.showWelcomeMessage(), ResponseType.NORMAL, botImage)
         );
 
         if (loadingErrorMessage != null) {
             dialogContainer.getChildren().add(
-                    DialogBox.getAnswerMeDialog(loadingErrorMessage, botImage)
+                    DialogBox.getAnswerMeDialog(loadingErrorMessage, ResponseType.ERROR, botImage)
             );
         }
     }

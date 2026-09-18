@@ -2,6 +2,7 @@ package answerme.ui;
 
 import java.util.Scanner;
 
+import answerme.command.ResponseType;
 import answerme.task.Task;
 import answerme.task.TaskList;
 
@@ -13,6 +14,7 @@ public class Ui {
     private static final String HORIZONTAL_LINE = "____________________________________________________________";
     private final Scanner scanner = new Scanner(System.in);
     private String latestResponse;
+    private ResponseType latestResponseType;
     private final boolean isCliInstance;
     private String loadingErrorMessage;
 
@@ -76,7 +78,30 @@ public class Ui {
      * @param message The message to display.
      */
     public void showMessage(String message) {
+        showTypedMessage(message, ResponseType.NORMAL);
+    }
+
+    /**
+     * Records and displays a successful response.
+     *
+     * @param message The success message to display.
+     */
+    public void showSuccessMessage(String message) {
+        showTypedMessage(message, ResponseType.SUCCESS);
+    }
+
+    /**
+     * Records and displays an error response.
+     *
+     * @param message The error message to display.
+     */
+    public void showErrorMessage(String message) {
+        showTypedMessage(message, ResponseType.ERROR);
+    }
+
+    private void showTypedMessage(String message, ResponseType responseType) {
         latestResponse = message;
+        latestResponseType = responseType;
 
         if (isCliInstance) {
             printMessageToConsole(message);
@@ -100,7 +125,7 @@ public class Ui {
         loadingErrorMessage = "[ERROR] Unable to load saved file.\n"
                 + reason + "\n"
                 + "Initializing task list as empty...";
-        showMessage(loadingErrorMessage);
+        showErrorMessage(loadingErrorMessage);
     }
 
     /**
@@ -110,7 +135,7 @@ public class Ui {
      * @param taskCount The number of tasks currently in the list.
      */
     public void printAddNewItem(Task task, int taskCount) {
-        showMessage("Got it. I have added this task:\n"
+        showSuccessMessage("Got it. I have added this task:\n"
                 + task + "\nYou now have " + taskCount + " tasks in the list.");
     }
 
@@ -121,7 +146,7 @@ public class Ui {
      * @param taskCount The number of tasks currently in the list.
      */
     public void printDeleteItem(Task task, int taskCount) {
-        showMessage("Noted. I will remove this task:\n"
+        showSuccessMessage("Noted. I will remove this task:\n"
                 + task + "\nYou now have " + taskCount + " tasks in the list.");
     }
 
@@ -133,7 +158,7 @@ public class Ui {
      * @param taskCount The number of tasks remaining in the list.
      */
     public void printDedupItem(TaskList duplicateTasks, int taskCount) {
-        showMessage("Removed the following duplicate task(s):\n"
+        showSuccessMessage("Removed the following duplicate task(s):\n"
                 + duplicateTasks + "You now have " + taskCount + " tasks in the list.");
     }
 
@@ -151,6 +176,10 @@ public class Ui {
     // accessors
     public String getLatestResponse() {
         return latestResponse;
+    }
+
+    public ResponseType getLatestResponseType() {
+        return latestResponseType;
     }
 
     public String getLoadingErrorMessage() {
