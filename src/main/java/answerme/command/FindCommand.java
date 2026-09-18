@@ -39,6 +39,6 @@ public class FindCommand extends Command {
                                         .toList());
 
         ui.listTasks(foundTasks, "Here are the matching tasks in your list:",
-                "No tasks matching " + toFind + " were found");
+                "No tasks matching \"" + toFind + "\" were found");
     }
 }

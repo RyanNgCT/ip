@@ -155,7 +155,7 @@ public class Ui {
      */
     public void printAddNewItem(Task task, int taskCount) {
         showSuccessMessage("Got it. I have added this task:\n"
-                + task + "\nYou now have " + taskCount + " tasks in the list.");
+                + task + "\nYou now have " + taskCount + " task(s) in the list.");
     }
 
     /**
@@ -166,7 +166,7 @@ public class Ui {
      */
     public void printDeleteItem(Task task, int taskCount) {
         showSuccessMessage("Noted. I will remove this task:\n"
-                + task + "\nYou now have " + taskCount + " tasks in the list.");
+                + task + "\nYou now have " + taskCount + " task(s) in the list.");
     }
 
     /**
@@ -178,7 +178,7 @@ public class Ui {
      */
     public void printDedupItem(TaskList duplicateTasks, int taskCount) {
         showSuccessMessage("Removed the following duplicate task(s):\n"
-                + duplicateTasks + "You now have " + taskCount + " tasks in the list.");
+                + duplicateTasks + "You now have " + taskCount + " task(s) in the list.");
     }
 
     /**
