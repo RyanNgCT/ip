@@ -59,7 +59,6 @@ test {
 }
 
 application {
-//     mainClass = 'answerme.AnswerMe'
     mainClass = 'answerme.Launcher'
 }
 
