@@ -97,7 +97,11 @@ public class Ui {
         showTypedMessage(message, ResponseType.SUCCESS);
     }
 
-    private void showErrorMessage(String message) {
+    /**
+     * Records and displays an error response.
+     * @param message The error message to display.
+     */
+    public void showErrorMessage(String message) {
         showTypedMessage(message, ResponseType.ERROR);
     }
 
