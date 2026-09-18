@@ -1,10 +1,10 @@
 package answerme.command;
 
+import java.util.Locale;
+
 import answerme.storage.Storage;
 import answerme.task.TaskList;
 import answerme.ui.Ui;
-
-import java.util.Locale;
 
 /**
  * Represents a command that searches the task list for tasks containing
