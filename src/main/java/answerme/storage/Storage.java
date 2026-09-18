@@ -247,6 +247,11 @@ public class Storage {
         checkFieldCount(taskType, fields, lineNumber);
         String taskDescription = fields[DESCRIPTION_FIELD_INDEX];
 
+        if (taskDescription.isBlank()) {
+            throw new AnswerMeException(
+                    "Task description cannot be empty on line " + lineNumber + ".");
+        }
+
         switch (taskType) {
             case TODO:
                 return new ToDo(taskDescription);
