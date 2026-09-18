@@ -98,6 +98,7 @@ public class DateTimeParser {
      */
     private static DateTimeFormatter createInputFormatter(String input) {
         return new DateTimeFormatterBuilder()
+                .parseCaseInsensitive()
                 .appendPattern(input)
                 .parseDefaulting(ChronoField.HOUR_OF_DAY, 0)
                 .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0)

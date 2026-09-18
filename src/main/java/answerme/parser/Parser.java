@@ -168,7 +168,7 @@ public class Parser {
      */
     private static Command parseDeadline(String args)
             throws AnswerMeException {
-        String[] segments = args.split("\\s+(?=/by\\b)");
+        String[] segments = args.split("\\s+(?=(?i:/by\\b))");
         String description = segments[0].trim();
         HashMap<String, String> flags = extractFlags(segments);
 
@@ -192,7 +192,7 @@ public class Parser {
      */
     private static Command parseEvent(String args)
             throws AnswerMeException {
-        String[] segments = args.split("\\s+(?=/(?:from|to)\\b)");
+        String[] segments = args.split("\\s+(?=(?i:/(?:from|to)\\b))");
         String description = segments[0].trim();
         HashMap<String, String> flags = extractFlags(segments);
 
@@ -228,7 +228,7 @@ public class Parser {
             if (flagArguments.length < 2 || flagArguments[1].isBlank()) {
                 throw new AnswerMeException("Every flag must be followed by an argument.");
             }
-            String flag = flagArguments[0];
+            String flag = flagArguments[0].toLowerCase(Locale.ROOT);
             String value = flagArguments[1];
 
             if (flags.containsKey(flag)) {
