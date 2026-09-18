@@ -62,17 +62,17 @@ public class DialogBox extends HBox {
         dialog.getStyleClass().add("reply-label");
 
         switch (responseType) {
-        case NORMAL:
-            dialog.getStyleClass().add("normal-reply-label");
-            break;
-        case SUCCESS:
-            dialog.getStyleClass().add("success-reply-label");
-            break;
-        case ERROR:
-            dialog.getStyleClass().add("error-reply-label");
-            break;
-        default:
-            throw new IllegalArgumentException("Unknown response type");
+            case NORMAL:
+                dialog.getStyleClass().add("normal-reply-label");
+                break;
+            case SUCCESS:
+                dialog.getStyleClass().add("success-reply-label");
+                break;
+            case ERROR:
+                dialog.getStyleClass().add("error-reply-label");
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown response type");
         }
     }
 
