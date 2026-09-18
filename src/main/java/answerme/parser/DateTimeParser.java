@@ -79,10 +79,14 @@ public class DateTimeParser {
         if (dateTime == null) {
             throw new NullPointerException("Datetime cannot be null.");
         }
+        //@@author RyanNgCT-reused
+        //Code reused from https://github.com/draxche/ip/blob/master/src/main/java/drax/ScheduleDateTime.java
+        //with minor modifications (by my teammate Kai Le @draxche)
         if (dateTime.toLocalTime().equals(LocalTime.MIDNIGHT)) {
             return dateTime.format(DISPLAY_DATE_FORMATTER);
         }
         return dateTime.format(DISPLAY_DATETIME_FORMATTER);
+        //@@author
     }
 
     /**

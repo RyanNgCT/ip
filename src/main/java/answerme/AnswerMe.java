@@ -6,6 +6,7 @@ import answerme.command.ResponseType;
 import answerme.exception.AnswerMeException;
 import answerme.parser.Parser;
 import answerme.storage.Storage;
+import answerme.storage.TaskLoadResult;
 import answerme.task.TaskList;
 import answerme.ui.Ui;
 
@@ -28,9 +29,14 @@ public class AnswerMe {
         storage = new Storage();
         ui = new Ui(isCliInstance);
         try {
-            taskList = new TaskList(storage.loadTasks());
+            TaskLoadResult loadResult = storage.loadTasks();
+            taskList = new TaskList(loadResult.taskList());
+            if (loadResult.hasWarnings()) {
+                ui.showLoadingWarning(loadResult.warnings());
+            }
         } catch (AnswerMeException exception) {
             ui.showLoadingError(exception.getMessage());
+            storage.disableSaving();
             taskList = new TaskList();
         }
     }
@@ -39,6 +45,9 @@ public class AnswerMe {
      * Runs the application until the user enters the exit command.
      */
     public void run() {
+        if (ui.getLoadingErrorMessage() != null) {
+            return;
+        }
         ui.showWelcome();
         boolean shouldExit = false;
         while (!shouldExit) {
@@ -60,10 +69,8 @@ public class AnswerMe {
             command.execute(taskList, ui, storage);
             return new CommandResult(ui.getLatestResponse(), ui.getLatestResponseType(), command.isExit());
         } catch (AnswerMeException exception) {
-            String errorMessage = exception.getMessage();
-            ui.showErrorMessage(errorMessage);
-
-            return new CommandResult(errorMessage, ResponseType.ERROR, false);
+            ui.showError(exception.getMessage());
+            return new CommandResult(ui.getLatestResponse(), ResponseType.ERROR, false);
         }
     }
 
@@ -83,6 +90,15 @@ public class AnswerMe {
      */
     public String getLoadingErrorMessage() {
         return ui.getLoadingErrorMessage();
+    }
+
+    /**
+     * Returns the loading warning message when one or more saved tasks were skipped.
+     *
+     * @return The loading warning message, or {@code null} if no warnings occurred.
+     */
+    public String getLoadingWarningMessage() {
+        return ui.getLoadingWarningMessage();
     }
 
     /**

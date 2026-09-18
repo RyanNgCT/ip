@@ -1,8 +1,8 @@
 package answerme.exception;
 
 /**
- * Represents an exception thrown when the application encounters
- * an unexpected exception.
+ * Represents an exception caused by invalid user input or an application
+ * operation that cannot be completed.
  */
 public class AnswerMeException extends Exception {
     /**
@@ -12,6 +12,6 @@ public class AnswerMeException extends Exception {
      * @param message The message describing the exception.
      */
     public AnswerMeException(String message) {
-        super("Oh no! " + message);
+        super(message);
     }
 }

@@ -27,7 +27,7 @@ public class ParserTest {
             Command eventCommand = Parser.parse(newEvent);
             fail();
         } catch (AnswerMeException e) {
-            assertEquals("Oh no! Format: event <description> /from <when> /to <when>", e.getMessage());
+            assertEquals("Format: event <description> /from <when> /to <when>", e.getMessage());
         }
     }
 
@@ -38,7 +38,7 @@ public class ParserTest {
             Command eventCommand = Parser.parse(newEvent);
             fail();
         } catch (AnswerMeException e) {
-            assertEquals("Oh no! Ensure that date/time is formatted correctly.\n"
+            assertEquals("Ensure that date/time is formatted correctly.\n"
                             + "Use a date such as 11/9/2026 or a date and time such as 11/9/2026 1800.",
                             e.getMessage());
         }
@@ -51,7 +51,7 @@ public class ParserTest {
             Command eventCommand = Parser.parse(newEvent);
             fail();
         } catch (AnswerMeException e) {
-            assertEquals("Oh no! 'From' datetime cannot occur after 'To'.", e.getMessage());
+            assertEquals("'From' datetime cannot occur after 'To'.", e.getMessage());
         }
     }
 }

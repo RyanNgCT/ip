@@ -33,13 +33,18 @@ public class DeleteCommand extends Command {
     @Override
     public void execute(TaskList taskList, Ui ui, Storage storage)
             throws AnswerMeException {
-        Task task = taskList.getTask(taskIndex);
-
+        Task deletedTask = taskList.getTask(taskIndex);
         int originalListSize = taskList.size();
-        taskList.remove(task);
+        taskList.remove(taskIndex);
         assert taskList.size() == originalListSize - 1;
 
-        storage.saveTasks(taskList);
-        ui.printDeleteItem(task, taskList.size());
+        try {
+            storage.saveTasks(taskList);
+        } catch (AnswerMeException exception) {
+            taskList.add(taskIndex, deletedTask);
+            throw exception;
+        }
+
+        ui.printDeleteItem(deletedTask, taskList.size());
     }
 }
