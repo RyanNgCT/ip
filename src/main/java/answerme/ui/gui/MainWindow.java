@@ -2,6 +2,7 @@ package answerme.ui.gui;
 
 import answerme.AnswerMe;
 import answerme.command.CommandResult;
+import answerme.ui.ResponseType;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -30,11 +31,12 @@ public class MainWindow extends AnchorPane {
     private Image botImage = new Image(this.getClass().getResourceAsStream("/images/AnswerMe.jpg"));
 
     /**
-     * Configures the scroll pane to follow the newest dialog box.
+     * Configures the scroll pane to show the newest dialog box while allowing manual scrolling.
      */
     @FXML
     public void initialize() {
-        scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
+        dialogContainer.heightProperty().addListener((observable, oldHeight, newHeight)
+                -> scrollPane.setVvalue(scrollPane.getVmax()));
     }
 
     /**
@@ -57,7 +59,7 @@ public class MainWindow extends AnchorPane {
         CommandResult result = answerMe.processCommand(input);
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input, userImage),
-                DialogBox.getAnswerMeDialog(result.response(), botImage)
+                DialogBox.getAnswerMeDialog(result.response(), result.responseType(), botImage)
         );
         userInput.clear();
 
@@ -76,12 +78,12 @@ public class MainWindow extends AnchorPane {
         String loadingWarningMessage = answerMe.getLoadingWarningMessage();
 
         dialogContainer.getChildren().addAll(
-                DialogBox.getAnswerMeDialog(answerMe.showWelcomeMessage(), botImage)
+                DialogBox.getAnswerMeDialog(answerMe.showWelcomeMessage(), ResponseType.NORMAL, botImage)
         );
 
         if (loadingErrorMessage != null) {
             dialogContainer.getChildren().add(
-                    DialogBox.getAnswerMeDialog(loadingErrorMessage, botImage)
+                    DialogBox.getAnswerMeDialog(loadingErrorMessage, ResponseType.ERROR, botImage)
             );
             userInput.setDisable(true);
             sendButton.setDisable(true);
@@ -89,7 +91,7 @@ public class MainWindow extends AnchorPane {
 
         if (loadingWarningMessage != null) {
             dialogContainer.getChildren().add(
-                    DialogBox.getAnswerMeDialog(loadingWarningMessage, botImage)
+                    DialogBox.getAnswerMeDialog(loadingWarningMessage, ResponseType.ERROR, botImage)
             );
         }
     }

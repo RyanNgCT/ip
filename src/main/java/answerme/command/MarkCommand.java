@@ -43,6 +43,6 @@ public class MarkCommand extends Command {
             throw exception;
         }
 
-        ui.showMessage("Nice! I have marked this task as done:\n" + task);
+        ui.showSuccessMessage("Nice! I have marked this task as done:\n" + task);
     }
 }

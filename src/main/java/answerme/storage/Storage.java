@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 
 import answerme.exception.AnswerMeException;
@@ -207,7 +208,7 @@ public class Storage {
 
     private TaskType parseTaskType(String type, int lineNumber) throws AnswerMeException {
         try {
-            return TaskType.valueOf(type.toUpperCase());
+            return TaskType.valueOf(type.toUpperCase(Locale.ROOT));
         } catch (IllegalArgumentException exception) {
             throw new AnswerMeException("Unknown task type on line " + lineNumber);
         }
@@ -216,7 +217,7 @@ public class Storage {
     private TaskStatus parseTaskStatus(String value, int lineNumber)
             throws AnswerMeException {
         try {
-            return TaskStatus.valueOf(value.toUpperCase());
+            return TaskStatus.valueOf(value.toUpperCase(Locale.ROOT));
         } catch (IllegalArgumentException exception) {
             throw new AnswerMeException("Invalid task status on line "
                     + lineNumber + ".");

@@ -26,7 +26,7 @@ public class DedupCommand extends Command {
         TaskList originalTasks = new TaskList(taskList);
         TaskList duplicateTasks = taskList.removeDuplicateTasks();
         if (duplicateTasks.isEmpty()) {
-            ui.showMessage("No duplicate tasks found.");
+            ui.showErrorMessage("No duplicate tasks found.");
             return;
         }
 

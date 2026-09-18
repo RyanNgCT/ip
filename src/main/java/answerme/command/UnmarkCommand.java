@@ -43,6 +43,6 @@ public class UnmarkCommand extends Command {
             throw exception;
         }
 
-        ui.showMessage("OK, I've marked this task as not done yet\n" + task);
+        ui.showSuccessMessage("OK, I've marked this task as not done yet\n" + task);
     }
 }

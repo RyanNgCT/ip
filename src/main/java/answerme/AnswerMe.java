@@ -7,6 +7,7 @@ import answerme.parser.Parser;
 import answerme.storage.Storage;
 import answerme.storage.TaskLoadResult;
 import answerme.task.TaskList;
+import answerme.ui.ResponseType;
 import answerme.ui.Ui;
 
 /**
@@ -66,10 +67,10 @@ public class AnswerMe {
         try {
             Command command = Parser.parse(input);
             command.execute(taskList, ui, storage);
-            return new CommandResult(ui.getLatestResponse(), command.isExit());
+            return new CommandResult(ui.getLatestResponse(), ui.getLatestResponseType(), command.isExit());
         } catch (AnswerMeException exception) {
             ui.showError(exception.getMessage());
-            return new CommandResult(ui.getLatestResponse(), false);
+            return new CommandResult(ui.getLatestResponse(), ResponseType.ERROR, false);
         }
     }
 

@@ -1,5 +1,7 @@
 package answerme.command;
 
+import java.util.Locale;
+
 import answerme.storage.Storage;
 import answerme.task.TaskList;
 import answerme.ui.Ui;
@@ -28,11 +30,11 @@ public class FindCommand extends Command {
      */
     @Override
     public void execute(TaskList taskList, Ui ui, Storage storage) {
-        String lowerCaseSearchTerm = toFind.toLowerCase();
+        String lowerCaseSearchTerm = toFind.toLowerCase(Locale.ROOT);
 
         TaskList foundTasks = new TaskList(taskList
                                         .stream()
-                                        .filter(task -> task.getDescription().toLowerCase()
+                                        .filter(task -> task.getDescription().toLowerCase(Locale.ROOT)
                                                 .contains(lowerCaseSearchTerm))
                                         .toList());
 

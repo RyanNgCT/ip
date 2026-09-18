@@ -2,6 +2,7 @@ package answerme.parser;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.Locale;
 
 import answerme.command.AddDeadlineCommand;
 import answerme.command.AddEventCommand;
@@ -49,7 +50,7 @@ public class Parser {
         }
 
         String[] responseParts = userResponse.trim().split(WHITESPACE_REGEX, COMMAND_ARGUMENT_SPLIT_LIMIT);
-        String commandName = responseParts[0].toLowerCase();
+        String commandName = responseParts[0].toLowerCase(Locale.ROOT);
         String args = extractArgs(responseParts);
 
         switch (commandName) {
