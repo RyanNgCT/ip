@@ -86,6 +86,20 @@ public class StorageTest {
     }
 
     @Test
+    public void loadTasks_blankTaskDescription_reportsWarning() throws AnswerMeException, IOException {
+        File dataFile = temporaryDirectory.resolve("tasks.txt").toFile();
+        Files.writeString(dataFile.toPath(), "Todo | Incomplete | \n");
+        Storage storage = new Storage(dataFile);
+
+        TaskLoadResult result = storage.loadTasks();
+
+        assertTrue(result.taskList().isEmpty());
+        assertEquals(1, result.warnings().size());
+        assertEquals("Task description cannot be empty on line 1.",
+                result.warnings().get(0));
+    }
+
+    @Test
     public void loadTasks_malformedTaskBetweenValidTasks_loadsValidTasksAndReportsWarning()
             throws AnswerMeException, IOException {
         File dataFile = temporaryDirectory.resolve("tasks.txt").toFile();
