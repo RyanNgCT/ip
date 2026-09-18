@@ -4,6 +4,8 @@ import answerme.storage.Storage;
 import answerme.task.TaskList;
 import answerme.ui.Ui;
 
+import java.util.Locale;
+
 /**
  * Represents a command that searches the task list for tasks containing
  * a specified keyword.
@@ -28,11 +30,11 @@ public class FindCommand extends Command {
      */
     @Override
     public void execute(TaskList taskList, Ui ui, Storage storage) {
-        String lowerCaseSearchTerm = toFind.toLowerCase();
+        String lowerCaseSearchTerm = toFind.toLowerCase(Locale.ROOT);
 
         TaskList foundTasks = new TaskList(taskList
                                         .stream()
-                                        .filter(task -> task.getDescription().toLowerCase()
+                                        .filter(task -> task.getDescription().toLowerCase(Locale.ROOT)
                                                 .contains(lowerCaseSearchTerm))
                                         .toList());
 
