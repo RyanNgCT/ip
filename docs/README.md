@@ -65,6 +65,9 @@ The following formats can be used for populating `<when>` in the deadline and ev
 | `d/M/yyyy` (e.g., `18/9/2026`) | `d/M/yyyy HHmm` or `d/M/yyyy HH:mm` (e.g., `18/9/2026 2359` or `18/9/2026 23:59`) |
 | `MMM d yyyy` (e.g., `Sep 18 2026`) | `MMM d yyyy HH:mm` (e.g., `Sep 18 2026 23:59`) |
 
+### Important Note for adding tasks
+The application considers tasks with the same type and same description as duplicates. You will not be able to add the task if it is a duplicate!
+
 ## Viewing tasks with `list`
 Displays the current list of tasks.
 
@@ -83,9 +86,6 @@ Here are the tasks in your list:
 ```
 Task list is empty!
 ```
-
-### Important Note
-Note that the application considers tasks of the same type and descriptions as duplicates. You will not be able to add the task if it is a duplicate!
 
 ## Removing a task with `delete`
 Removes the task based on its index reflected in `list`.
