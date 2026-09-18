@@ -1,7 +1,34 @@
 # AnswerMe User Guide
 
+![AnswerMe application interface](Ui.png)
+
 **AnswerMe** is an interactive task management application. It frees your mind from having to remember countless things that you need to get done.
 
+## Getting Started
+1. Ensure you have [Java 25](https://www.oracle.com/java/technologies/downloads/#java25) installed on your computer.
+2. Download the [latest release](https://github.com/RyanNgCT/ip/releases) of AnswerMe as a `.jar` file.
+3. Place the `.jar` file in a directory of your choosing.
+4. Open a new terminal window in that folder and run:
+```
+java -jar answerme.jar
+```
+5. This should open the graphical window, as shown above for you to enter commands.
+6. Hit the submit button (i.e. the plane icon) or press `Enter` to send a command to AnswerMe.
+
+## Command Summary
+
+| Command | Command Syntax | Purpose |
+| --- | --- | --- |
+| `todo` | `todo <task-description>` | Adds a todo task. |
+| `deadline` | `deadline <task-description> /by <when>` | Adds a task with a due date and/or time. |
+| `event` | `event <task-description> /from <when> /to <when>` | Adds an event with a start and end date and/or time. |
+| `list` | `list` | Displays all saved tasks. |
+| `delete` | `delete <task-index>` | Removes a task from the list. |
+| `find` | `find <search-term>` | Searches for tasks matching a search term. |
+| `mark` | `mark <task-index>` | Marks a task as completed. |
+| `unmark` | `unmark <task-index>` | Marks a task as incomplete. |
+| `dedup` | `dedup` | Removes saved duplicate tasks. |
+| `bye` | `bye` | Exits the application. |
 
 ## Adding Tasks
 ### Add To-dos with `todo`
@@ -65,8 +92,6 @@ The following formats can be used for populating `<when>` in the deadline and ev
 | `d/M/yyyy` (e.g., `18/9/2026`) | `d/M/yyyy HHmm` or `d/M/yyyy HH:mm` (e.g., `18/9/2026 2359` or `18/9/2026 23:59`) |
 | `MMM d yyyy` (e.g., `Sep 18 2026`) | `MMM d yyyy HH:mm` (e.g., `Sep 18 2026 23:59`) |
 
-### Important Note for adding tasks
-The application considers tasks with the same type and same description as duplicates. You will not be able to add the task if it is a duplicate!
 
 ## Viewing tasks with `list`
 Displays the current list of tasks.
@@ -82,7 +107,7 @@ Here are the tasks in your list:
     3. [E][ ] 9/11 (from: Sep 11 2026 to: Sep 11 2026)
 ```
 
-**Case 2:** No tasks were added.
+**Case 2:** The current list does not contain any tasks.
 ```
 Task list is empty!
 ```
@@ -111,7 +136,7 @@ Oh no! The task does not exist in the list.
 ```
 
 ## Search for tasks with `find`
-Displays tasks whose descriptions contain the given search term.
+Displays tasks whose descriptions contain the given search term. The search term is **case-insensitive**.
 
 ### Usage: `find <search-term>`
 
@@ -163,10 +188,12 @@ OK, I've marked this task as not done yet
 [T][ ] update resume
 ```
 
-## Remove duplicate task(s) using `dedup`
-Removes duplicate saved tasks from the task list. Tasks are considered duplicates when they have the same task type and description, ignoring differences in letter case.
+## Remove duplicate tasks using `dedup`
+Removes duplicate saved tasks from the task list. Tasks are considered duplicates when they have the same task type and description, ignoring differences in case.
 
-Completion status and date or time details are not considered when identifying duplicates. Only the earliest matching task is preserved.
+The implementation preserves the first occurrence in the current task list, regardless of its date, time, or completion status.
+
+This command is useful in removing duplicates already present in saved data.
 
 ### Usage: `dedup`
 
@@ -194,3 +221,9 @@ Bye. Hope to see you again soon!
 ```
 
 The application then exits.
+
+---
+## Some pointers worth noting
+- Your tasks are saved in `data/tasks.txt` to ensure persistence of data across sessions.
+- The application considers tasks with the same type and same description as _duplicates_. You will not be able to add tasks that are duplicates!
+- You are not allowed to use pipe characters (`|`) in task descriptions.
