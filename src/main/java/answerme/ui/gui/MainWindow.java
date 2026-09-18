@@ -90,7 +90,7 @@ public class MainWindow extends AnchorPane {
 
         if (loadingWarningMessage != null) {
             dialogContainer.getChildren().add(
-                    DialogBox.getAnswerMeDialog(loadingWarningMessage, botImage)
+                    DialogBox.getAnswerMeDialog(loadingWarningMessage, ResponseType.ERROR, botImage)
             );
         }
     }

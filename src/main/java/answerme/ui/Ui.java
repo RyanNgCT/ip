@@ -97,12 +97,7 @@ public class Ui {
         showTypedMessage(message, ResponseType.SUCCESS);
     }
 
-    /**
-     * Records and displays an error response.
-     *
-     * @param message The error message to display.
-     */
-    public void showErrorMessage(String message) {
+    private void showErrorMessage(String message) {
         showTypedMessage(message, ResponseType.ERROR);
     }
 
@@ -145,7 +140,7 @@ public class Ui {
                         + String.join("\n- ", warnings)
                         + "\n\nThe remaining tasks were loaded successfully. "
                         + "Skipped entries will be removed the next time tasks are saved.";
-        showMessage(loadingWarningMessage);
+        showErrorMessage(loadingWarningMessage);
     }
 
     /**
@@ -199,7 +194,7 @@ public class Ui {
      * @param reason The reason the command failed.
      */
     public void showError(String reason) {
-        showMessage(ERROR_PREFIX + reason);
+        showErrorMessage(ERROR_PREFIX + reason);
     }
 
     // accessors
