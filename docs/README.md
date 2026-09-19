@@ -5,7 +5,7 @@
 **AnswerMe** is an interactive task management application. It frees your mind from having to remember countless things that you need to get done.
 
 ## Getting Started
-1. Ensure you have [Java 25](https://www.oracle.com/java/technologies/downloads/#java25) installed on your computer.
+1. Ensure that you have Java 25 installed on your computer based on the installation guides [here](https://se-education.org/guides/tutorials/javaInstallation.html) (Choose your OS accordingly).
 2. Download the [latest release](https://github.com/RyanNgCT/ip/releases) of AnswerMe as a `.jar` file.
 3. Place the `.jar` file in a directory of your choosing.
 4. Open a new terminal window in that folder and run:
